@@ -126,7 +126,7 @@ bref_user2= f"Voici un deuxième exemple de Monsieur test. Dans un texte de **MA
 
 bref_assistant2= "Guillaume est une personne méthodique et analytique, guidée par un désir de comprendre les choses en détail et de s'assurer que tout suit un ordre logique. Son approche structurée et son attention aux détails font de lui un professionnel organisé, capable de garantir des résultats d'excellence. Il vise des standards élevés et cherche constamment à perfectionner son travail.\n Sa prudence et son analyse réfléchie des situations montrent sa capacité à évaluer les options avant de prendre des décisions. Bien qu'il préfère analyser les données plutôt que d'agir sur des impulsions, il est déterminé à atteindre ses objectifs une fois sa décision prise. Cette rigueur est renforcée par une grande patience et une tolérance pour les situations complexes, lui permettant de persévérer même dans les environnements exigeants.\n Dans ses interactions sociales, Guillaume est plus réservé, préférant se concentrer sur les faits concrets plutôt que sur les discussions superficielles. Il valorise le tact et la bienveillance dans ses relations, mais est avant tout motivé par le besoin d'assurer une qualité irréprochable dans tout ce qu'il fait. Sa capacité à évaluer l'impact de ses actions sur les autres montre un souci de préserver l'équilibre.\n En somme, Guillaume est une personne rigoureuse, organisée et analytique, engagée à atteindre des résultats de haute qualité tout en maintenant une approche réfléchie et structurée."
 
-bref_prompt= f"Maintenant, voici le véritable questionnaire qui nous servira pour toute la suite de la conversation. Execute la même tâche que les deux exemples précédents pour le questionnaire suivant:\n {synergia_section1_string}"
+bref_prompt= f"Maintenant, voici le véritable questionnaire qui nous servira pour toute la suite de la conversation. Execute la même tâche que les deux exemples précédents dans un **MAXIMUM DE 220 MOTS** pour le questionnaire suivant:\n {synergia_section1_string}"
 
 message_data= [{"role": "system",
                "content": bref_system},
@@ -318,7 +318,6 @@ toi = generateur_texte(message_data, 350)
 
 toi_text = toi.choices[0].message.content
 
-time.sleep(61)
 
 #Section "Valeurs Schwartz"
 
@@ -368,7 +367,7 @@ valeur = generateur_texte(message_data, 225)
 
 valeur_text = valeur.choices[0].message.content
 
-time.sleep(61)
+
 
 #section Toi et le marché du travail
 
@@ -418,7 +417,7 @@ environnement = generateur_texte(message_data, 500)
 
 environnement_text = environnement.choices[0].message.content
 
-time.sleep(61)
+
 
 #Section Exemples d’environnements de travail favorables
 
@@ -446,61 +445,59 @@ ex_env_text = ex_env.choices[0].message.content
 
 #Section Tes couleurs en couple
 
-#couple_prompt = f"""Je souhaite que tu rédiges un texte ***D'UN MAXIMUM DE 200 MOTS*** qui décrit le profil de la personne dans sa relation de couple, en utilisant spécifiquement ces réponses :\n {synergia_section_couple_string}\n Pour chaque couleur (rouge, jaune, vert, bleu), mets en avant les points forts basés sur les réponses spécifiques données aux questions de cette section et mentionne aussi les aspects moins présents ou absents pour chaque couleur. N’utilise pas de pourcentages mais qualifie les scores comme "fort", "modéré" ou "faible" selon les réponses. Voici comment structurer le texte :\n1.	Jaune (Influence) : Décris les forces telles que la convivialité, la sociabilité, et l'engagement émotionnel si le score est élevé. Si la couleur est moins présente, mentionne le manque de dynamisme social ou d'influence, indiquant une préférence pour d'autres types d'interactions.\n2.	Rouge (Dominance) : Mets en avant la prise d'initiative et la proactivité si le score est fort, expliquant comment la personne prend les devants dans la relation. Si le score est faible, note l'absence de traits dominants ou assertifs, avec une tendance à privilégier les décisions partagées ou la collaboration plutôt que le contrôle.\n3.	Vert (Stabilité) : Décris les points forts liés à la stabilité émotionnelle, à l'écoute et à la création d’un environnement serein si le score est élevé. Si cette couleur est moins présente, mentionne une tendance à moins rechercher l’harmonie ou la stabilité émotionnelle.\n4.	Bleu (Conformité) : Souligne les forces analytiques et la précision dans la communication si le score est élevé, en mettant en avant l'importance de la clarté et de la réflexion dans les échanges. Si le score est faible, note l’absence de structure ou de rigueur dans la communication, avec une préférence pour des approches moins formelles.\nAssure-toi que le texte soit équilibré, nuancé, et donne une vision complète de la dynamique de la personne en couple. Utilise un langage engageant et précis, en montrant à la fois ce qui est présent et ce qui manque dans chaque trait DISC."\n(Exemple 1 : Jaune (Influence) : Modéré\nMadame Test montre une influence modérée en matière de convivialité et d’engagement social dans sa relation de couple. Elle privilégie les discussions dynamiques et communicatives, mettant l’accent sur la clarté et l’échange. Cependant, ses interactions ne sont pas toujours axées sur la spontanéité ou l’exubérance sociale, ce qui montre qu’elle préfère des moments de connexion réfléchis et ciblés plutôt que des échanges trop fréquents ou légers.\nRouge (Dominance) : Fort\nMadame Test affiche un score fort en rouge, ce qui se traduit par une prise d’initiative marquée et une volonté de s’exprimer clairement dans la relation. Elle n’hésite pas à communiquer ses attentes de manière directe et à prendre des décisions rapidement lorsqu’il le faut. Cette approche proactive montre son désir de mener et d’influencer activement les dynamiques de son couple, tout en restant ouverte à la collaboration.\nVert (Stabilité) : Modéré\nSon score modéré en vert indique une appréciation pour l’harmonie et la stabilité émotionnelle, mais ce n’est pas sa priorité principale. Madame Test veille à maintenir un environnement relativement calme et serein, mais elle n’est pas exclusivement focalisée sur le maintien constant de l’harmonie. Elle est capable d’écouter et de soutenir son partenaire, mais sans nécessairement éviter les confrontations si elles s’avèrent nécessaires pour avancer.\nBleu (Conformité) : Fort\nMadame Test montre une forte affinité pour la réflexion et l’analyse dans ses interactions. Elle s’assure que ses attentes sont bien comprises en les expliquant en détail, ce qui souligne son besoin de précision et de clarté dans la communication. Cependant, elle n’adopte pas toujours une approche structurée ou formelle, indiquant une préférence pour une certaine flexibilité tout en gardant un œil sur les détails importants.\n"""
+couple_prompt = f"""Je souhaite que tu rédiges un texte ***D'UN MAXIMUM DE 200 MOTS*** qui décrit le profil de la personne dans sa relation de couple, en utilisant spécifiquement ces réponses :\n {synergia_section_couple_string}\n Pour chaque couleur (rouge, jaune, vert, bleu), mets en avant les points forts basés sur les réponses spécifiques données aux questions de cette section et mentionne aussi les aspects moins présents ou absents pour chaque couleur. N’utilise pas de pourcentages mais qualifie les scores comme "fort", "modéré" ou "faible" selon les réponses. Voici comment structurer le texte :\n1.	Jaune (Influence) : Décris les forces telles que la convivialité, la sociabilité, et l'engagement émotionnel si le score est élevé. Si la couleur est moins présente, mentionne le manque de dynamisme social ou d'influence, indiquant une préférence pour d'autres types d'interactions.\n2.	Rouge (Dominance) : Mets en avant la prise d'initiative et la proactivité si le score est fort, expliquant comment la personne prend les devants dans la relation. Si le score est faible, note l'absence de traits dominants ou assertifs, avec une tendance à privilégier les décisions partagées ou la collaboration plutôt que le contrôle.\n3.	Vert (Stabilité) : Décris les points forts liés à la stabilité émotionnelle, à l'écoute et à la création d’un environnement serein si le score est élevé. Si cette couleur est moins présente, mentionne une tendance à moins rechercher l’harmonie ou la stabilité émotionnelle.\n4.	Bleu (Conformité) : Souligne les forces analytiques et la précision dans la communication si le score est élevé, en mettant en avant l'importance de la clarté et de la réflexion dans les échanges. Si le score est faible, note l’absence de structure ou de rigueur dans la communication, avec une préférence pour des approches moins formelles.\nAssure-toi que le texte soit équilibré, nuancé, et donne une vision complète de la dynamique de la personne en couple. Utilise un langage engageant et précis, en montrant à la fois ce qui est présent et ce qui manque dans chaque trait DISC."\n(Exemple 1 : Jaune (Influence) : Modéré\nMadame Test montre une influence modérée en matière de convivialité et d’engagement social dans sa relation de couple. Elle privilégie les discussions dynamiques et communicatives, mettant l’accent sur la clarté et l’échange. Cependant, ses interactions ne sont pas toujours axées sur la spontanéité ou l’exubérance sociale, ce qui montre qu’elle préfère des moments de connexion réfléchis et ciblés plutôt que des échanges trop fréquents ou légers.\nRouge (Dominance) : Fort\nMadame Test affiche un score fort en rouge, ce qui se traduit par une prise d’initiative marquée et une volonté de s’exprimer clairement dans la relation. Elle n’hésite pas à communiquer ses attentes de manière directe et à prendre des décisions rapidement lorsqu’il le faut. Cette approche proactive montre son désir de mener et d’influencer activement les dynamiques de son couple, tout en restant ouverte à la collaboration.\nVert (Stabilité) : Modéré\nSon score modéré en vert indique une appréciation pour l’harmonie et la stabilité émotionnelle, mais ce n’est pas sa priorité principale. Madame Test veille à maintenir un environnement relativement calme et serein, mais elle n’est pas exclusivement focalisée sur le maintien constant de l’harmonie. Elle est capable d’écouter et de soutenir son partenaire, mais sans nécessairement éviter les confrontations si elles s’avèrent nécessaires pour avancer.\nBleu (Conformité) : Fort\nMadame Test montre une forte affinité pour la réflexion et l’analyse dans ses interactions. Elle s’assure que ses attentes sont bien comprises en les expliquant en détail, ce qui souligne son besoin de précision et de clarté dans la communication. Cependant, elle n’adopte pas toujours une approche structurée ou formelle, indiquant une préférence pour une certaine flexibilité tout en gardant un œil sur les détails importants.\n"""
 
 #"Exemple 2 : Jaune (Influence) : Faible\nMonsieur Test présente un score faible en jaune, indiquant une moindre orientation vers les interactions sociales et l’exubérance émotionnelle dans sa relation. Il ne cherche pas particulièrement à être le moteur dynamique ou communicatif du couple, préférant des interactions plus calmes et réfléchies. Les moments d’énergie et de spontanéité ne sont pas sa priorité, ce qui montre une préférence pour des échanges plus mesurés.\nRouge (Dominance) : Modéré\nAvec un score modéré en rouge, Monsieur Test prend des initiatives et montre une certaine proactivité, mais sans imposer ses décisions de manière dominante. Il est capable de prendre les devants lorsque nécessaire, mais préfère généralement des discussions où les décisions sont prises de façon concertée. Sa tendance à initier reste présente, mais sans être trop assertive, ce qui favorise une dynamique plus équilibrée.\nVert (Stabilité) : Fort\nMonsieur Test obtient un score fort en vert, indiquant une grande valorisation de l’harmonie et de la stabilité émotionnelle. Il privilégie un environnement calme et serein, cherchant à maintenir l’harmonie dans le couple. Son approche est axée sur l’écoute, le soutien et la patience, ce qui en fait un partenaire apaisant qui veille à ce que les tensions soient minimisées et les échanges restent sereins.\nBleu (Conformité) : Fort\nAvec un score fort en bleu, Monsieur Test adopte une approche analytique et réfléchie dans sa relation. Il communique de manière claire et détaillée, assurant que ses attentes sont bien comprises. Il valorise la précision et la structure dans les échanges, et préfère que les décisions soient prises après une analyse minutieuse des situations. Sa tendance à éviter les impulsivités et à privilégier une approche méthodique renforce le caractère stable et réfléchi de ses interactions.) "
 
-#message_data.append( 
-  #{
-    #"role": "assistant", 
-    #"content": ex_env_text
-  #}
-#)
+message_data.append( 
+  {
+    "role": "assistant", 
+    "content": ex_env_text
+  }
+)
   
-#message_data.append(
-    #{
-        #"role": "user",
-        #"content": couple_prompt
-    #}
-#)
+message_data.append(
+    {
+        "role": "user",
+        "content": couple_prompt
+    }
+)
 
-#couple = generateur_texte(message_data, 300)
+couple = generateur_texte(message_data, 300)
 
-#couple_text = couple.choices[0].message.content
+couple_text = couple.choices[0].message.content
 
-#time.sleep(61)
+
 
 #Section Portrait
 
-#portrait_prompt = """Je souhaite que tu rédiges un texte ***D'UN MAXIMUM DE 200 MOTS*** qui décrit le profil de la personne dans sa relation de couple, en utilisant uniquement les informations de la section couple du questionnaire DISC de la section précédente. Le texte doit détailler les forces de la personne en tant que partenaire, en mettant en avant son style de communication, son approche au soutien émotionnel, et la manière dont elle aborde les objectifs communs et les projets futurs. Voici les éléments à inclure :\n1.	Introduction sur la Personne : Débute par une description des principaux traits de personnalité en couple, tels que la préférence pour la structure, la stabilité ou la spontanéité, selon les réponses.\n2.	Style de Communication : Explique comment la personne communique ses attentes et assure une compréhension claire entre les partenaires. Mentionne si elle privilégie une communication détaillée, directe ou émotionnelle.\n3.	Approche au Soutien Émotionnel : Décris la manière dont la personne offre du soutien à son partenaire, en mettant en avant son écoute, ses conseils réfléchis, ou ses solutions pratiques.\n4.	Stabilité Émotionnelle et Harmonie : Mentionne l'importance qu'elle accorde à la stabilité émotionnelle et à la sérénité dans la relation, et comment cela contribue à un environnement paisible.\n5.	Objectifs Communs et Personnels : Parle de l'importance des objectifs partagés et de la manière dont la personne s'engage à les atteindre en collaboration avec son partenaire.\n6.	Joie et Spontanéité : Décris comment la personne apporte de la joie et de la légèreté au quotidien, et en quoi son style unique rend chaque journée spéciale.\n7.	Approche des Projets Futurs : Explique comment la personne aborde les discussions sur les projets futurs, si elle préfère planifier, discuter spontanément ou réfléchir calmement aux décisions importantes.\nAssure-toi que le texte soit fluide, nuancé, et qu'il donne une vision complète de la personne en couple, en combinant organisation, soutien émotionnel et joie de vivre." \n(exemple1 :  Monsieur Test est un partenaire qui valorise l’harmonie, l’écoute et une approche réfléchie dans sa relation de couple. En tant que pacificateur, il veille à maintenir un environnement serein, évitant les conflits et favorisant une communication calme et posée. Sa manière de communiquer est détaillée et réfléchie, préférant expliquer ses attentes clairement pour éviter tout malentendu. Cette approche structurée aide à renforcer la compréhension mutuelle et à créer un climat de confiance dans la relation.\nMonsieur Test est également un soutien précieux pour son partenaire. Il écoute avec attention et apporte des conseils réfléchis, montrant un engagement profond envers le bien-être de l’autre. Sa capacité à maintenir la stabilité émotionnelle est un atout majeur dans son couple, car il crée un espace où chacun peut s’exprimer librement tout en se sentant soutenu. Cette attention aux besoins émotionnels permet de construire une relation fondée sur le respect mutuel et la compréhension.\nIl accorde une grande importance aux expériences partagées, apportant une énergie positive et une volonté de créer des moments agréables. Monsieur Test privilégie les discussions ouvertes et spontanées sur les projets futurs, tout en prenant le temps de réfléchir calmement aux décisions importantes. Sa capacité à maintenir l’équilibre entre réflexion et spontanéité permet de naviguer sereinement à travers les décisions communes.\nBien qu’il préfère les discussions posées, Monsieur Test ne fuit pas les confrontations lorsqu’elles sont nécessaires. Il aborde les défis avec une approche analytique, cherchant toujours à comprendre les situations avant d’agir. En résumé, Monsieur Test est un partenaire attentionné et réfléchi, qui combine harmonie, soutien émotionnel et une approche équilibrée dans sa vie de couple.\n"""
+portrait_prompt = """Je souhaite que tu rédiges un texte ***D'UN MAXIMUM DE 200 MOTS*** qui décrit le profil de la personne dans sa relation de couple, en utilisant uniquement les informations de la section couple du questionnaire DISC de la section précédente. Le texte doit détailler les forces de la personne en tant que partenaire, en mettant en avant son style de communication, son approche au soutien émotionnel, et la manière dont elle aborde les objectifs communs et les projets futurs. Voici les éléments à inclure :\n1.	Introduction sur la Personne : Débute par une description des principaux traits de personnalité en couple, tels que la préférence pour la structure, la stabilité ou la spontanéité, selon les réponses.\n2.	Style de Communication : Explique comment la personne communique ses attentes et assure une compréhension claire entre les partenaires. Mentionne si elle privilégie une communication détaillée, directe ou émotionnelle.\n3.	Approche au Soutien Émotionnel : Décris la manière dont la personne offre du soutien à son partenaire, en mettant en avant son écoute, ses conseils réfléchis, ou ses solutions pratiques.\n4.	Stabilité Émotionnelle et Harmonie : Mentionne l'importance qu'elle accorde à la stabilité émotionnelle et à la sérénité dans la relation, et comment cela contribue à un environnement paisible.\n5.	Objectifs Communs et Personnels : Parle de l'importance des objectifs partagés et de la manière dont la personne s'engage à les atteindre en collaboration avec son partenaire.\n6.	Joie et Spontanéité : Décris comment la personne apporte de la joie et de la légèreté au quotidien, et en quoi son style unique rend chaque journée spéciale.\n7.	Approche des Projets Futurs : Explique comment la personne aborde les discussions sur les projets futurs, si elle préfère planifier, discuter spontanément ou réfléchir calmement aux décisions importantes.\nAssure-toi que le texte soit fluide, nuancé, et qu'il donne une vision complète de la personne en couple, en combinant organisation, soutien émotionnel et joie de vivre." \n(exemple1 :  Monsieur Test est un partenaire qui valorise l’harmonie, l’écoute et une approche réfléchie dans sa relation de couple. En tant que pacificateur, il veille à maintenir un environnement serein, évitant les conflits et favorisant une communication calme et posée. Sa manière de communiquer est détaillée et réfléchie, préférant expliquer ses attentes clairement pour éviter tout malentendu. Cette approche structurée aide à renforcer la compréhension mutuelle et à créer un climat de confiance dans la relation.\nMonsieur Test est également un soutien précieux pour son partenaire. Il écoute avec attention et apporte des conseils réfléchis, montrant un engagement profond envers le bien-être de l’autre. Sa capacité à maintenir la stabilité émotionnelle est un atout majeur dans son couple, car il crée un espace où chacun peut s’exprimer librement tout en se sentant soutenu. Cette attention aux besoins émotionnels permet de construire une relation fondée sur le respect mutuel et la compréhension.\nIl accorde une grande importance aux expériences partagées, apportant une énergie positive et une volonté de créer des moments agréables. Monsieur Test privilégie les discussions ouvertes et spontanées sur les projets futurs, tout en prenant le temps de réfléchir calmement aux décisions importantes. Sa capacité à maintenir l’équilibre entre réflexion et spontanéité permet de naviguer sereinement à travers les décisions communes.\nBien qu’il préfère les discussions posées, Monsieur Test ne fuit pas les confrontations lorsqu’elles sont nécessaires. Il aborde les défis avec une approche analytique, cherchant toujours à comprendre les situations avant d’agir. En résumé, Monsieur Test est un partenaire attentionné et réfléchi, qui combine harmonie, soutien émotionnel et une approche équilibrée dans sa vie de couple.\n"""
 
 #"Exemple 2 : Madame Test est une partenaire dynamique et communicative, qui apporte une énergie positive et un sens de la spontanéité à sa relation de couple. Elle privilégie des échanges clairs et directs, n'hésitant pas à exprimer ses attentes de manière détaillée pour assurer une compréhension mutuelle. Cette transparence dans la communication aide à renforcer les liens et à éviter les malentendus, créant un climat de confiance et d’ouverture.\nEn tant que soutien, Madame Test se distingue par sa capacité à écouter attentivement et à offrir des conseils réfléchis. Elle encourage son partenaire à s’exprimer et partage des solutions pratiques et bien pensées pour les aider à surmonter ensemble les défis. Son approche est marquée par un souci constant d’équilibrer les émotions et de maintenir un environnement serein, tout en restant ouverte aux discussions profondes et constructives.\nL’accomplissement des objectifs, qu'ils soient personnels ou communs, est essentiel pour Madame Test. Elle aime travailler main dans la main avec son partenaire pour atteindre des buts partagés, ce qui renforce leur connexion et apporte un sentiment d’accomplissement mutuel. Sa volonté de prendre des initiatives et d'apporter des solutions efficaces témoigne de son engagement actif dans la relation.\nMadame Test apporte également une touche de joie et de légèreté au quotidien. Elle sait rendre chaque journée spéciale et pleine de rires, créant des moments précieux et inoubliables qui enrichissent la relation. Elle aborde les discussions sur les projets futurs avec enthousiasme, aimant rêver et planifier spontanément tout en restant ouverte à ajuster les décisions au besoin.\nEn somme, Madame Test est une partenaire communicative, réfléchie et engagée, qui allie structure, soutien émotionnel et joie de vivre pour créer une relation épanouie et harmonieuse.)"
 
-#message_data.append( 
-  #{
-    #"role": "assistant", 
-    #"content": couple_text
-  #}
-#)
+message_data.append( 
+  {
+    "role": "assistant", 
+    "content": couple_text
+  }
+)
   
-#message_data.append(
-    #{
-        #"role": "user",
-        #"content": portrait_prompt
-    #}
-#)
+message_data.append(
+    {
+        "role": "user",
+        "content": portrait_prompt
+    }
+)
 
-#portrait = generateur_texte(message_data, 400)
+portrait = generateur_texte(message_data, 400)
 
-#portrait_text = portrait.choices[0].message.content
+portrait_text = portrait.choices[0].message.content
 
 
 
 #Print la totalité des textes
 
-full_text= "EN BREF\n" + bref_text + "\n\n" + "Tes forces mises en lumière\n" + forces_text + "\n\n" + "Tes défis Potentiels\n" + defis_text + "\n\n" + "Perception du changement\n" + changements_text + "\n\n" + "Perception des relations amicales\n" + amicale_text + "\n\n" + "Perception des règles et convention sociales\n" + regles_text + "\n\n" + "Perception des défis, problèmes et difficultés\n" + problemes_text + "\n\n" + "Encore un peu plus sur toi\n" + toi_text + "\n\n" + "Valeurs Schwartz\n" + schwartz_text + "\n\n" + "Valeur et motivation\n" + valeur_text + "\n\n" + "Toi et le marché du travail\n" + travail_text + "\n\n" + "Environnement de travail favorable\n" + environnement_text + "\n\n" + "Exemples d’environnements de travail favorables\n" + ex_env_text + "\n\n" 
-
-#+ "Tes couleurs en couple\n" + couple_text + "\n\n" + "Ton portrait\n" + portrait_text
+full_text= "EN BREF\n" + bref_text + "\n\n" + "Tes forces mises en lumière\n" + forces_text + "\n\n" + "Tes défis Potentiels\n" + defis_text + "\n\n" + "Perception du changement\n" + changements_text + "\n\n" + "Perception des relations amicales\n" + amicale_text + "\n\n" + "Perception des règles et convention sociales\n" + regles_text + "\n\n" + "Perception des défis, problèmes et difficultés\n" + problemes_text + "\n\n" + "Encore un peu plus sur toi\n" + toi_text + "\n\n" + "Valeurs Schwartz\n" + schwartz_text + "\n\n" + "Valeur et motivation\n" + valeur_text + "\n\n" + "Toi et le marché du travail\n" + travail_text + "\n\n" + "Environnement de travail favorable\n" + environnement_text + "\n\n" + "Exemples d’environnements de travail favorables\n" + ex_env_text + "\n\n" + "Tes couleurs en couple\n" + couple_text + "\n\n" + "Ton portrait\n" + portrait_text
 
 
 
