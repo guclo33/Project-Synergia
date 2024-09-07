@@ -75,7 +75,11 @@ synergia_section_dev_string = synergia_section_dev_transposed.to_string(header=F
 
 pd.set_option('display.max_colwidth', None)
 
-print(synergia_section_motivation_string)
+
+
+nom_organisateur = synergia_nom.iloc[0, 4]
+
+print(nom_organisateur)
 
 
 # Charger un onglet spécifique d'un fichier Excel
