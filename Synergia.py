@@ -16,7 +16,7 @@ from docx import Document
 
 #NOM format "Prénom, Nom"
 
-nom = "Lydia, Lefebvre"
+nom = "Patrice, Simard"
 
 #DONNÉES EXCEL
 
@@ -25,14 +25,14 @@ synergia = pd.read_excel("C:/Users/Guillaume Cloutier/OneDrive/Synergia/Synergia
 
 synergia_nom = pd.DataFrame(synergia.loc[synergia["Nom"]== nom])
 
-plage_nom = synergia_nom.iloc[:,2]
+plage_nom = synergia_nom.iloc[:,2:3]
 plage_questions1_11 = synergia_nom.iloc[:,6:50]
 plage_questions17_20 = synergia_nom.iloc[:,62:78]
 plage_questions1_20 = synergia_nom.iloc[:,6:78]
 plage_questions12_14 = synergia_nom.iloc[:,50:62]
-plage_questions15_16 = synergia_nom.iloc[:,105:114]
-plage_questions_dev1 = synergia_nom.iloc[:,103:105]
-plage_questions_dev2 = synergia_nom.iloc[:,114]
+plage_questions15_16 = synergia_nom.iloc[:,106:114]
+plage_questions_dev1 = synergia_nom.iloc[:,104:106]
+plage_questions_dev2 = synergia_nom.iloc[:,115:116]
 plage_questions_complet = synergia_nom.iloc[:,6:115]
 plage_questions21_26 = synergia_nom.iloc[:,78:102]
 
@@ -51,7 +51,7 @@ synergia_section2_transposed = synergia_section2.transpose()
 synergia_section2_string = synergia_section2_transposed.to_string(header=False)
 
 #motivation
-synergia_section_motivation= pd.concat([plage_nom, plage_questions1_20, plage_questions15_16, plage_questions_dev1, plage_questions_dev2], axis=1)
+synergia_section_motivation= pd.concat([plage_nom, plage_questions1_20, plage_questions15_16], axis=1)
 
 synergia_section_motivation_transposed = synergia_section_motivation.transpose()
 
@@ -65,8 +65,13 @@ synergia_section_couple_transposed = synergia_section_couple.transpose()
 
 synergia_section_couple_string = synergia_section_couple_transposed.to_string(header=False)
 
+#question developpement
 
-#complet
+synergia_section_dev = pd.concat([plage_nom, plage_questions_dev1, plage_questions_dev2], axis = 1)
+
+synergia_section_dev_transposed = synergia_section_dev.transpose()
+
+synergia_section_dev_string = synergia_section_dev_transposed.to_string(header=False)
 
 
 #Pour le model 1
@@ -296,7 +301,7 @@ problemes_text = problemes.choices[0].message.content
 
 #Section "Encore un peu plus sur toi"
 
-toi_prompt = f"""Je souhaite que tu crées une section 'Valeurs et motivations' qui décrit les valeurs principales et les motivations d'une personne, en se basant sur ses réponses au questionnaire DISC, ses caractéristiques personnelles, et les réponses aux questions 12 à 16 ainsi que les questions à développement de la fin. Voici le questionnaire :\n {synergia_section_motivation_string}\n Le texte doit être en plusieurs paragraphes, ***DANS UN MAXIMUM DE 200 MOTS***, mettant en avant les aspects personnels de la personne en montrant comment ses valeurs influencent ses actions et ses décisions dans différents contextes de sa vie. Décris ce que la personne valorise dans sa vie personnelle, sa vie professionnelle, ses loisirs, et ses interactions avec ses proches. Mentionne ce qui motive la personne dans son travail – est-ce l'innovation, l'engagement, la rigueur, ou le désir d'influencer positivement son environnement ? Évoque ce qui est important pour elle. Utilise un ton inspirant et nuancé, qui met en lumière les forces et les motivations de la personne. Voici un exemple de ce que je souhaite obtenir : [Exemple 1 : Madame Test valorise avant tout la liberté et l’indépendance, que ce soit dans sa vie personnelle ou professionnelle. Elle a créé une entreprise d’animations à domicile et de consultations en entreprise, cherchant à inspirer et à influencer positivement son entourage. Son aspiration à long terme est de bâtir un réseau de franchisés qui partagent sa vision, lui permettant de rester alignée, motivée, et fière de son parcours tout en vivant une vie pleine de sens.\n Dans sa vie personnelle, Madame Test se connecte avec elle-même à travers des moments de solitude en faisant du sport, du ménage ou du plein air tout en écoutant des podcasts, ce qui nourrit son besoin de liberté. Elle apprécie également le sport d’équipe, une façon pour elle de créer des connexions intenses tout en prenant soin de son corps. Elle accorde une grande importance à ses moments de qualité avec son conjoint, où le partage et la complicité renforcent leur relation. \n Madame Test est motivée par l’innovation et l’exploration de projets excitants. Elle ne craint pas de prendre des risques et préfère l’action à l’attente, valorisant les expériences positives et l’impact qu’elle peut avoir sur les autres. Sa réussite personnelle, comme avoir pris le temps de réaligner sa vie, reflète son engagement à vivre selon ses propres termes, en étant libre et authentique.\n """
+toi_prompt = f"""Je souhaite que tu crées une section 'Valeurs et motivations' qui décrit les valeurs principales et les motivations d'une personne, en se basant sur ses réponses au questionnaire DISC, ses caractéristiques personnelles, et les réponses aux questions 12 à 16 ainsi que les questions à développement de la fin. Voici le questionnaire :\n {synergia_section_motivation_string} et {synergia_section_dev}\n Le texte doit être en plusieurs paragraphes, ***DANS UN MAXIMUM DE 200 MOTS***, mettant en avant les aspects personnels de la personne en montrant comment ses valeurs influencent ses actions et ses décisions dans différents contextes de sa vie. Décris ce que la personne valorise dans sa vie personnelle, sa vie professionnelle, ses loisirs, et ses interactions avec ses proches. Mentionne ce qui motive la personne dans son travail – est-ce l'innovation, l'engagement, la rigueur, ou le désir d'influencer positivement son environnement ? Évoque ce qui est important pour elle. Utilise un ton inspirant et nuancé, qui met en lumière les forces et les motivations de la personne. Voici un exemple de ce que je souhaite obtenir : [Exemple 1 : Madame Test valorise avant tout la liberté et l’indépendance, que ce soit dans sa vie personnelle ou professionnelle. Elle a créé une entreprise d’animations à domicile et de consultations en entreprise, cherchant à inspirer et à influencer positivement son entourage. Son aspiration à long terme est de bâtir un réseau de franchisés qui partagent sa vision, lui permettant de rester alignée, motivée, et fière de son parcours tout en vivant une vie pleine de sens.\n Dans sa vie personnelle, Madame Test se connecte avec elle-même à travers des moments de solitude en faisant du sport, du ménage ou du plein air tout en écoutant des podcasts, ce qui nourrit son besoin de liberté. Elle apprécie également le sport d’équipe, une façon pour elle de créer des connexions intenses tout en prenant soin de son corps. Elle accorde une grande importance à ses moments de qualité avec son conjoint, où le partage et la complicité renforcent leur relation. \n Madame Test est motivée par l’innovation et l’exploration de projets excitants. Elle ne craint pas de prendre des risques et préfère l’action à l’attente, valorisant les expériences positives et l’impact qu’elle peut avoir sur les autres. Sa réussite personnelle, comme avoir pris le temps de réaligner sa vie, reflète son engagement à vivre selon ses propres termes, en étant libre et authentique.\n """
 
 #"Exemple 2 Monsieur Test valorise avant tout la liberté et l’indépendance, cherchant à maximiser le plaisir dans sa vie tout en préservant un équilibre qui lui permet de profiter de sa famille et de sa santé. Il aspire à une carrière qui lui offre la flexibilité nécessaire pour être bien dans sa vie professionnelle tout en savourant ses moments personnels. Ce besoin d’autonomie se reflète dans sa préférence pour des projets excitants et des activités qui stimulent sa curiosité et son désir constant d’apprendre. \n Dans sa vie personnelle, Monsieur Test apprécie les moments de qualité avec sa conjointe, la pratique régulière de sport, et l'importance qu'il accorde à bien manger. Ces activités lui procurent non seulement un sentiment de satisfaction et de bien-être, mais elles contribuent également à sa santé physique et mentale, qu'il considère comme essentielles. Sa fierté d’avoir aidé une athlète à atteindre le niveau NCAA illustre son engagement à soutenir les autres et à perfectionner les talents autour de lui, tout en reflétant sa rigueur et sa passion pour le sport.\n Sur le plan professionnel, il est motivé par la recherche de nouvelles expériences et par l’amélioration continue de ses compétences, même s’il préfère éviter les environnements stressants. Son approche axée sur le plaisir, l’innovation modérée, et la reconnaissance de ses talents uniques le pousse à rechercher des situations qui valorisent ses forces tout en lui offrant une certaine stabilité.].\n Assure-toi que chaque paragraphe donne une vision cohérente et enrichissante des motivations et des valeurs de la personne."
 
