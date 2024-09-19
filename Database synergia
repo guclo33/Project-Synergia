@@ -1,8 +1,0 @@
-CREATE TABLE couleur (
-    name TEXT PRIMARY KEY
-);
-
-INSERT INTO couleur (name)
-VALUES ("Marie-Soleil Veillette");
-
-SELECT * FROM couleur

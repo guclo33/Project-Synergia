@@ -16,7 +16,7 @@ from docx import Document
 
 #NOM format "Prénom, Nom"
 
-nom = "David, Bernier"
+nom = "Maxime, Pépin"
 
 #DONNÉES EXCEL
 
@@ -36,42 +36,36 @@ plage_questions_dev2 = synergia_nom.iloc[:,115:116]
 plage_questions_complet = synergia_nom.iloc[:,6:115]
 plage_questions21_26 = synergia_nom.iloc[:,78:102]
 
+#definition de la fonction pour formatter les résultats des bases de données
+def excel_to_string(*args):
+  return pd.concat(args, axis=1).transpose().to_string(header=False)
+
+
+
 #section 1
-synergia_section1= pd.concat([plage_nom, plage_questions1_11, plage_questions17_20], axis=1)
 
-synergia_section1_transposed = synergia_section1.transpose()
+synergia_section1_string = excel_to_string(plage_nom, plage_questions1_11, plage_questions17_20)
 
-synergia_section1_string = synergia_section1_transposed.to_string(header=False)
 
 #section 2
-synergia_section2 = pd.concat([plage_nom, plage_questions1_20], axis = 1)
 
-synergia_section2_transposed = synergia_section2.transpose()
+synergia_section2_string = excel_to_string(plage_nom, plage_questions1_20)
 
-synergia_section2_string = synergia_section2_transposed.to_string(header=False)
 
 #motivation
-synergia_section_motivation= pd.concat([plage_nom, plage_questions1_20, plage_questions15_16], axis=1)
 
-synergia_section_motivation_transposed = synergia_section_motivation.transpose()
 
-synergia_section_motivation_string = synergia_section_motivation_transposed.to_string(header=False)
+synergia_section_motivation_string = excel_to_string(plage_nom, plage_questions1_20, plage_questions15_16)
 
 
 #couple
-synergia_section_couple= pd.concat([plage_nom, plage_questions21_26], axis=1)
 
-synergia_section_couple_transposed = synergia_section_couple.transpose()
+synergia_section_couple_string = excel_to_string(plage_nom, plage_questions21_26)
 
-synergia_section_couple_string = synergia_section_couple_transposed.to_string(header=False)
 
 #question developpement
 
-synergia_section_dev = pd.concat([plage_nom, plage_questions_dev1, plage_questions_dev2], axis = 1)
-
-synergia_section_dev_transposed = synergia_section_dev.transpose()
-
-synergia_section_dev_string = synergia_section_dev_transposed.to_string(header=False)
+synergia_section_dev_string = excel_to_string(plage_nom, plage_questions_dev1, plage_questions_dev2)
 
 
 #Pour le model 1
@@ -82,11 +76,8 @@ plage_model1 = synergia_model1.iloc[:,2]
 plage_model1_questions1_11 = synergia_model1.iloc[:,6:50]
 plage_model1_questions17_20 = synergia_model1.iloc[:,62:78]
 
-synergia_model1_section1= pd.concat([plage_model1, plage_model1_questions1_11, plage_model1_questions17_20], axis=1)
+synergia_model1_section1_string = excel_to_string(plage_model1, plage_model1_questions1_11, plage_model1_questions17_20)
 
-synergia_model1_section1_transposed = synergia_model1_section1.transpose()
-
-synergia_model1_section1_string = synergia_model1_section1_transposed.to_string(header=False)
 
 #Pour le model 2
 
@@ -96,11 +87,7 @@ plage_model2 = synergia_model2.iloc[:,2]
 plage_model2_questions1_11 = synergia_model2.iloc[:,6:50]
 plage_model2_questions17_20 = synergia_model2.iloc[:,62:78]
 
-synergia_model2_section1= pd.concat([plage_model2, plage_model2_questions1_11, plage_model2_questions17_20], axis=1)
-
-synergia_model2_section1_transposed = synergia_model2_section1.transpose()
-
-synergia_model2_section1_string = synergia_model2_section1_transposed.to_string(header=False)
+synergia_model2_section1_string = excel_to_string(plage_model2, plage_model2_questions1_11, plage_model2_questions17_20)
 
 
 #***VARIABLES ET FONCTIONS***
