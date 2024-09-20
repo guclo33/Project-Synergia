@@ -3,6 +3,7 @@ import time
 import pandas as pd
 import warnings
 warnings.filterwarnings("ignore", category=UserWarning, module="openpyxl")
+pd.set_option('future.no_silent_downcasting', True)
 from openai import OpenAI
 from openai.types import Completion, CompletionChoice, CompletionUsage
 from reportlab.lib.pagesizes import letter
@@ -21,9 +22,38 @@ nom = "Maxime, Pépin"
 #DONNÉES EXCEL
 
 #Pour le client
-synergia = pd.read_excel("C:/Users/Guillaume Cloutier/OneDrive/Synergia/Synergia.xlsx", sheet_name="Réponses 3")
+synergia = pd.read_excel("C:/Users/Guillaume Cloutier/OneDrive/Synergia/Synergia.xlsx", sheet_name="synergia_mlm")
 
 synergia_nom = pd.DataFrame(synergia.loc[synergia["Nom"]== nom])
+
+#Pour avoir les pourcentage de Couleur et d'archétype
+
+def moyenne(*colonnes):
+    colonne = synergia_nom.iloc[:,list(colonnes)].replace({
+        "Plus comme moi" : 10,
+        "Moins comme moi" : 0
+    }).infer_objects(copy=False)
+    valeurs= colonne.to_numpy()
+    return round(valeurs.mean()*10)
+
+bleu = moyenne(6, 13, 17, 18, 24, 29, 30, 34, 41, 45, 49, 51, 57, 59, 64)
+rouge = moyenne(7,12,14,19,22,27,31,35,39,44,48,50,55,61,65)
+jaune = moyenne(8,10,15,21,23,26,32,36,40,42,46,52,56,60,62)
+vert = moyenne(9,11,16,20,25,28,33,37,38,43,47,53,54,58,63)
+explorateur = moyenne()
+protecteur = moyenne()
+bouffon = moyenne()
+souverain = moyenne()
+magicien = moyenne()
+createur = moyenne()
+hero = moyenne()
+citoyen = moyenne()
+sage = moyenne()
+amant = moyenne()
+rebelle = moyenne()
+optimiste = moyenne()
+
+#plage de questions utilisé pour les prompts
 
 plage_nom = synergia_nom.iloc[:,2:3]
 plage_questions1_11 = synergia_nom.iloc[:,6:50]
@@ -485,11 +515,9 @@ portrait = generateur_texte(message_data, 500)
 
 portrait_text = portrait.choices[0].message.content
 
-
-
 #Print la totalité des textes
 
-full_text= "EN BREF\n" + bref_text + "\n\n" + "Tes forces mises en lumière\n" + forces_text + "\n\n" + "Tes défis Potentiels\n" + defis_text + "\n\n" + "Perception du changement\n" + changements_text + "\n\n" + "Perception des relations amicales\n" + amicale_text + "\n\n" + "Perception des règles et convention sociales\n" + regles_text + "\n\n" + "Perception des défis, problèmes et difficultés\n" + problemes_text + "\n\n" + "Encore un peu plus sur toi\n" + toi_text + "\n\n" + "Valeurs Schwartz\n" + schwartz_text + "\n\n" + "Valeur et motivation\n" + valeur_text + "\n\n" + "Toi et le marché du travail\n" + travail_text + "\n\n" + "Environnement de travail favorable\n" + environnement_text + "\n\n" + "Exemples d’environnements de travail favorables\n" + ex_env_text + "\n\n" + "Tes couleurs en couple\n" + couple_text + "\n\n" + "Ton portrait\n" + portrait_text
+full_text= f"COULEURS\nbleu : {bleu}%, rouge : {rouge}%, jaune : {jaune}%, vert : {vert}%\n" + f"ARCHÉTYPE\nexploreur : {explorateur}%, protecteur : {protecteur}%, bouffon : {bouffon}%, souverain : {souverain}%\nmagicien : {magicien}%, créateur : {createur}%, héro : {hero}, citoyen : {citoyen}%\nsage : {sage}%, amant : {amant}, rebelle : {rebelle}%, optimiste : {optimiste}\n\n" + "EN BREF\n" + bref_text + "\n\n" + "Tes forces mises en lumière\n" + forces_text + "\n\n" + "Tes défis Potentiels\n" + defis_text + "\n\n" + "Perception du changement\n" + changements_text + "\n\n" + "Perception des relations amicales\n" + amicale_text + "\n\n" + "Perception des règles et convention sociales\n" + regles_text + "\n\n" + "Perception des défis, problèmes et difficultés\n" + problemes_text + "\n\n" + "Encore un peu plus sur toi\n" + toi_text + "\n\n" + "Valeurs Schwartz\n" + schwartz_text + "\n\n" + "Valeur et motivation\n" + valeur_text + "\n\n" + "Toi et le marché du travail\n" + travail_text + "\n\n" + "Environnement de travail favorable\n" + environnement_text + "\n\n" + "Exemples d’environnements de travail favorables\n" + ex_env_text + "\n\n" + "Tes couleurs en couple\n" + couple_text + "\n\n" + "Ton portrait\n" + portrait_text
 
 
 

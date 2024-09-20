@@ -2,6 +2,7 @@ import os
 import pandas as pd
 import warnings
 warnings.filterwarnings("ignore", category=UserWarning, module="openpyxl")
+pd.set_option('future.no_silent_downcasting', True)
 from openai import OpenAI
 from openai.types import Completion, CompletionChoice, CompletionUsage
 import textwrap
@@ -13,80 +14,56 @@ import textwrap
 
 #NOM
 
-nom = "Patrice, Simard"
+nom = "Veillette, Joanie"
 
 #DONNÉES EXCEL
 
-#Pour le client
-synergia = pd.read_excel("C:/Users/Guillaume Cloutier/OneDrive/Synergia/Synergia.xlsx", sheet_name="Réponses 3")
+#Pour trouver les data du client
+synergia = pd.read_excel("C:/Users/Guillaume Cloutier/OneDrive/Synergia/Synergia.xlsx", sheet_name="synergia_mlm")
 
 synergia_nom = pd.DataFrame(synergia.loc[synergia["Nom"]== nom])
 
-plage_nom = synergia_nom.iloc[:,2:3]
-plage_questions1_11 = synergia_nom.iloc[:,6:50]
-plage_questions17_20 = synergia_nom.iloc[:,62:78]
-plage_questions1_20 = synergia_nom.iloc[:,6:78]
-plage_questions12_14 = synergia_nom.iloc[:,50:62]
-plage_questions15_16 = synergia_nom.iloc[:,106:114]
-plage_questions_dev1 = synergia_nom.iloc[:,104:106]
-plage_questions_dev2 = synergia_nom.iloc[:,115:116]
-plage_questions_complet = synergia_nom.iloc[:,6:115]
-plage_questions21_26 = synergia_nom.iloc[:,78:102]
+#Pour avoir les pourcentage de Couleur et d'archétype
 
-#section 1
-synergia_section1= pd.concat([plage_nom, plage_questions1_11, plage_questions17_20], axis=1)
+def moyenne(*colonnes):
+    colonne = synergia_nom.iloc[:,list(colonnes)].replace({
+        "Plus comme moi" : 10,
+        "Moins comme moi" : 0
+    }).infer_objects(copy=False)
+    valeurs= colonne.to_numpy()
+    return round(valeurs.mean()*10)
 
-synergia_section1_transposed = synergia_section1.transpose()
-
-synergia_section1_string = synergia_section1_transposed.to_string(header=False)
-
-#section 2
-synergia_section2 = pd.concat([plage_nom, plage_questions1_20], axis = 1)
-
-synergia_section2_transposed = synergia_section2.transpose()
-
-synergia_section2_string = synergia_section2_transposed.to_string(header=False)
-
-#motivation
-synergia_section_motivation= pd.concat([plage_nom, plage_questions1_20, plage_questions15_16], axis=1)
-
-synergia_section_motivation_transposed = synergia_section_motivation.transpose()
+bleu = moyenne(6, 13, 17, 18, 24, 29, 30, 34, 41, 45, 49, 51, 57, 59, 64)
+rouge = moyenne(7,12,14,19,22,27,31,35,39,44,48,50,55,61,65)
+jaune = moyenne(8,10,15,21,23,26,32,36,40,42,46,52,56,60,62)
+vert = moyenne(9,11,16,20,25,28,33,37,38,43,47,53,54,58,63)
+explorateur = moyenne()
+protecteur = moyenne()
+bouffon = moyenne()
+souverain = moyenne()
+magicien = moyenne()
+createur = moyenne()
+hero = moyenne()
+citoyen = moyenne()
+sage = moyenne()
+amant = moyenne()
+rebelle = moyenne()
+optimiste = moyenne()
 
 
-synergia_section_motivation_string = synergia_section_motivation_transposed.to_string(header=False, max_colwidth = None)
-
-
-
-#couple
-synergia_section_couple= pd.concat([plage_nom, plage_questions21_26], axis=1)
-
-synergia_section_couple_transposed = synergia_section_couple.transpose()
-
-synergia_section_couple_string = synergia_section_couple_transposed.to_string(header=False)
-
-
-#question developpement
-
-synergia_section_dev = pd.concat([plage_nom, plage_questions_dev1, plage_questions_dev2], axis = 1)
-
-synergia_section_dev_transposed = synergia_section_dev.transpose()
-
-synergia_section_dev_string = synergia_section_dev_transposed.to_string(header=False)
-
-pd.set_option('display.max_colwidth', None)
-
-
-
-nom_organisateur = synergia_nom.iloc[0, 4]
-
-print(nom_organisateur)
-
-
-# Charger un onglet spécifique d'un fichier Excel
-#df = pd.read_excel('votre_fichier.xlsx', sheet_name='Nom_de_la_feuille')
-
-# Vous pouvez également accéder à une plage de colonnes
-#colonnes_range = df.iloc[:, 1:3]  # Accède à la deuxième et troisième colonne
-
-# Combiner les deux plages en un seul DataFrame
-#colonnes_range = pd.concat([plage_1, plage_2], axis=1)
+print(bleu)
+print(rouge)
+print(jaune)
+print(vert)
+print(explorateur)
+print(protecteur)
+print(bouffon)
+print(souverain)
+print(magicien)
+print(createur)
+print(hero)
+print(citoyen)
+print(sage)
+print(amant)
+print(rebelle)
+print(optimiste)
