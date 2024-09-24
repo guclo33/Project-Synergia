@@ -71,6 +71,30 @@ plage_model2_questions17_20 = synergia_model2.iloc[:,62:78]
 
 synergia_model2_section1_string = excel_to_string(plage_model2, plage_model2_questions1_11, plage_model2_questions17_20)
 
+def moyenne(*colonnes):
+    colonne = synergia_nom.iloc[:,list(colonnes)].replace({
+        "Plus comme moi" : 10,
+        "Moins comme moi" : 0
+    }).infer_objects(copy=False)
+    valeurs= colonne.to_numpy()
+    return round(valeurs.mean()*10)
 
-print(synergia_model2_section1_string)
+bleu = moyenne(6, 13, 17, 18, 24, 29, 30, 34, 41, 45, 49, 51, 57, 59, 64)
+rouge = moyenne(7,12,14,19,22,27,31,35,39,44,48,50,55,61,65)
+jaune = moyenne(8,10,15,21,23,26,32,36,40,42,46,52,56,60,62)
+vert = moyenne(9,11,16,20,25,28,33,37,38,43,47,53,54,58,63)
+explorateur = moyenne(66, 78, 90)
+protecteur = moyenne(70, 79, 91)
+bouffon = moyenne(68, 80, 92)
+souverain = moyenne(69, 77, 93)
+magicien = moyenne(67, 82, 98)
+createur = moyenne(71, 87, 95)
+hero = moyenne(72, 84,96)
+citoyen = moyenne(73, 85, 97)
+sage = moyenne(74, 86, 94)
+amant = moyenne(75, 83, 99)
+rebelle = moyenne(76, 88, 100)
+optimiste = moyenne(81, 89, 101)
+
+print(optimiste)
 

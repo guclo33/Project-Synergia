@@ -17,7 +17,7 @@ from docx import Document
 
 #NOM format "Prénom, Nom"
 
-nom = "Veillette, Joanie"
+nom = "Jutras, Laurie"
 
 #DONNÉES EXCEL
 
@@ -132,20 +132,24 @@ bleu = moyenne(6, 13, 17, 18, 24, 29, 30, 34, 41, 45, 49, 51, 57, 59, 64)
 rouge = moyenne(7,12,14,19,22,27,31,35,39,44,48,50,55,61,65)
 jaune = moyenne(8,10,15,21,23,26,32,36,40,42,46,52,56,60,62)
 vert = moyenne(9,11,16,20,25,28,33,37,38,43,47,53,54,58,63)
-explorateur = moyenne()
-protecteur = moyenne()
-bouffon = moyenne()
-souverain = moyenne()
-magicien = moyenne()
-createur = moyenne()
-hero = moyenne()
-citoyen = moyenne()
-sage = moyenne()
-amant = moyenne()
-rebelle = moyenne()
-optimiste = moyenne()
+explorateur = moyenne(66, 78, 90)
+protecteur = moyenne(70, 79, 91)
+bouffon = moyenne(68, 80, 92)
+souverain = moyenne(69, 77, 93)
+magicien = moyenne(67, 82, 98)
+createur = moyenne(71, 87, 95)
+hero = moyenne(72, 84,96)
+citoyen = moyenne(73, 85, 97)
+sage = moyenne(74, 86, 94)
+amant = moyenne(75, 83, 99)
+rebelle = moyenne(76, 88, 100)
+optimiste = moyenne(81, 89, 101)
 
+text_pourcentage_complet = f"COULEURS\nbleu : {bleu}%, rouge : {rouge}%, jaune : {jaune}%, vert : {vert}%\n" + f"ARCHÉTYPE\nexploreur : {explorateur}%, protecteur : {protecteur}%, bouffon : {bouffon}%, souverain : {souverain}%\nmagicien : {magicien}%, créateur : {createur}%, héro : {hero}%, citoyen : {citoyen}%\nsage : {sage}%, amant : {amant}%, rebelle : {rebelle}%, optimiste : {optimiste}%\n\n"
 
+text_pourcentage_couleur = f"COULEURS\nbleu : {bleu}%, rouge : {rouge}%, jaune : {jaune}%, vert : {vert}%\n"
+
+text_pourcentage_archetype= f"ARCHÉTYPE\nexploreur : {explorateur}%, protecteur : {protecteur}%, bouffon : {bouffon}%, souverain : {souverain}%\nmagicien : {magicien}%, créateur : {createur}%, héro : {hero}%, citoyen : {citoyen}%\nsage : {sage}%, amant : {amant}%, rebelle : {rebelle}%, optimiste : {optimiste}%"
 
 # GÉNÉRER UN TEXTE POUR CHAQUE SECTION
 
@@ -289,78 +293,26 @@ problemes = generateur_texte(message_data, 350)
 problemes_text = problemes.choices[0].message.content
 
 
-#Section "Encore un peu plus sur toi"
+#Section "Archétype"
 
-toi_prompt = f"""Je souhaite que tu crées une section 'Valeurs et motivations' qui décrit les valeurs principales et les motivations d'une personne, en se basant sur ses réponses au questionnaire DISC, ses caractéristiques personnelles, et les réponses aux questions 12 à 16 ainsi que les questions à développement de la fin. Voici le questionnaire :\n {synergia_section_motivation_string} et {synergia_section_dev_string}\n Le texte doit être en plusieurs paragraphes, ***DANS UN MAXIMUM DE 200 MOTS***, mettant en avant les aspects personnels de la personne en montrant comment ses valeurs influencent ses actions et ses décisions dans différents contextes de sa vie. Décris ce que la personne valorise dans sa vie personnelle, sa vie professionnelle, ses loisirs, et ses interactions avec ses proches. Mentionne ce qui motive la personne dans son travail – est-ce l'innovation, l'engagement, la rigueur, ou le désir d'influencer positivement son environnement ? Évoque ce qui est important pour elle. Utilise un ton inspirant et nuancé, qui met en lumière les forces et les motivations de la personne. Voici un exemple de ce que je souhaite obtenir : [Exemple 1 : Madame Test valorise avant tout la liberté et l’indépendance, que ce soit dans sa vie personnelle ou professionnelle. Elle a créé une entreprise d’animations à domicile et de consultations en entreprise, cherchant à inspirer et à influencer positivement son entourage. Son aspiration à long terme est de bâtir un réseau de franchisés qui partagent sa vision, lui permettant de rester alignée, motivée, et fière de son parcours tout en vivant une vie pleine de sens.\n Dans sa vie personnelle, Madame Test se connecte avec elle-même à travers des moments de solitude en faisant du sport, du ménage ou du plein air tout en écoutant des podcasts, ce qui nourrit son besoin de liberté. Elle apprécie également le sport d’équipe, une façon pour elle de créer des connexions intenses tout en prenant soin de son corps. Elle accorde une grande importance à ses moments de qualité avec son conjoint, où le partage et la complicité renforcent leur relation. \n Madame Test est motivée par l’innovation et l’exploration de projets excitants. Elle ne craint pas de prendre des risques et préfère l’action à l’attente, valorisant les expériences positives et l’impact qu’elle peut avoir sur les autres. Sa réussite personnelle, comme avoir pris le temps de réaligner sa vie, reflète son engagement à vivre selon ses propres termes, en étant libre et authentique.\n """
+archetype_prompt = f"""Tes motivations naturelles "Je souhaite que tu crées un texte de ***100 MOTS MAXIMUM*** qui décrit les motivations profondes de la personne. Base-toi sur ces questionnaires : {synergia_archetype_string} et{synergia_section_developpement_string}, ainsi que sur les archétypes de la personnalité, sans les nommer. Le texte doit refléter ce qui motive la personne de façon unique, en soulignant ses valeurs fondamentales et ce qui la rend spéciale. Utilise un ton positif qui met en avant son individualité et son approche singulière dans ses actions et décisions." (exemple : Madame Test est profondément motivée par la volonté de créer un impact positif à travers des projets innovants et inspirants. Elle aime repousser les frontières de la connaissance, guider les autres vers la transformation, et inspirer des changements de perspective. L'humour et l'authenticité jouent un rôle clé dans ses interactions, tout comme son désir de vivre des connexions émotionnelles profondes. Ambitieuse et orientée vers l'action, elle cherche à bâtir un avenir où elle pourra diriger avec confiance, tout en restant fidèle à ses valeurs de créativité et de simplicité.)"""
 
+context_append(problemes_text, archetype_prompt)
 
+archetype = generateur_texte(message_data, 300)
 
-message_data.append( 
-  {
-    "role": "assistant", 
-    "content": problemes_text
-  }
-)
-  
-message_data.append(
-    {
-        "role": "user",
-        "content": toi_prompt
-    }
-)
+archetype_text = archetype.choices[0].message.content
 
-toi = generateur_texte(message_data, 500)
+#Section Description 2 Archétypes
 
-toi_text = toi.choices[0].message.content
+desc_arch_prompt= f"""Je souhaite obtenir un texte de 100 mots par archétype, basé sur les deux principaux archétypes de la personne. Le texte doit refléter ce que la personne aime, en se basant sur ces deux questionnaires:\n {synergia_archetype_string} et\n {synergia_section_developpement_string}. À partir de ces pourcentages calculés : \n {text_pourcentage_archetype}\n pondère les en fonction des questions à développement. Assure-toi de mettre en avant les préférences, désirs, et motivations de la personne en lien avec ses deux principaux archétypes, tout en expliquant ce qui la motive profondément." (Exemple : Madame Test aime inspirer les autres à voir de nouvelles possibilités et à transformer leurs pensées. Elle apprécie particulièrement guider les gens vers leur propre croissance et transformation, en trouvant des moyens d'influencer positivement leur vie. Son intérêt pour les idées innovantes et sa volonté de voir des changements profonds chez les autres la motivent profondément. Elle aime également créer des projets concrets qui font une réelle différence, reflétant son désir constant d’apporter de la magie et de la transformation dans le monde qui l'entoure. Madame Test aime créer des relations profondes et authentiques avec ceux qui l’entourent. Elle apprécie particulièrement les moments de connexion émotionnelle et les interactions où la sincérité et l’affection sont présentes. Elle aime partager des expériences riches en émotions et exprimer ses sentiments de manière directe et authentique. Pour elle, la profondeur des liens humains est essentielle, et elle se sent épanouie lorsqu'elle peut être elle-même et vivre des relations pleines d'intimité et de complicité. Madame Test recherche des relations qui nourrissent son besoin d'authenticité et de sincérité.)"""
 
 
-#Section "Valeurs Schwartz"
+context_append(archetype_text, desc_arch_prompt)
 
-schwartz_prompt = """Je souhaite que tu identifies les trois principales motivations d'une personne selon le modèle de Schwartz, ***J'AI BESOIN DE SEULEMENT LES TROIS MOTS***, en se basant sur l'ensemble des réponses au questionnaire de la section précédente, avec une attention particulière aux questions 12 à 16 ainsi qu’aux réponses à développement. Analyse les réponses pour repérer les valeurs dominantes en utilisant les dimensions du modèle de Schwartz (ex. hédonisme, stimulation, autonomie, sécurité, etc.). Évalue quelles valeurs ressortent le plus fortement en fonction des réponses. Attribue un score à chaque dimension de Schwartz en fonction des réponses fournies, notamment celles qui reflètent des thèmes comme l'indépendance, la tradition, le plaisir, la sécurité, l'innovation, etc. Sélectionne les trois dimensions avec les scores les plus élevés pour définir les principales motivations. Présente les trois principales motivations identifiées, accompagnées d'une brève description expliquant pourquoi ces motivations sont les plus fortes chez la personne, en se basant sur les réponses spécifiques du questionnaire."""
+desc_arch = generateur_texte(message_data, 500)
 
-message_data.append( 
-  {
-    "role": "assistant", 
-    "content": toi_text
-  }
-)
-  
-message_data.append(
-    {
-        "role": "user",
-        "content": schwartz_prompt
-    }
-)
-
-schwartz = generateur_texte(message_data, 400)
-
-schwartz_text = schwartz.choices[0].message.content
-
-
-#Section Valeur et motivations
-
-valeur_prompt = """Je souhaite que tu identifies et décrives **QUATRES MOTIVATIONS SPÉCIFIQUES** et précises pour une personne, basées sur l'ensemble de ses réponses au questionnaire, en incluant particulièrement les deux dernières questions à développement.***LE TEXTE DOIT ÊTRE D'UN MAXIMUM DE 150 MOTS***. Prends aussi en considération les couleurs de personnalité DISC de la personne. Les motivations doivent refléter ce qui pousse réellement cette personne à agir dans sa vie personnelle et professionnelle. Je veux que tu utilises des déductions et reformulations sans répéter les mots exacts de la personne. (Exemple; , Accomplissement personnel, Reconnaissance sociale,  Croissance personnelle,  Sécurité financière, Liberté d’action, Impact sur les autres,  Plaisir et divertissement, Réussite professionnelle,  Apprentissage continu,  Relations familiales,  Stabilité émotionnelle,  Avoir un objectif clair,  Compétition et défis,  Amélioration de soi,  Innovation et créativité,  Contribution à une cause,  Autonomie et indépendance,  Appartenance à un groupe, Exploration et aventure,  Spiritualité et connexion intérieure). Pour chaque motivation, développe des actions concrètes et inspirantes qui pourraient l'aider à poursuivre ses objectifs. Assure-toi que chaque motivation soit présentée de manière unique et engageante, avec des exemples pratiques et des suggestions spécifiques. Voici un exemple de format que je souhaite obtenir pour une motivation : Exemple 1\n •  Madame Test est motivée par l’innovation et la recherche de projets excitants.\n 🚀 Lancer des Initiatives Innovantes : Propose des idées nouvelles dans ton entreprise et cherche constamment à sortir des sentiers battus. Créer des franchises pour tes animations à domicile peut répondre à ton désir d’expansion et de nouveauté.\n 🧩 Participer à des Conférences sur l’Innovation : Assiste à des événements ou conférences sur les nouvelles tendances dans ton domaine, pour alimenter ta soif de projets excitants et de connaissances actuelles.\n 📝 Brainstorming Créatif : Organise des sessions de brainstorming pour développer des concepts nouveaux, que ce soit pour ton entreprise ou des projets personnels. Cela alimente ton esprit d’innovation tout en explorant des terrains inconnus.\n 🎯 Collaborations avec des Esprits Créatifs : Associe-toi à des personnes ou des équipes qui partagent ta passion pour l’innovation. Les échanges d’idées peuvent inspirer et revitaliser tes projets.\n """
-
-
-
-
-message_data.append( 
-  {
-    "role": "assistant", 
-    "content": schwartz_text
-  }
-)
-  
-message_data.append(
-    {
-        "role": "user",
-        "content": valeur_prompt
-    }
-)
-
-valeur = generateur_texte(message_data, 500)
-
-valeur_text = valeur.choices[0].message.content
+desc_arch_text = desc_arch.choices[0].message.content
 
 
 
@@ -369,21 +321,9 @@ valeur_text = valeur.choices[0].message.content
 travail_prompt = """Je souhaite que tu rédiges un texte complet qui décrit le profil professionnel d’une personne, en utilisant ses réponses au questionnaire, ses traits de personnalité DISC, et ses motivations principales. Le texte doit suivre une structure précise et inclure plusieurs paragraphes décrivant différents aspects de sa personnalité et de sa façon de travailler, ***DANS UN MAXIMUM DE 325 MOTS***. Assure-toi d’utiliser un langage fluide, engageant, et de ne pas répéter les mêmes mots ou expressions. Voici la structure à suivre :\n1.	Introduction de la Personne :\nDébute par une description de la nature et des traits de personnalité principaux de la personne, et comment ces caractéristiques influencent sa manière de travailler. Mets en avant ce qui la rend unique dans son approche professionnelle.\n2.	Compétences et Style de Travail :\nPrésente les compétences professionnelles distinctives de la personne et son style de travail. Décris comment ses traits se manifestent concrètement dans son travail, en expliquant ce qui la rend efficace dans son rôle. Inclue des exemples ou scénarios pour illustrer ces compétences.\n3.	Approche en Équipe et Prise de Décision :\nDécris comment la personne contribue à la dynamique d’équipe et à la prise de décision. Mentionne sa manière de collaborer, son style de communication, et comment elle aborde les défis en groupe. Ajoute un aperçu de la gestion des conflits ou des situations délicates pour montrer comment elle réagit en moments critiques.\n4.	Style de Leadership :\nSi la personne est en position de leadership, décris son style de gestion et comment elle est perçue par les autres. Mets en avant ses qualités de leader et la façon dont elle inspire, motive, ou guide son équipe. \n5.	Impact sur l’Équipe :\nConclus en expliquant l’impact de la personne sur ses collègues et sur la dynamique de l’équipe. Mentionne comment elle influence son entourage, crée une dynamique de travail spécifique, et en quoi ses qualités apportent de la valeur. \nAssure-toi que le texte soit équilibré, nuancé, et qu’il donne une vision complète de la personne en montrant à la fois ses forces et ses zones d’amélioration. Il ne doit pas répéter les mêmes caractéristiques fréquemment. Inclue des exemples concrets et explore les aspects relationnels pour offrir un portrait riche et engageant. Voici un exemple de ce que je souhaite obtenir : [Exemple 1 :Madame Test se distingue par sa nature audacieuse et indépendante, qui transparaît dans sa manière de travailler. Elle valorise la liberté d’action et l’autonomie, ce qui lui permet de prendre des initiatives audacieuses et d’aborder les projets avec une grande créativité. Son désir de se démarquer et de créer un impact positif est évident dans chaque aspect de son travail. Son approche professionnelle est marquée par une volonté constante de repousser les limites, tant pour elle-même que pour son équipe.\nSur le plan professionnel, Madame Test se révèle particulièrement efficace dans des contextes où l’innovation est encouragée. Elle excelle à transformer des idées novatrices en actions concrètes, notamment lors de la création d’animations à domicile ou dans des projets qui demandent une touche personnelle. Son style de travail est dynamique et énergique : elle aime explorer de nouvelles voies et se lance sans hésiter dans des initiatives non conventionnelles. Par exemple, lorsqu'elle initie un projet, elle s’assure que chaque détail reflète son sens de l’originalité et de la nouveauté, apportant ainsi une dimension unique à ses réalisations.\nDans une équipe, Madame Test adopte une approche directe et proactive, contribuant à la prise de décision avec assurance. Elle n’hésite pas à exprimer ses idées et à encourager les autres à sortir de leur zone de confort. Sa capacité à gérer des situations délicates avec un mélange d’audace et de réflexion rapide lui permet de naviguer efficacement dans les moments critiques. Elle sait mobiliser son équipe en utilisant son enthousiasme contagieux, même si son style peut parfois dérouter ceux qui préfèrent une approche plus structurée et méthodique.\nEn tant que leader, Madame Test inspire par sa détermination et son esprit d’initiative. Elle est perçue comme une figure motivante, toujours prête à explorer de nouvelles stratégies et à encourager son équipe à faire de même. Sa capacité à diriger avec confiance tout en laissant de la place à l’innovation en fait une leader qui se démarque par son approche visionnaire. Elle sait guider son équipe avec un équilibre entre indépendance et engagement, créant un environnement où chacun se sent libre de contribuer.\nL’impact de Madame Test sur son entourage est marqué par sa capacité à insuffler une dynamique positive et stimulante. Elle influence ses collègues par son énergie et sa passion pour l’innovation, poussant l’équipe à se dépasser et à embrasser le changement avec enthousiasme. Ses qualités font d’elle une alliée précieuse, capable de transformer la dynamique de travail en un espace où les idées audacieuses et les approches non conventionnelles sont non seulement acceptées, mais encouragées.\n."""
 
 
-message_data.append( 
-  {
-    "role": "assistant", 
-    "content": valeur_text
-  }
-)
-  
-message_data.append(
-    {
-        "role": "user",
-        "content": travail_prompt
-    }
-)
+context_append(desc_arch_text, travail_prompt)
 
-travail = generateur_texte(message_data, 750)
+travail = generateur_texte(message_data, 700)
 
 travail_text = travail.choices[0].message.content
 
@@ -392,20 +332,7 @@ travail_text = travail.choices[0].message.content
 environnement_prompt = """Je souhaite que tu rédiges un texte complet qui décrit l'environnement de travail favorable pour une personne, en se basant sur ses réponses au questionnaire, ses traits de personnalité DISC, et ses motivations principales, ***DANS UN MAXIMUM DE 300 MOTS***. Ne prends pas en compte les réponses aux questions à développement. Le texte doit suivre une structure précise, incluant plusieurs paragraphes qui décrivent les conditions de travail optimales pour cette personne, ainsi que les environnements les moins favorables et les raisons pour lesquelles ils sont moins adaptés. Assure-toi de développer pourquoi certains environnements sont positifs pour la personne et pourquoi d'autres ne le sont pas. Intègre également une section qui décrit ses préférences en matière de contacts sociaux, en précisant si ces interactions lui donnent de l’énergie ou la drainent, afin de refléter son niveau d’extraversion ou d’intraversion. Utilise un langage fluide, engageant, et évite de répéter les mêmes mots ou expressions. Voici la structure à suivre :\n1.	Introduction :\nDébute en expliquant dans quel type d'environnement la personne s’épanouit le mieux. Mentionne les caractéristiques principales de l’environnement qui lui permettent de se sentir à l’aise et de performer, en lien avec ses traits de personnalité.\n2.	Culture d'entreprise et style de travail :\nDécris les éléments de la culture d’entreprise qui sont les plus compatibles avec la personne, comme l'innovation, la prise de risque, ou la collaboration. Précise ce qui lui permet d'exprimer ses forces et de s’engager pleinement dans son travail, en élaborant sur les raisons pour lesquelles ces éléments sont positifs pour elle.\n3.	Préférences en Matière de Contacts Sociaux :\nMentionne si la personne préfère des interactions sociales fréquentes ou si elle privilégie des échanges plus authentiques et de qualité. Précise si ces interactions lui donnent de l’énergie ou la drainent, afin de déterminer son niveau d’extraversion ou d’intraversion. Explique comment ces préférences influencent son environnement de travail idéal.\n4.	Rôle et contribution :\nExplique comment la personne se comporte dans cet environnement et comment elle utilise ses compétences pour apporter de la valeur. Mentionne sa façon de contribuer à l’équipe ou au projet, et comment l’environnement lui permet de mettre en avant son leadership ou ses capacités spécifiques.\n5.	Environnements Moins Favorables :\nAjoute une section sur les types d’environnements qui conviennent le moins à la personne. Explique pourquoi ces environnements sont moins favorables, en lien avec ses traits de personnalité et ses préférences, et comment cela peut affecter sa performance ou son bien-être. Développe sur les aspects spécifiques qui rendent ces environnements difficiles pour elle.\n6.	Conclusion :\nConclus en résumant ce qui rend cet environnement idéal pour la personne, en soulignant comment cela maximise son potentiel et son épanouissement professionnel, tout en notant l'importance d'éviter les environnements moins adaptés.\nAssure-toi que le texte reflète fidèlement la personnalité et les préférences de la personne, en montrant clairement comment un environnement de travail spécifique peut l’aider à s’épanouir, et pourquoi d'autres environnements pourraient nuire à sa performance. Utilise des phrases positives et engageantes pour créer un portrait motivant et précis de son environnement de travail idéal et moins idéal. Voici un exemple de ce que je souhaite obtenir : \n: [Exemple 1 Monsieur Test s’épanouit dans un environnement de travail structuré et méthodique, où l’organisation, la stabilité et les normes élevées sont valorisées. Il excelle dans des contextes où les processus clairs et les règles définies permettent une gestion précise et ordonnée des projets. Ces environnements lui offrent un cadre sécurisant, lui permettant de se concentrer sur l’atteinte de l’excellence et la production de résultats de haute qualité. Le respect des procédures et la cohérence dans les pratiques lui permettent de minimiser les risques et de garantir un travail impeccable, aligné avec ses standards élevés.\nMonsieur Test apprécie particulièrement les cultures d'entreprise qui valorisent la planification, la précision, et le respect des protocoles établis. Ces contextes sont positifs pour lui car ils répondent à son besoin de clarté et de rigueur, lui offrant la stabilité nécessaire pour performer à son meilleur. La structure et l'organisation de ces environnements lui permettent de canaliser son souci du détail et sa capacité à analyser les données de manière approfondie, contribuant ainsi de manière efficace à l'atteinte des objectifs communs.\nEn matière de contacts sociaux, Monsieur Test préfère des interactions qui sont ciblées et pertinentes, plutôt que des échanges sociaux fréquents ou superficiels. Les contacts constants et les interactions trop nombreuses peuvent le drainer, affectant sa concentration et son efficacité. Il se sent plus énergisé lorsqu'il peut travailler de manière autonome ou dans des environnements où les échanges sont constructifs et limités à ce qui est nécessaire pour avancer dans les projets. Cela reflète une tendance plus introvertie, où les échanges de qualité priment sur la quantité.\nEn revanche, Monsieur Test est moins à l’aise dans des environnements trop dynamiques, imprévisibles, ou désorganisés, où les règles sont floues et les structures peu respectées. Les cultures d’entreprise qui favorisent l’improvisation, le changement constant, ou une approche trop flexible peuvent créer du stress et réduire son efficacité. Ces environnements peuvent affecter son bien-être car ils manquent de la clarté et de la stabilité dont il a besoin pour se sentir en contrôle et motivé.\nEn résumé, Monsieur Test s’épanouit dans des environnements de travail ordonnés et bien structurés, où ses compétences méthodiques et analytiques peuvent briller. Les environnements trop chaotiques ou axés sur l’improvisation risquent de nuire à son engagement et à sa performance, limitant ainsi sa capacité à apporter une contribution optimale à son équipe et à son organisation.\n"""
 
 
-
-message_data.append( 
-  {
-    "role": "assistant", 
-    "content": travail_text
-  }
-)
-  
-message_data.append(
-    {
-        "role": "user",
-        "content": environnement_prompt
-    }
-)
+context_append(travail_text, environnement_prompt)
 
 environnement = generateur_texte(message_data, 650)
 
@@ -413,83 +340,9 @@ environnement_text = environnement.choices[0].message.content
 
 
 
-#Section Exemples d’environnements de travail favorables
-
-ex_env_prompt = """Je souhaite que tu rédiges une section qui présente des environnements de travail favorables pour une personne, en se basant sur l'entièreté de ses réponses au questionnaire et ses traits de personnalité DISC, ***DANS UN MAXIMUM DE 200 MOTS***. Propose des suggestions qui sont en lien avec ce qu'elle fait actuellement, mais inclut également des suggestions d'environnements qui pourraient lui convenir parfaitement selon ses réponses. Utilise un ton positif et engageant, et présente chaque suggestion de manière claire avec une phrase d'introduction suivie d'une explication précise du pourquoi cet environnement est favorable à la personne. Utilise des icônes pertinentes pour chaque suggestion pour rendre le texte plus visuel et attrayant. Voici la structure à suivre :\n1.	Présente l'environnement avec un titre et une icône :\nDonne un titre à chaque environnement de travail proposé avec une icône pertinente, comme : “Administration et Support Organisationnel 🏢”.\n2.	Décris pourquoi cet environnement convient :\nPour chaque suggestion, explique brièvement pourquoi cet environnement est favorable à la personne, en reliant cette explication à ses compétences, traits de personnalité, et préférences indiquées dans le questionnaire.\n3.	Inclut des exemples concrets ou des tâches typiques :\nMentionne des tâches spécifiques ou des aspects de l’environnement qui exploitent les forces et les compétences de la personne.\n4.	Assure-toi d’inclure des suggestions variées :\nInclut à la fois des environnements en lien avec ce qu’elle fait actuellement et d’autres qui pourraient être de bonnes options selon ses réponses, même si elles ne sont pas directement liées à son parcours actuel.\nAssure-toi que le texte soit concis, clair, et montre des possibilités de carrière ou d’environnements de travail dans lesquels la personne pourrait s’épanouir et utiliser ses forces au maximum. Voici un exemple de ce que je souhaite obtenir : [Exemple 1 : Entrepreneuriat et Création de Projets Innovants 🚀\nMadame Test excelle dans des environnements où l’innovation, l’indépendance, et la prise de risque sont au cœur des activités. En tant qu'entrepreneure, elle peut exploiter sa créativité et sa passion pour les nouvelles idées, tout en jouissant d'une grande liberté d’action. Ce cadre lui permet de prendre des décisions audacieuses et de mener des projets qui sortent des sentiers battus, alignés avec son besoin de liberté et d'autonomie.\nConsultation et Coaching en Développement Personnel 🧠\nAvec sa capacité à motiver et à influencer positivement les autres, Madame Test serait idéale pour des rôles en consultation ou en coaching. Ces environnements favorisent la communication directe, l'impact positif, et l’innovation, répondant parfaitement à son désir de faire une différence tout en travaillant de manière indépendante. Son enthousiasme et son approche inspirante peuvent transformer les expériences des personnes qu’elle accompagne.\nÉvénementiel et Organisation d’Animations à Domicile 🎉\nMadame Test se sentirait à l’aise dans des rôles qui impliquent la création d'événements et l'animation, où elle peut maximiser les expériences positives pour les participants. Son esprit innovateur et son désir de sortir des conventions s’alignent avec des activités dynamiques et créatives qui lui permettent de partager ses idées tout en interagissant avec les autres dans des contextes stimulants et sociaux.\nMarketing Créatif et Publicité 📣\nSon goût pour l'originalité et sa capacité à penser hors des sentiers battus rendent Madame Test particulièrement adaptée aux environnements de marketing créatif et de publicité. Elle peut y exploiter son sens de l’innovation, son esprit d’indépendance, et sa volonté de prendre des risques calculés pour créer des campagnes qui se démarquent et captent l’attention du public.\nRôle de Leadership dans Startups ou PME 💡\nMadame Test pourrait également exceller dans des rôles de leadership au sein de startups ou de PME, où la flexibilité et l'innovation sont valorisées. Ces environnements lui permettent de diriger des équipes avec audace et de mettre en place des stratégies novatrices tout en influençant directement la direction de l'entreprise. Sa capacité à inspirer et à motiver les autres serait un atout majeur dans ce type de contexte.\n"""
-
-
-
-message_data.append( 
-  {
-    "role": "assistant", 
-    "content": environnement_text
-  }
-)
-  
-message_data.append(
-    {
-        "role": "user",
-        "content": ex_env_prompt
-    }
-)
-
-ex_env = generateur_texte(message_data, 350)
-
-ex_env_text = ex_env.choices[0].message.content
-
-#Section Tes couleurs en couple
-
-couple_prompt = f"""Je souhaite que tu rédiges un texte ***D'UN MAXIMUM DE 200 MOTS*** qui décrit le profil de la personne dans sa relation de couple, en utilisant spécifiquement ces réponses :\n {synergia_section_couple_string}\n Pour chaque couleur (rouge, jaune, vert, bleu), mets en avant les points forts basés sur les réponses spécifiques données aux questions de cette section et mentionne aussi les aspects moins présents ou absents pour chaque couleur. Je veux que tu accordes à chaque énoncé une couleur pour t'aider à calculer le résultat, et que tu donnes un % calculé en fonction de donner une pondération à chaque énoncé. N’utilise pas de pourcentages mais qualifie les scores comme "fort", "modéré" ou "faible" selon les réponses. Voici comment structurer le texte :\n1.	Jaune (Influence) : Décris les forces telles que la convivialité, la sociabilité, et l'engagement émotionnel si le score est élevé. Si la couleur est moins présente, mentionne le manque de dynamisme social ou d'influence, indiquant une préférence pour d'autres types d'interactions.\n2.	Rouge (Dominance) : Mets en avant la prise d'initiative et la proactivité si le score est fort, expliquant comment la personne prend les devants dans la relation. Si le score est faible, note l'absence de traits dominants ou assertifs, avec une tendance à privilégier les décisions partagées ou la collaboration plutôt que le contrôle.\n3.	Vert (Stabilité) : Décris les points forts liés à la stabilité émotionnelle, à l'écoute et à la création d’un environnement serein si le score est élevé. Si cette couleur est moins présente, mentionne une tendance à moins rechercher l’harmonie ou la stabilité émotionnelle.\n4.	Bleu (Conformité) : Souligne les forces analytiques et la précision dans la communication si le score est élevé, en mettant en avant l'importance de la clarté et de la réflexion dans les échanges. Si le score est faible, note l’absence de structure ou de rigueur dans la communication, avec une préférence pour des approches moins formelles.\nAssure-toi que le texte soit équilibré, nuancé, et donne une vision complète de la dynamique de la personne en couple. Utilise un langage engageant et précis, en montrant à la fois ce qui est présent et ce qui manque dans chaque trait DISC."\n(Exemple 1 : Jaune (Influence) : Modéré\nMadame Test montre une influence modérée en matière de convivialité et d’engagement social dans sa relation de couple. Elle privilégie les discussions dynamiques et communicatives, mettant l’accent sur la clarté et l’échange. Cependant, ses interactions ne sont pas toujours axées sur la spontanéité ou l’exubérance sociale, ce qui montre qu’elle préfère des moments de connexion réfléchis et ciblés plutôt que des échanges trop fréquents ou légers.\nRouge (Dominance) : Fort\nMadame Test affiche un score fort en rouge, ce qui se traduit par une prise d’initiative marquée et une volonté de s’exprimer clairement dans la relation. Elle n’hésite pas à communiquer ses attentes de manière directe et à prendre des décisions rapidement lorsqu’il le faut. Cette approche proactive montre son désir de mener et d’influencer activement les dynamiques de son couple, tout en restant ouverte à la collaboration.\nVert (Stabilité) : Modéré\nSon score modéré en vert indique une appréciation pour l’harmonie et la stabilité émotionnelle, mais ce n’est pas sa priorité principale. Madame Test veille à maintenir un environnement relativement calme et serein, mais elle n’est pas exclusivement focalisée sur le maintien constant de l’harmonie. Elle est capable d’écouter et de soutenir son partenaire, mais sans nécessairement éviter les confrontations si elles s’avèrent nécessaires pour avancer.\nBleu (Conformité) : Fort\nMadame Test montre une forte affinité pour la réflexion et l’analyse dans ses interactions. Elle s’assure que ses attentes sont bien comprises en les expliquant en détail, ce qui souligne son besoin de précision et de clarté dans la communication. Cependant, elle n’adopte pas toujours une approche structurée ou formelle, indiquant une préférence pour une certaine flexibilité tout en gardant un œil sur les détails importants.\n"""
-
-
-
-message_data.append( 
-  {
-    "role": "assistant", 
-    "content": ex_env_text
-  }
-)
-  
-message_data.append(
-    {
-        "role": "user",
-        "content": couple_prompt
-    }
-)
-
-couple = generateur_texte(message_data, 500)
-
-couple_text = couple.choices[0].message.content
-
-
-
-#Section Portrait
-
-portrait_prompt = """Je souhaite que tu rédiges un texte ***D'UN MAXIMUM DE 200 MOTS*** qui décrit le profil de la personne dans sa relation de couple, en utilisant uniquement les informations de la section couple du questionnaire DISC de la section précédente. On ne sait pas si la personne à un ou une partenaire alors on va faire un texte inclusif. Le texte doit détailler les forces de la personne en tant que partenaire, en mettant en avant son style de communication, son approche au soutien émotionnel, et la manière dont elle aborde les objectifs communs et les projets futurs. Voici les éléments à inclure :\n1.	Introduction sur la Personne : Débute par une description des principaux traits de personnalité en couple, tels que la préférence pour la structure, la stabilité ou la spontanéité, selon les réponses.\n2.	Style de Communication : Explique comment la personne communique ses attentes et assure une compréhension claire entre les partenaires. Mentionne si elle privilégie une communication détaillée, directe ou émotionnelle.\n3.	Approche au Soutien Émotionnel : Décris la manière dont la personne offre du soutien à son partenaire, en mettant en avant son écoute, ses conseils réfléchis, ou ses solutions pratiques.\n4.	Stabilité Émotionnelle et Harmonie : Mentionne l'importance qu'elle accorde à la stabilité émotionnelle et à la sérénité dans la relation, et comment cela contribue à un environnement paisible.\n5.	Objectifs Communs et Personnels : Parle de l'importance des objectifs partagés et de la manière dont la personne s'engage à les atteindre en collaboration avec son partenaire.\n6.	Joie et Spontanéité : Décris comment la personne apporte de la joie et de la légèreté au quotidien, et en quoi son style unique rend chaque journée spéciale.\n7.	Approche des Projets Futurs : Explique comment la personne aborde les discussions sur les projets futurs, si elle préfère planifier, discuter spontanément ou réfléchir calmement aux décisions importantes.\nAssure-toi que le texte soit fluide, nuancé, et qu'il donne une vision complète de la personne en couple, en combinant organisation, soutien émotionnel et joie de vivre." \n(exemple1 :  Monsieur Test est un partenaire qui valorise l’harmonie, l’écoute et une approche réfléchie dans sa relation de couple. En tant que pacificateur, il veille à maintenir un environnement serein, évitant les conflits et favorisant une communication calme et posée. Sa manière de communiquer est détaillée et réfléchie, préférant expliquer ses attentes clairement pour éviter tout malentendu. Cette approche structurée aide à renforcer la compréhension mutuelle et à créer un climat de confiance dans la relation.\nMonsieur Test est également un soutien précieux pour son partenaire. Il écoute avec attention et apporte des conseils réfléchis, montrant un engagement profond envers le bien-être de l’autre. Sa capacité à maintenir la stabilité émotionnelle est un atout majeur dans son couple, car il crée un espace où chacun peut s’exprimer librement tout en se sentant soutenu. Cette attention aux besoins émotionnels permet de construire une relation fondée sur le respect mutuel et la compréhension.\nIl accorde une grande importance aux expériences partagées, apportant une énergie positive et une volonté de créer des moments agréables. Monsieur Test privilégie les discussions ouvertes et spontanées sur les projets futurs, tout en prenant le temps de réfléchir calmement aux décisions importantes. Sa capacité à maintenir l’équilibre entre réflexion et spontanéité permet de naviguer sereinement à travers les décisions communes.\nBien qu’il préfère les discussions posées, Monsieur Test ne fuit pas les confrontations lorsqu’elles sont nécessaires. Il aborde les défis avec une approche analytique, cherchant toujours à comprendre les situations avant d’agir. En résumé, Monsieur Test est un partenaire attentionné et réfléchi, qui combine harmonie, soutien émotionnel et une approche équilibrée dans sa vie de couple.\n"""
-
-
-
-message_data.append( 
-  {
-    "role": "assistant", 
-    "content": couple_text
-  }
-)
-  
-message_data.append(
-    {
-        "role": "user",
-        "content": portrait_prompt
-    }
-)
-
-portrait = generateur_texte(message_data, 500)
-
-portrait_text = portrait.choices[0].message.content
-
 #Print la totalité des textes
 
-full_text= f"COULEURS\nbleu : {bleu}%, rouge : {rouge}%, jaune : {jaune}%, vert : {vert}%\n" + f"ARCHÉTYPE\nexploreur : {explorateur}%, protecteur : {protecteur}%, bouffon : {bouffon}%, souverain : {souverain}%\nmagicien : {magicien}%, créateur : {createur}%, héro : {hero}, citoyen : {citoyen}%\nsage : {sage}%, amant : {amant}, rebelle : {rebelle}%, optimiste : {optimiste}\n\n" + "EN BREF\n" + bref_text + "\n\n" + "Tes forces mises en lumière\n" + forces_text + "\n\n" + "Tes défis Potentiels\n" + defis_text + "\n\n" + "Perception du changement\n" + changements_text + "\n\n" + "Perception des relations interpersonnelles\n" + interpersonnelles_text + "\n\n" + "Perception dubesoin de structure et de prévisibilité\n" + structure_text + "\n\n" + "Perception des défis, problèmes et difficultés\n" + problemes_text + "\n\n" + "Encore un peu plus sur toi\n" + toi_text + "\n\n" + "Valeurs Schwartz\n" + schwartz_text + "\n\n" + "Valeur et motivation\n" + valeur_text + "\n\n" + "Toi et le marché du travail\n" + travail_text + "\n\n" + "Environnement de travail favorable\n" + environnement_text + "\n\n" + "Exemples d’environnements de travail favorables\n" + ex_env_text + "\n\n" + "Tes couleurs en couple\n" + couple_text + "\n\n" + "Ton portrait\n" + portrait_text
+full_text= text_pourcentage_complet + "EN BREF\n" + bref_text + "\n\n" + "Tes forces mises en lumière\n" + forces_text + "\n\n" + "Tes défis Potentiels\n" + defis_text + "\n\n" + "Perception du changement\n" + changements_text + "\n\n" + "Perception des relations interpersonnelles\n" + interpersonnelles_text + "\n\n" + "Perception dubesoin de structure et de prévisibilité\n" + structure_text + "\n\n" + "Perception des défis, problèmes et difficultés\n" + problemes_text + "\n\n" + "Section Archétypes\n" + archetype_text + "\n\n" + "Description des 2 archétypes\n" + desc_arch_text + "\n\n" + "Toi et le marché du travail\n" + travail_text + "\n\n" + "Environnement de travail favorable\n" + environnement_text + "\n\n" 
 
 
 
