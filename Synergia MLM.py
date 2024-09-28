@@ -17,7 +17,7 @@ from docx import Document
 
 #NOM format "Prénom, Nom"
 
-nom = "Jutras, Laurie"
+nom = "Lee ann, Roy"
 
 #DONNÉES EXCEL
 
@@ -26,7 +26,7 @@ synergia = pd.read_excel("C:/Users/Guillaume Cloutier/OneDrive/Synergia/Synergia
 
 synergia_model = pd.read_excel("C:/Users/Guillaume Cloutier/OneDrive/Synergia/Synergia.xlsx", sheet_name="Réponses 3")
 
-synergia_nom = pd.DataFrame(synergia.loc[synergia["Nom"]== nom])
+synergia_nom = pd.DataFrame(synergia.loc[synergia["Prénom, Nom"]== nom])
 
 
 #plage de questions utilisé pour les prompts
@@ -141,15 +141,15 @@ createur = moyenne(71, 87, 95)
 hero = moyenne(72, 84,96)
 citoyen = moyenne(73, 85, 97)
 sage = moyenne(74, 86, 94)
-amant = moyenne(75, 83, 99)
+amoureuse = moyenne(75, 83, 99)
 rebelle = moyenne(76, 88, 100)
 optimiste = moyenne(81, 89, 101)
 
-text_pourcentage_complet = f"COULEURS\nbleu : {bleu}%, rouge : {rouge}%, jaune : {jaune}%, vert : {vert}%\n" + f"ARCHÉTYPE\nexploreur : {explorateur}%, protecteur : {protecteur}%, bouffon : {bouffon}%, souverain : {souverain}%\nmagicien : {magicien}%, créateur : {createur}%, héro : {hero}%, citoyen : {citoyen}%\nsage : {sage}%, amant : {amant}%, rebelle : {rebelle}%, optimiste : {optimiste}%\n\n"
+text_pourcentage_complet = f"COULEURS\nbleu : {bleu}%, rouge : {rouge}%, jaune : {jaune}%, vert : {vert}%\n" + f"ARCHÉTYPE\nexploreur : {explorateur}%, protecteur : {protecteur}%, bouffon : {bouffon}%, souverain : {souverain}%\nmagicien : {magicien}%, créateur : {createur}%, héro : {hero}%, citoyen : {citoyen}%\nsage : {sage}%, amoureuse : {amoureuse}%, rebelle : {rebelle}%, optimiste : {optimiste}%\n\n"
 
 text_pourcentage_couleur = f"COULEURS\nbleu : {bleu}%, rouge : {rouge}%, jaune : {jaune}%, vert : {vert}%\n"
 
-text_pourcentage_archetype= f"ARCHÉTYPE\nexploreur : {explorateur}%, protecteur : {protecteur}%, bouffon : {bouffon}%, souverain : {souverain}%\nmagicien : {magicien}%, créateur : {createur}%, héro : {hero}%, citoyen : {citoyen}%\nsage : {sage}%, amant : {amant}%, rebelle : {rebelle}%, optimiste : {optimiste}%"
+text_pourcentage_archetype= f"ARCHÉTYPE\nexploreur : {explorateur}%, protecteur : {protecteur}%, bouffon : {bouffon}%, souverain : {souverain}%\nmagicien : {magicien}%, créateur : {createur}%, héro : {hero}%, citoyen : {citoyen}%\nsage : {sage}%, amoureuse : {amoureuse}%, rebelle : {rebelle}%, optimiste : {optimiste}%"
 
 # GÉNÉRER UN TEXTE POUR CHAQUE SECTION
 
@@ -305,12 +305,12 @@ archetype_text = archetype.choices[0].message.content
 
 #Section Description 2 Archétypes
 
-desc_arch_prompt= f"""Je souhaite obtenir un texte de 100 mots par archétype, basé sur les deux principaux archétypes de la personne. Le texte doit refléter ce que la personne aime, en se basant sur ces deux questionnaires:\n {synergia_archetype_string} et\n {synergia_section_developpement_string}. À partir de ces pourcentages calculés : \n {text_pourcentage_archetype}\n pondère les en fonction des questions à développement. Assure-toi de mettre en avant les préférences, désirs, et motivations de la personne en lien avec ses deux principaux archétypes, tout en expliquant ce qui la motive profondément." (Exemple : Madame Test aime inspirer les autres à voir de nouvelles possibilités et à transformer leurs pensées. Elle apprécie particulièrement guider les gens vers leur propre croissance et transformation, en trouvant des moyens d'influencer positivement leur vie. Son intérêt pour les idées innovantes et sa volonté de voir des changements profonds chez les autres la motivent profondément. Elle aime également créer des projets concrets qui font une réelle différence, reflétant son désir constant d’apporter de la magie et de la transformation dans le monde qui l'entoure. Madame Test aime créer des relations profondes et authentiques avec ceux qui l’entourent. Elle apprécie particulièrement les moments de connexion émotionnelle et les interactions où la sincérité et l’affection sont présentes. Elle aime partager des expériences riches en émotions et exprimer ses sentiments de manière directe et authentique. Pour elle, la profondeur des liens humains est essentielle, et elle se sent épanouie lorsqu'elle peut être elle-même et vivre des relations pleines d'intimité et de complicité. Madame Test recherche des relations qui nourrissent son besoin d'authenticité et de sincérité.)"""
+desc_arch_prompt= f"""Je souhaite obtenir un texte de 100 mots par archétype, basé sur les deux principaux archétypes de la personne. Le texte doit refléter ce que la personne aime, en se basant sur ces deux questionnaires:\n {synergia_archetype_string} et\n {synergia_section_developpement_string}. À partir de ces pourcentages calculés : \n {text_pourcentage_archetype}\n pondère les archétypes en fonction des questions à développement, j'aimerais que tu me donne la pondération et tu m'explique le raisonnemment dans un petit texte avant les deux textes principaux. Assure-toi de mettre en avant les préférences, désirs, et motivations de la personne en lien avec ses deux principaux archétypes, tout en expliquant ce qui la motive profondément." (Exemple : Madame Test aime inspirer les autres à voir de nouvelles possibilités et à transformer leurs pensées. Elle apprécie particulièrement guider les gens vers leur propre croissance et transformation, en trouvant des moyens d'influencer positivement leur vie. Son intérêt pour les idées innovantes et sa volonté de voir des changements profonds chez les autres la motivent profondément. Elle aime également créer des projets concrets qui font une réelle différence, reflétant son désir constant d’apporter de la magie et de la transformation dans le monde qui l'entoure. Madame Test aime créer des relations profondes et authentiques avec ceux qui l’entourent. Elle apprécie particulièrement les moments de connexion émotionnelle et les interactions où la sincérité et l’affection sont présentes. Elle aime partager des expériences riches en émotions et exprimer ses sentiments de manière directe et authentique. Pour elle, la profondeur des liens humains est essentielle, et elle se sent épanouie lorsqu'elle peut être elle-même et vivre des relations pleines d'intimité et de complicité. Madame Test recherche des relations qui nourrissent son besoin d'authenticité et de sincérité.)"""
 
 
 context_append(archetype_text, desc_arch_prompt)
 
-desc_arch = generateur_texte(message_data, 500)
+desc_arch = generateur_texte(message_data, 700)
 
 desc_arch_text = desc_arch.choices[0].message.content
 
@@ -372,7 +372,7 @@ def generate_simple_word(file_path, text_content):
 
 nom_organisateur = synergia_nom.iloc[0, 4]
 
-nouveau_dossier = f"C:/Users/Guillaume Cloutier/OneDrive/Synergia/{nom_organisateur}/{nom}"
+nouveau_dossier = f"C:/Users/Guillaume Cloutier/OneDrive/Synergia/{nom_organisateur}"
 
 if not os.path.exists(nouveau_dossier):
     os.makedirs(nouveau_dossier)
