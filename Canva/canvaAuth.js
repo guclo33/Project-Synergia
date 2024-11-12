@@ -1,0 +1,75 @@
+require('dotenv').config();
+const express = require('express');
+const app = express();
+const PORT = 3000;
+const crypto = require("crypto");
+const fetch = (...args) => import('node-fetch').then(({default: fetch}) => fetch(...args));
+const { URLSearchParams } = require("url");
+
+
+const codeVerifier = crypto.randomBytes(96).toString("base64url");
+const codeChallenge = crypto
+  .createHash("sha256")
+  .update(codeVerifier)
+  .digest("base64url");
+
+
+
+
+const clientId = process.env.CANVA_CLIENTID;
+const clientSecret = process.env.CANVA_SECRETID;
+const authURL = process.env.CANVA_AUTHURL + codeChallenge;
+const redirectURI = "http://127.0.0.1:3000/callback/";
+let accessToken = "";
+let refreshToken = "";
+
+
+
+app.get("/", (req,res) => {
+    res.redirect(authURL)
+})
+
+app.get("/callback", async (req,res) => {
+    const authCode = req.query.code;
+    if(authCode) {
+        try{
+        const credentials = `${clientId}:${clientSecret}`;
+        const base64Credentials = Buffer.from(credentials).toString('base64');
+        const response = await fetch("https://api.canva.com/rest/v1/oauth/token", {
+            method: "POST",
+            headers: {
+              "Authorization": `Basic ${base64Credentials}`,
+              "Content-Type": "application/x-www-form-urlencoded",
+            },
+            body: new URLSearchParams({
+                grant_type: "authorization_code",
+                code_verifier: codeVerifier,
+                code: authCode, 
+                redirect_uri: redirectURI
+            })
+        });
+        const data = await response.json();
+        accessToken = data.access_token;
+        refreshToken = data.refresh_token;
+        console.log(data);    
+        res.status(200).json(data);
+        
+      } catch (err) {
+        console.error(err);
+        res.status(500).send("Error fetching token");
+      }
+    } else {
+      res.status(404).send("Could not get code");
+    }
+
+});
+
+
+
+console.log("Access Token:", accessToken);
+
+
+
+app.listen(PORT, () =>{
+    console.log(`Listening to port : ${PORT}`)
+})
