@@ -1,12 +1,9 @@
 import os
-import time
 import pandas as pd
 import warnings
 warnings.filterwarnings("ignore", category=UserWarning, module="openpyxl")
 from openai import OpenAI
-from openai.types import Completion, CompletionChoice, CompletionUsage
 from reportlab.lib.pagesizes import letter
-import textwrap
 from docx import Document
 
 
