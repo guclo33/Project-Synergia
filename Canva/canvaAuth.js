@@ -5,6 +5,7 @@ const PORT = 3000;
 const crypto = require("crypto");
 const fetch = (...args) => import('node-fetch').then(({default: fetch}) => fetch(...args));
 const { URLSearchParams } = require("url");
+const {template} = require("./canvaTemplate")
 
 
 const codeVerifier = crypto.randomBytes(96).toString("base64url");
@@ -49,10 +50,11 @@ app.get("/callback", async (req,res) => {
             })
         });
         const data = await response.json();
-        accessToken = data.access_token;
-        refreshToken = data.refresh_token;
+        accessToken = await data.access_token;
+        refreshToken = await data.refresh_token;
         console.log(data);    
         res.status(200).json(data);
+        template(accessToken);
         
       } catch (err) {
         console.error(err);
@@ -73,3 +75,8 @@ console.log("Access Token:", accessToken);
 app.listen(PORT, () =>{
     console.log(`Listening to port : ${PORT}`)
 })
+
+module.exports = {
+    accessToken : accessToken,
+    refreshToken : refreshToken
+}

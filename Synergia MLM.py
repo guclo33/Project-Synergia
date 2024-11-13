@@ -17,7 +17,7 @@ from docx import Document
 
 #NOM format "Prénom, Nom"
 
-nom = "Lee ann, Roy"
+nom = "Jean-Sébastien, Sauvé"
 
 #DONNÉES EXCEL
 
