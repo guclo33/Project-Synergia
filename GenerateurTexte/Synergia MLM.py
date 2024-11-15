@@ -1,14 +1,13 @@
 import os
-import time
 import pandas as pd
 import warnings
 warnings.filterwarnings("ignore", category=UserWarning, module="openpyxl")
 pd.set_option('future.no_silent_downcasting', True)
 from openai import OpenAI
-from openai.types import Completion, CompletionChoice, CompletionUsage
-from reportlab.lib.pagesizes import letter
-import textwrap
 from docx import Document
+import psycopg2
+import subprocess
+from canvaAutofill import autofill_job
 
 
 
@@ -18,6 +17,10 @@ from docx import Document
 #NOM format "Prénom, Nom"
 
 nom = "Jean-Sébastien, Sauvé"
+
+nom_profile = nom.replace(",", "")
+
+prenom = nom.split(",")[0]
 
 #DONNÉES EXCEL
 
@@ -301,18 +304,52 @@ context_append(problemes_text, archetype_prompt)
 
 archetype = generateur_texte(message_data, 300)
 
-archetype_text = archetype.choices[0].message.content
+motivation_text = archetype.choices[0].message.content
 
-#Section Description 2 Archétypes
+#Section Description Archétype 1
 
-desc_arch_prompt= f"""Je souhaite obtenir un texte de 100 mots par archétype, basé sur les deux principaux archétypes de la personne. Le texte doit refléter ce que la personne aime, en se basant sur ces deux questionnaires:\n {synergia_archetype_string} et\n {synergia_section_developpement_string}. À partir de ces pourcentages calculés : \n {text_pourcentage_archetype}\n pondère les archétypes en fonction des questions à développement, j'aimerais que tu me donne la pondération et tu m'explique le raisonnemment dans un petit texte avant les deux textes principaux. Assure-toi de mettre en avant les préférences, désirs, et motivations de la personne en lien avec ses deux principaux archétypes, tout en expliquant ce qui la motive profondément." (Exemple : Madame Test aime inspirer les autres à voir de nouvelles possibilités et à transformer leurs pensées. Elle apprécie particulièrement guider les gens vers leur propre croissance et transformation, en trouvant des moyens d'influencer positivement leur vie. Son intérêt pour les idées innovantes et sa volonté de voir des changements profonds chez les autres la motivent profondément. Elle aime également créer des projets concrets qui font une réelle différence, reflétant son désir constant d’apporter de la magie et de la transformation dans le monde qui l'entoure. Madame Test aime créer des relations profondes et authentiques avec ceux qui l’entourent. Elle apprécie particulièrement les moments de connexion émotionnelle et les interactions où la sincérité et l’affection sont présentes. Elle aime partager des expériences riches en émotions et exprimer ses sentiments de manière directe et authentique. Pour elle, la profondeur des liens humains est essentielle, et elle se sent épanouie lorsqu'elle peut être elle-même et vivre des relations pleines d'intimité et de complicité. Madame Test recherche des relations qui nourrissent son besoin d'authenticité et de sincérité.)"""
+desc_arch1_prompt= f"""Je souhaite obtenir un texte de 100 mots par archétype, basé sur les deux principaux archétypes de la personne. Le texte doit refléter ce que la personne aime, en se basant sur ces deux questionnaires:\n {synergia_archetype_string} et\n {synergia_section_developpement_string}. À partir de ces pourcentages calculés : \n {text_pourcentage_archetype}\n pondère les archétypes en fonction des questions à développement. Nous allons commencer par le premier texte de 100 mot pour le premier archétype, le deuxième texte viendra dans le prompt suivant et devra suivre la même logique que celui-ci. Assure-toi de mettre en avant les préférences, désirs, et motivations de la personne en lien avec le premier de ses deux principaux archétypes, tout en expliquant ce qui la motive profondément." (Exemple : Madame Test aime inspirer les autres à voir de nouvelles possibilités et à transformer leurs pensées. Elle apprécie particulièrement guider les gens vers leur propre croissance et transformation, en trouvant des moyens d'influencer positivement leur vie. Son intérêt pour les idées innovantes et sa volonté de voir des changements profonds chez les autres la motivent profondément. Elle aime également créer des projets concrets qui font une réelle différence, reflétant son désir constant d’apporter de la magie et de la transformation dans le monde qui l'entoure. Madame Test aime créer des relations profondes et authentiques avec ceux qui l’entourent. Elle apprécie particulièrement les moments de connexion émotionnelle et les interactions où la sincérité et l’affection sont présentes. Elle aime partager des expériences riches en émotions et exprimer ses sentiments de manière directe et authentique. Pour elle, la profondeur des liens humains est essentielle, et elle se sent épanouie lorsqu'elle peut être elle-même et vivre des relations pleines d'intimité et de complicité. Madame Test recherche des relations qui nourrissent son besoin d'authenticité et de sincérité.)"""
 
 
-context_append(archetype_text, desc_arch_prompt)
+context_append(motivation_text, desc_arch1_prompt)
 
-desc_arch = generateur_texte(message_data, 700)
+desc_arch1 = generateur_texte(message_data, 700)
 
-desc_arch_text = desc_arch.choices[0].message.content
+desc_arch1_text = desc_arch1.choices[0].message.content
+
+
+
+
+#Section description Archétype 2
+
+desc_arch2_prompt= f"""En se fiant au même contexte que le prompt précédant en lien des deux principaux archétype de la personne, j'ai besoin que tu m'écrive le texte de 100 mots avec les mêmes consignes et informations, mais cette fois-ci pour le deuxième de ses deux principaux archétypes"""
+
+
+context_append(desc_arch1_text, desc_arch2_prompt)
+
+desc_arch2 = generateur_texte(message_data, 700)
+
+desc_arch2_text = desc_arch2.choices[0].message.content
+
+#Section nom du premier archétype
+
+arch1_prompt = "J'ai besoin que tu me sorte le premier de ses deux archétype principaux que tu as choisis mais en ***1 SEUL MOT! SANS POINT!***"
+
+context_append(desc_arch2_text, arch1_prompt)
+
+arch1 = generateur_texte(message_data, 50)
+
+arch1_nom = arch1.choices[0].message.content
+
+#Section nom du deuxième archétype
+
+arch2_prompt = "J'ai besoin que tu me sorte le deuxième de ses deux archétype principaux que tu as choisis mais en ***1 SEUL MOT! SANS POINT!***"
+
+context_append(arch1_nom, arch2_prompt)
+
+arch2 = generateur_texte(message_data, 50)
+
+arch2_nom = arch2.choices[0].message.content
 
 
 
@@ -321,28 +358,76 @@ desc_arch_text = desc_arch.choices[0].message.content
 travail_prompt = """Je souhaite que tu rédiges un texte complet qui décrit le profil professionnel d’une personne, en utilisant ses réponses au questionnaire, ses traits de personnalité DISC, et ses motivations principales. Le texte doit suivre une structure précise et inclure plusieurs paragraphes décrivant différents aspects de sa personnalité et de sa façon de travailler, ***DANS UN MAXIMUM DE 325 MOTS***. Assure-toi d’utiliser un langage fluide, engageant, et de ne pas répéter les mêmes mots ou expressions. Voici la structure à suivre :\n1.	Introduction de la Personne :\nDébute par une description de la nature et des traits de personnalité principaux de la personne, et comment ces caractéristiques influencent sa manière de travailler. Mets en avant ce qui la rend unique dans son approche professionnelle.\n2.	Compétences et Style de Travail :\nPrésente les compétences professionnelles distinctives de la personne et son style de travail. Décris comment ses traits se manifestent concrètement dans son travail, en expliquant ce qui la rend efficace dans son rôle. Inclue des exemples ou scénarios pour illustrer ces compétences.\n3.	Approche en Équipe et Prise de Décision :\nDécris comment la personne contribue à la dynamique d’équipe et à la prise de décision. Mentionne sa manière de collaborer, son style de communication, et comment elle aborde les défis en groupe. Ajoute un aperçu de la gestion des conflits ou des situations délicates pour montrer comment elle réagit en moments critiques.\n4.	Style de Leadership :\nSi la personne est en position de leadership, décris son style de gestion et comment elle est perçue par les autres. Mets en avant ses qualités de leader et la façon dont elle inspire, motive, ou guide son équipe. \n5.	Impact sur l’Équipe :\nConclus en expliquant l’impact de la personne sur ses collègues et sur la dynamique de l’équipe. Mentionne comment elle influence son entourage, crée une dynamique de travail spécifique, et en quoi ses qualités apportent de la valeur. \nAssure-toi que le texte soit équilibré, nuancé, et qu’il donne une vision complète de la personne en montrant à la fois ses forces et ses zones d’amélioration. Il ne doit pas répéter les mêmes caractéristiques fréquemment. Inclue des exemples concrets et explore les aspects relationnels pour offrir un portrait riche et engageant. Voici un exemple de ce que je souhaite obtenir : [Exemple 1 :Madame Test se distingue par sa nature audacieuse et indépendante, qui transparaît dans sa manière de travailler. Elle valorise la liberté d’action et l’autonomie, ce qui lui permet de prendre des initiatives audacieuses et d’aborder les projets avec une grande créativité. Son désir de se démarquer et de créer un impact positif est évident dans chaque aspect de son travail. Son approche professionnelle est marquée par une volonté constante de repousser les limites, tant pour elle-même que pour son équipe.\nSur le plan professionnel, Madame Test se révèle particulièrement efficace dans des contextes où l’innovation est encouragée. Elle excelle à transformer des idées novatrices en actions concrètes, notamment lors de la création d’animations à domicile ou dans des projets qui demandent une touche personnelle. Son style de travail est dynamique et énergique : elle aime explorer de nouvelles voies et se lance sans hésiter dans des initiatives non conventionnelles. Par exemple, lorsqu'elle initie un projet, elle s’assure que chaque détail reflète son sens de l’originalité et de la nouveauté, apportant ainsi une dimension unique à ses réalisations.\nDans une équipe, Madame Test adopte une approche directe et proactive, contribuant à la prise de décision avec assurance. Elle n’hésite pas à exprimer ses idées et à encourager les autres à sortir de leur zone de confort. Sa capacité à gérer des situations délicates avec un mélange d’audace et de réflexion rapide lui permet de naviguer efficacement dans les moments critiques. Elle sait mobiliser son équipe en utilisant son enthousiasme contagieux, même si son style peut parfois dérouter ceux qui préfèrent une approche plus structurée et méthodique.\nEn tant que leader, Madame Test inspire par sa détermination et son esprit d’initiative. Elle est perçue comme une figure motivante, toujours prête à explorer de nouvelles stratégies et à encourager son équipe à faire de même. Sa capacité à diriger avec confiance tout en laissant de la place à l’innovation en fait une leader qui se démarque par son approche visionnaire. Elle sait guider son équipe avec un équilibre entre indépendance et engagement, créant un environnement où chacun se sent libre de contribuer.\nL’impact de Madame Test sur son entourage est marqué par sa capacité à insuffler une dynamique positive et stimulante. Elle influence ses collègues par son énergie et sa passion pour l’innovation, poussant l’équipe à se dépasser et à embrasser le changement avec enthousiasme. Ses qualités font d’elle une alliée précieuse, capable de transformer la dynamique de travail en un espace où les idées audacieuses et les approches non conventionnelles sont non seulement acceptées, mais encouragées.\n."""
 
 
-context_append(desc_arch_text, travail_prompt)
+context_append(arch2_nom, travail_prompt)
 
 travail = generateur_texte(message_data, 700)
 
 travail_text = travail.choices[0].message.content
 
-#Section Environnements de travail favorable
+# Section comment s'adapter Rouge
 
-environnement_prompt = """Je souhaite que tu rédiges un texte complet qui décrit l'environnement de travail favorable pour une personne, en se basant sur ses réponses au questionnaire, ses traits de personnalité DISC, et ses motivations principales, ***DANS UN MAXIMUM DE 300 MOTS***. Ne prends pas en compte les réponses aux questions à développement. Le texte doit suivre une structure précise, incluant plusieurs paragraphes qui décrivent les conditions de travail optimales pour cette personne, ainsi que les environnements les moins favorables et les raisons pour lesquelles ils sont moins adaptés. Assure-toi de développer pourquoi certains environnements sont positifs pour la personne et pourquoi d'autres ne le sont pas. Intègre également une section qui décrit ses préférences en matière de contacts sociaux, en précisant si ces interactions lui donnent de l’énergie ou la drainent, afin de refléter son niveau d’extraversion ou d’intraversion. Utilise un langage fluide, engageant, et évite de répéter les mêmes mots ou expressions. Voici la structure à suivre :\n1.	Introduction :\nDébute en expliquant dans quel type d'environnement la personne s’épanouit le mieux. Mentionne les caractéristiques principales de l’environnement qui lui permettent de se sentir à l’aise et de performer, en lien avec ses traits de personnalité.\n2.	Culture d'entreprise et style de travail :\nDécris les éléments de la culture d’entreprise qui sont les plus compatibles avec la personne, comme l'innovation, la prise de risque, ou la collaboration. Précise ce qui lui permet d'exprimer ses forces et de s’engager pleinement dans son travail, en élaborant sur les raisons pour lesquelles ces éléments sont positifs pour elle.\n3.	Préférences en Matière de Contacts Sociaux :\nMentionne si la personne préfère des interactions sociales fréquentes ou si elle privilégie des échanges plus authentiques et de qualité. Précise si ces interactions lui donnent de l’énergie ou la drainent, afin de déterminer son niveau d’extraversion ou d’intraversion. Explique comment ces préférences influencent son environnement de travail idéal.\n4.	Rôle et contribution :\nExplique comment la personne se comporte dans cet environnement et comment elle utilise ses compétences pour apporter de la valeur. Mentionne sa façon de contribuer à l’équipe ou au projet, et comment l’environnement lui permet de mettre en avant son leadership ou ses capacités spécifiques.\n5.	Environnements Moins Favorables :\nAjoute une section sur les types d’environnements qui conviennent le moins à la personne. Explique pourquoi ces environnements sont moins favorables, en lien avec ses traits de personnalité et ses préférences, et comment cela peut affecter sa performance ou son bien-être. Développe sur les aspects spécifiques qui rendent ces environnements difficiles pour elle.\n6.	Conclusion :\nConclus en résumant ce qui rend cet environnement idéal pour la personne, en soulignant comment cela maximise son potentiel et son épanouissement professionnel, tout en notant l'importance d'éviter les environnements moins adaptés.\nAssure-toi que le texte reflète fidèlement la personnalité et les préférences de la personne, en montrant clairement comment un environnement de travail spécifique peut l’aider à s’épanouir, et pourquoi d'autres environnements pourraient nuire à sa performance. Utilise des phrases positives et engageantes pour créer un portrait motivant et précis de son environnement de travail idéal et moins idéal. Voici un exemple de ce que je souhaite obtenir : \n: [Exemple 1 Monsieur Test s’épanouit dans un environnement de travail structuré et méthodique, où l’organisation, la stabilité et les normes élevées sont valorisées. Il excelle dans des contextes où les processus clairs et les règles définies permettent une gestion précise et ordonnée des projets. Ces environnements lui offrent un cadre sécurisant, lui permettant de se concentrer sur l’atteinte de l’excellence et la production de résultats de haute qualité. Le respect des procédures et la cohérence dans les pratiques lui permettent de minimiser les risques et de garantir un travail impeccable, aligné avec ses standards élevés.\nMonsieur Test apprécie particulièrement les cultures d'entreprise qui valorisent la planification, la précision, et le respect des protocoles établis. Ces contextes sont positifs pour lui car ils répondent à son besoin de clarté et de rigueur, lui offrant la stabilité nécessaire pour performer à son meilleur. La structure et l'organisation de ces environnements lui permettent de canaliser son souci du détail et sa capacité à analyser les données de manière approfondie, contribuant ainsi de manière efficace à l'atteinte des objectifs communs.\nEn matière de contacts sociaux, Monsieur Test préfère des interactions qui sont ciblées et pertinentes, plutôt que des échanges sociaux fréquents ou superficiels. Les contacts constants et les interactions trop nombreuses peuvent le drainer, affectant sa concentration et son efficacité. Il se sent plus énergisé lorsqu'il peut travailler de manière autonome ou dans des environnements où les échanges sont constructifs et limités à ce qui est nécessaire pour avancer dans les projets. Cela reflète une tendance plus introvertie, où les échanges de qualité priment sur la quantité.\nEn revanche, Monsieur Test est moins à l’aise dans des environnements trop dynamiques, imprévisibles, ou désorganisés, où les règles sont floues et les structures peu respectées. Les cultures d’entreprise qui favorisent l’improvisation, le changement constant, ou une approche trop flexible peuvent créer du stress et réduire son efficacité. Ces environnements peuvent affecter son bien-être car ils manquent de la clarté et de la stabilité dont il a besoin pour se sentir en contrôle et motivé.\nEn résumé, Monsieur Test s’épanouit dans des environnements de travail ordonnés et bien structurés, où ses compétences méthodiques et analytiques peuvent briller. Les environnements trop chaotiques ou axés sur l’improvisation risquent de nuire à son engagement et à sa performance, limitant ainsi sa capacité à apporter une contribution optimale à son équipe et à son organisation.\n"""
+adapte_rouge_prompt = """Je souhaite obtenir une section intitulée 'Comment s'adapter' pour un profil DISC en contexte MLM, avec des conseils organisés pour interagir avec une personne rouge. La réponse doit proposer des stratégies de communication et de motivation adaptées aux préférences des rouges, tout en tenant compte des forces et faiblesses de la personne selon son propre profil DISC. Chaque conseil doit être concret, facile à appliquer et basé sur les caractéristiques spécifiques de la personne.***LE TEXTE DOIT AVOIR UN MAXIMUM DE 350 MOTS***. Organise les conseils sous forme de puces pour chaque point et il est important que tu retiennes ce format pour les prompts suivants:
 
+1. Communication : Décris comment la personne peut adapter sa communication avec une personne rouge, en s’appuyant sur ses forces et en évitant ses faiblesses.
 
-context_append(travail_text, environnement_prompt)
+2. Prise de Décision et Leadership : Fournis des conseils sur les styles de leadership et de prise de décision pour une personne rouge, alignés sur les points forts et les points d’amélioration de la personne.
 
-environnement = generateur_texte(message_data, 650)
+3. Encourager l’Engagement et la Fidélité : Propose des méthodes pour susciter l'engagement durable d’une personne rouge, adaptées aux compétences et aux limites naturelles de la personne.
 
-environnement_text = environnement.choices[0].message.content
+4. Reconnaissance et Célébration : Suggère des façons de reconnaître et célébrer les succès en fonction d’une personne rouge, tout en intégrant les talents et les préférences spécifiques de la personne.
 
+5. Gestion des Conflits et de l’Adaptabilité : Indique des stratégies pour gérer les conflits et s’adapter aux imprévus avec une personne rouge, en se basant sur les comportements naturels de la personne.
+
+Exemple : 🗣 Communication Directe et Concise : Monsieur Test, avec son style de communication analytique, doit adapter ses échanges avec les Rouges en simplifiant ses messages et en allant droit au but. Les Rouges apprécient la clarté et l'efficacité ; ainsi, en évitant les détails superflus et en se concentrant sur les points essentiels, Monsieur Test gagnera leur respect et leur attention.
+
+⚡ Prise de Décision Rapide et Assurée : Bien que Monsieur Test préfère analyser les options en profondeur, il est important qu'il montre de l'assurance et prenne des décisions rapides avec les Rouges. Ces derniers valorisent la fermeté et la rapidité. Monsieur Test peut s’exercer à réduire le temps de réflexion et à se montrer plus déterminé pour répondre à leurs attentes.
+
+🎯 Encourager l’Engagement et la Fidélité : Les Rouges sont motivés par les résultats et les objectifs concrets. Monsieur Test pourrait mettre en avant l'impact direct des actions pour les inciter à s'engager durablement. En soulignant la façon dont leurs efforts mènent à des accomplissements visibles, il leur donne un sens de direction et de satisfaction qui correspond à leur besoin d’efficacité.
+
+🏆 Reconnaissance Basée sur les Accomplissements : Plutôt que de se concentrer sur des encouragements réguliers, Monsieur Test devrait souligner les accomplissements majeurs des Rouges. Ils sont sensibles à la reconnaissance de leurs résultats concrets. En valorisant leurs réussites de manière factuelle et en leur montrant l'impact direct de leurs contributions, il renforcera leur motivation.
+
+💥 Gestion des Conflits et Adaptabilité : Les Rouges apprécient une approche assertive dans la gestion des conflits. Monsieur Test, qui peut avoir tendance à être méthodique, devrait se montrer plus réactif et éviter de trop s’attarder sur l’analyse des situations conflictuelles. Une réponse rapide et claire sera plus efficace avec eux, et cela leur montrera qu’il est capable de gérer des imprévus avec confiance."""
+
+context_append(travail_text, adapte_rouge_prompt)
+
+adapte_rouge = generateur_texte(message_data, 1000)
+
+adapte_rouge_text = adapte_rouge.choices[0].message.content
+
+# Section comment s'adapter Bleu
+
+adapte_bleu_prompt = """Pour ce texte, j'ai besoin du même style et consigne que le prompt précédent en lien avec l'adaptation selon les couleurs de personnalité, mais cette fois-ci, il faut s'adapter à une personne ayant une couleur de personnalité BLEU"""
+
+context_append(adapte_rouge_text, adapte_bleu_prompt)
+
+adapte_bleu = generateur_texte(message_data, 1000)
+
+adapte_bleu_text = adapte_bleu.choices[0].message.content
+
+# Section comment s'adapter Vert
+
+adapte_vert_prompt = """Pour ce texte, j'ai besoin du même style et consigne que le prompt précédent en lien avec l'adaptation selon les couleurs de personnalité, mais cette fois-ci, il faut s'adapter à une personne ayant une couleur de personnalité VERTE"""
+
+context_append(adapte_bleu_text, adapte_vert_prompt)
+
+adapte_vert = generateur_texte(message_data, 1000)
+
+adapte_vert_text = adapte_vert.choices[0].message.content
+
+# Section comment s'adapter Jaune
+
+adapte_jaune_prompt = """Pour ce texte, j'ai besoin du même style et consigne que le prompt précédent en lien avec l'adaptation selon les couleurs de personnalité, mais cette fois-ci, il faut s'adapter à une personne ayant une couleur de personnalité JAUNE"""
+
+context_append(adapte_vert_text, adapte_jaune_prompt)
+
+adapte_jaune = generateur_texte(message_data, 1000)
+
+adapte_jaune_text = adapte_jaune.choices[0].message.content
 
 
 #Print la totalité des textes
 
-full_text= text_pourcentage_complet + "EN BREF\n" + bref_text + "\n\n" + "Tes forces mises en lumière\n" + forces_text + "\n\n" + "Tes défis Potentiels\n" + defis_text + "\n\n" + "Perception du changement\n" + changements_text + "\n\n" + "Perception des relations interpersonnelles\n" + interpersonnelles_text + "\n\n" + "Perception dubesoin de structure et de prévisibilité\n" + structure_text + "\n\n" + "Perception des défis, problèmes et difficultés\n" + problemes_text + "\n\n" + "Section Archétypes\n" + archetype_text + "\n\n" + "Description des 2 archétypes\n" + desc_arch_text + "\n\n" + "Toi et le marché du travail\n" + travail_text + "\n\n" + "Environnement de travail favorable\n" + environnement_text + "\n\n" 
+full_text= text_pourcentage_complet + "EN BREF\n" + bref_text + "\n\n" + "Tes forces mises en lumière\n" + forces_text + "\n\n" + "Tes défis Potentiels\n" + defis_text + "\n\n" + "Perception du changement\n" + changements_text + "\n\n" + "Perception des relations interpersonnelles\n" + interpersonnelles_text + "\n\n" + "Perception dubesoin de structure et de prévisibilité\n" + structure_text + "\n\n" + "Perception des défis, problèmes et difficultés\n" + problemes_text + "\n\n" + "Section Archétypes\n" + motivation_text + "\n\n" + "Description des 2 archétypes\n" + desc_arch1_text + desc_arch2_text + "\n\n" + "Toi et le marché du travail\n" + travail_text + "\n\n" + "Comment s'adapter au rouge\n" + adapte_rouge_text + "\n\n" + "Comment s'adapter au bleu\n" + adapte_bleu_text + "\n\n" + "Comment s'adapter au vert\n" + adapte_vert_text + "\n\n" + "Comment s'adapter au jaune\n" + adapte_jaune_text + "\n\n" 
 
 
 
@@ -381,3 +466,30 @@ if not os.path.exists(nouveau_dossier):
 generate_simple_word(f"{nouveau_dossier}/{nom}", full_text)
     
 
+
+#envoyer les données vers PostgreSQL
+conn = psycopg2.connect(
+    dbname="Synergie_MLM",
+    user="postgres",
+    password="breekel123",
+    host="localhost"
+)
+cursor = conn.cursor()
+
+
+
+
+# Insérer les données dans la table
+cursor.execute(
+    "INSERT INTO clientprofile (nomclient, motivationsnaturelles, enbref,  forcesenlumieres, defispotentiels, perceptionchangement, relationsinterpersonnelles, perceptionstructure, perceptionproblemes, archnum1, archnum2, textarch1, textarch2, toitravail, adapterouge, adaptebleu, adaptevert, adaptejaune, bleu, rouge, jaune, vert, explorateur, protecteur, bouffon, souverain, magicien, createur, hero, citoyen, sage, amoureuse, rebelle, optimiste ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)",
+    (nom_profile, motivation_text, bref_text, forces_text, defis_text, changements_text, interpersonnelles_text, structure_text, problemes_text, arch1_nom, arch2_nom, desc_arch1_text, desc_arch2_text, travail_text, adapte_rouge_text, adapte_bleu_text, adapte_vert_text, adapte_jaune_text, bleu, rouge, jaune, vert, explorateur, protecteur, bouffon, souverain, magicien, createur, hero, citoyen, sage, amoureuse, rebelle, optimiste )
+)
+
+# Valider les changements et fermer la connexion
+conn.commit()
+cursor.close()
+conn.close()
+
+autofill_job(nom_profile, motivation_text, bref_text, forces_text, defis_text, changements_text, interpersonnelles_text, structure_text, problemes_text, arch1_nom, arch2_nom, desc_arch1_text, desc_arch2_text, travail_text, adapte_rouge_text, adapte_bleu_text, adapte_vert_text, adapte_jaune_text, bleu, rouge, jaune, vert)
+
+#subprocess.run(["node", "canvaAutofill.js"])

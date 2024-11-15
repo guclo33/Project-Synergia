@@ -5,7 +5,8 @@ const PORT = 3000;
 const crypto = require("crypto");
 const fetch = (...args) => import('node-fetch').then(({default: fetch}) => fetch(...args));
 const { URLSearchParams } = require("url");
-const {template} = require("./canvaTemplate")
+const {template} = require("./canvaTemplate");
+
 
 
 const codeVerifier = crypto.randomBytes(96).toString("base64url");
@@ -54,7 +55,8 @@ app.get("/callback", async (req,res) => {
         refreshToken = await data.refresh_token;
         console.log(data);    
         res.status(200).json(data);
-        template(accessToken);
+        template(accessToken, refreshToken);
+        
         
       } catch (err) {
         console.error(err);
@@ -68,7 +70,6 @@ app.get("/callback", async (req,res) => {
 
 
 
-console.log("Access Token:", accessToken);
 
 
 
