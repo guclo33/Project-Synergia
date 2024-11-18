@@ -8,6 +8,7 @@ from docx import Document
 import psycopg2
 import subprocess
 from canvaAutofill import autofill_job
+from fonction_database import update_database
 
 
 
@@ -16,7 +17,7 @@ from canvaAutofill import autofill_job
 
 #NOM format "Prénom, Nom"
 
-nom = "Jean-Sébastien, Sauvé"
+nom = "Josée, Drapeau"
 
 nom_profile = nom.replace(",", "")
 
@@ -39,6 +40,8 @@ plage_questions1_15 = synergia_nom.iloc[:,6:66]
 plage_questions16_24 = synergia_nom.iloc[:,66:102]
 plage_questions_developpement = synergia_nom.iloc[:,102:105]
 plage_questionnaire_complet = synergia_nom.iloc[:,6:105]
+email = synergia_nom.iloc[0,3]
+nom_leader = synergia_nom.iloc[0,4]
 
 
 #definition de la fonction pour formatter les résultats des bases de données
@@ -465,30 +468,11 @@ if not os.path.exists(nouveau_dossier):
 # Générer le fichier Word
 generate_simple_word(f"{nouveau_dossier}/{nom}", full_text)
     
+# Pour updater la database
 
+update_database(nom_profile, motivation_text, bref_text, forces_text, defis_text, changements_text, interpersonnelles_text, structure_text, problemes_text, arch1_nom, arch2_nom, desc_arch1_text, desc_arch2_text, travail_text, adapte_rouge_text, adapte_bleu_text, adapte_vert_text, adapte_jaune_text, bleu, rouge, jaune, vert, explorateur, protecteur, bouffon, souverain, magicien, createur, hero, citoyen, sage, amoureuse, rebelle, optimiste , email, nom_leader)
 
-#envoyer les données vers PostgreSQL
-conn = psycopg2.connect(
-    dbname="Synergie_MLM",
-    user="postgres",
-    password="breekel123",
-    host="localhost"
-)
-cursor = conn.cursor()
-
-
-
-
-# Insérer les données dans la table
-cursor.execute(
-    "INSERT INTO clientprofile (nomclient, motivationsnaturelles, enbref,  forcesenlumieres, defispotentiels, perceptionchangement, relationsinterpersonnelles, perceptionstructure, perceptionproblemes, archnum1, archnum2, textarch1, textarch2, toitravail, adapterouge, adaptebleu, adaptevert, adaptejaune, bleu, rouge, jaune, vert, explorateur, protecteur, bouffon, souverain, magicien, createur, hero, citoyen, sage, amoureuse, rebelle, optimiste ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)",
-    (nom_profile, motivation_text, bref_text, forces_text, defis_text, changements_text, interpersonnelles_text, structure_text, problemes_text, arch1_nom, arch2_nom, desc_arch1_text, desc_arch2_text, travail_text, adapte_rouge_text, adapte_bleu_text, adapte_vert_text, adapte_jaune_text, bleu, rouge, jaune, vert, explorateur, protecteur, bouffon, souverain, magicien, createur, hero, citoyen, sage, amoureuse, rebelle, optimiste )
-)
-
-# Valider les changements et fermer la connexion
-conn.commit()
-cursor.close()
-conn.close()
+# Pour Autofill le template Canva
 
 autofill_job(nom_profile, motivation_text, bref_text, forces_text, defis_text, changements_text, interpersonnelles_text, structure_text, problemes_text, arch1_nom, arch2_nom, desc_arch1_text, desc_arch2_text, travail_text, adapte_rouge_text, adapte_bleu_text, adapte_vert_text, adapte_jaune_text, bleu, rouge, jaune, vert)
 
