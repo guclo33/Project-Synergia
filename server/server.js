@@ -6,6 +6,11 @@ const crypto = require("crypto");
 const fetch = (...args) => import('node-fetch').then(({default: fetch}) => fetch(...args));
 const { URLSearchParams } = require("url");
 const {template} = require("./canvaTemplate");
+const adminRoute = require("../routes/admin");
+const registerRoute = require("../routes/register");
+const loginRoute = require("../routes/login")
+const cors = require('cors');
+app.use(cors()); 
 
 
 
@@ -25,7 +30,10 @@ const redirectURI = "http://127.0.0.1:3000/callback/";
 let accessToken = "";
 let refreshToken = "";
 
-
+app.use("/admin", adminRoute)
+app.use("/register", registerRoute)
+app.use("/login", loginRoute)
+app.use(cors()); 
 
 app.get("/", (req,res) => {
     res.redirect(authURL)
