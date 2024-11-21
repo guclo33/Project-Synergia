@@ -31,12 +31,12 @@ let accessToken = "";
 let refreshToken = "";
 
 app.use("/admin", adminRoute)
-app.use("/register", registerRoute)
+app.use("api/register", registerRoute)
 app.use("/login", loginRoute)
 app.use(cors()); 
 
 app.get("/", (req,res) => {
-    res.redirect(authURL)
+    
 })
 
 app.get("/callback", async (req,res) => {

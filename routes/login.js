@@ -1,7 +1,7 @@
-const express = requires("express");
+const express = require("express");
 const router = express.Route();
 
 
 
 
-modules.exports = router
+module.exports = router

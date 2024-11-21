@@ -5,7 +5,6 @@ warnings.filterwarnings("ignore", category=UserWarning, module="openpyxl")
 pd.set_option('future.no_silent_downcasting', True)
 from openai import OpenAI
 from docx import Document
-import psycopg2
 import subprocess
 from canvaAutofill import autofill_job
 from fonction_database import update_database
@@ -17,7 +16,7 @@ from fonction_database import update_database
 
 #NOM format "Prénom, Nom"
 
-nom = "Josée, Drapeau"
+nom = "Josianne, ares"
 
 nom_profile = nom.replace(",", "")
 
