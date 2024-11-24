@@ -31,20 +31,19 @@ export function Login() {
         e.preventDefault()
         if (verified){
             try {
+                console.log('Sending data to backend:', userData);
                 const response = await fetch("http://10.0.0.6:3000/api/login", {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json"
                     },
-                    body: JSON.stringify({
-                        usernameOrEmail : userData.usernameOrEmail,
-                        password: userData.password
+                    body: JSON.stringify(userData)
                     })
-                });
+                ;
                 if(response.ok){
-                    const existingUser = await response.json();
-                    console.log(`User succesfully match with role : ${existingUser.rows[0].role}`)
-                    navigate(`/${existingUser.rows[0].role}`)
+                    const data = await response.json();
+                    console.log(`User successfully logged in with role: ${data.role}`);
+                    navigate(`/${data.role}`);
 
                 } else {
                     const errorData = await response.json()
