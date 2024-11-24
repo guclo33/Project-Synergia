@@ -50,13 +50,13 @@ export function Register() {
         isPassCapsVerified(registerData.password);
         isPassLength(registerData.password);
         isSamePassword(registerData.password, registerData.verifyPassword)
-        if(passCapsVerified & passLength & samePassword) {
+        if(passCapsVerified && passLength && samePassword) {
             setVerified(true)
         } else {
             setVerified(false)
         }
 
-    }, [registerData])
+    }, [registerData, passCapsVerified, passLength, samePassword])
 
 
     const handleChange = (e) => {
@@ -73,29 +73,32 @@ export function Register() {
         e.preventDefault();
         if(verified){
 
-        try {
-            const response = await fetch ("/api/register", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify(registerData)
-            });
-            if(response.ok) {
-                const data = await response.json()
-                console.log("user created!", data)
-                navigate("/login")
-            } else {
-                const errorData = await response.json()
-                console.log("Error", errorData.message)
-            }
+            try {
+                const response = await fetch ("http://10.0.0.6:3000/api/register", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify(registerData)
+                });
+                if(response.ok) {
+                    const data = await response.json()
+                    console.log("user created!", data)
+                    navigate("/login")
+                } else {
+                    const errorData = await response.json()
+                    console.log("Error", errorData.message);
+                    alert(`Error : ${errorData.message}`)
+                }
 
-        } catch(error) {
-            console.log("Could not create user")
+            } catch(error) {
+                console.log("Could not create user");
+                alert("An unexpected error occured. Please try again")
+            }
+        } else {
+            console.log("format de mot de passe non valide");
+            
         }
-    } else {
-        console.log("format de mot de passe non valide")
-    }
     };
 
 

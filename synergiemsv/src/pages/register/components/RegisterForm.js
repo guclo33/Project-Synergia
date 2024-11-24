@@ -5,13 +5,13 @@ export function RegisterForm({handleSubmit, handleChange, registerData, passCaps
         <form onSubmit={handleSubmit}>
             <div className="form">
                 <label htmlFor="username">Nom d'utilisateur</label>
-                <input type="text" value={registerData.username} id="username" name="username" placeholder="Nom d'utilisateur" onChange={handleChange} />
+                <input type="text" value={registerData.username} id="username" name="username" placeholder="Nom d'utilisateur" onChange={handleChange} required/>
                 <label htmlFor="email">Courriel</label>
-                <input type="email" value={registerData.email} id="email" name="email" placeholder="Courriel" onChange={handleChange}/>
+                <input type="email" value={registerData.email} id="email" name="email" placeholder="Courriel" onChange={handleChange} required/>
                 <label htmlFor="password">Mot de passe</label>
-                <input type="password" value={registerData.password} id="password" name="password" placeholder="Mot de passe" onChange={handleChange} />
+                <input type="password" value={registerData.password} id="password" name="password" placeholder="Mot de passe" onChange={handleChange} required/>
                 <label htmlFor="verifyPassword">Vérification du mot de passe</label>
-                <input type="password" value={registerData.verifyPassword} id="verifyPassword" name="verifyPassword" placeholder="Mot de passe" onChange={handleChange} />
+                <input type="password" value={registerData.verifyPassword} id="verifyPassword" name="verifyPassword" placeholder="Mot de passe" onChange={handleChange} required/>
             </div>
             <div className="verificator">
                 <ul>
