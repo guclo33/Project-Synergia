@@ -24,7 +24,7 @@ const createUser = async (req, res) => {
 
 const login = async (req, res) => {
     const { usernameOrEmail, password} = req.body ;
-    console.log(req.body)
+    
     try {
         const user = await loginQuery(usernameOrEmail);
         
@@ -42,11 +42,12 @@ const login = async (req, res) => {
         req.session.user = {
             id: user.rows[0].id,
             username: user.rows[0].username,
-            role: user.rows[0].role
+            role: user.rows[0].role,
+            email: user.rows[0].email
         };
         console.log(user)
 
-        return res.status(200).send({ role: user.rows[0].role })
+        return res.status(200).send(user)
         
 
     } catch(error) {

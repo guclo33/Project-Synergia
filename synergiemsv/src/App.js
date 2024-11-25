@@ -7,6 +7,13 @@ import {Login} from "./pages/login/Login"
 import {Admin} from "./pages/admin/Admin"
 import {Leader} from "./pages/leader/Leader"
 import {User} from "./pages/user/User"
+import { AdminHome } from "./pages/admin/components/AdminHome"
+import { Overview} from "./pages/admin/components/Overview"
+import { Roadmap } from "./pages/admin/components/Roadmap"
+import { Details } from "./pages/admin/components/Details"
+import { Settings } from  "./pages/admin/components/Settings"
+import { AuthProvider } from './pages/AuthContext'
+import { Unauthorized } from './pages/unauthorized/Unauthorized';
 
 
 const appRouter = createBrowserRouter(createRoutesFromElements(
@@ -14,9 +21,18 @@ const appRouter = createBrowserRouter(createRoutesFromElements(
     <Route path="/" element={<Home />} />
     <Route path="/register" element={<Register />}/>
     <Route path="/login" element={<Login />} />
-    <Route path="/admin" element={<Admin />} />
+    <Route path="/admin/:id" element={<Admin />}>
+      <Route path="/admin/:id" element={<AdminHome />} />
+      <Route path="/admin/:id/overview" element={<Overview />} />
+      <Route path="/admin/:id/roadmap" element={<Roadmap />} />
+      <Route path="/admin/:id/roadmap/:id" element={<Roadmap />} />
+      <Route path="/admin/:id/details" element={<Details />} />
+      <Route path="/admin/:id/details/:id" element={<Details />} />
+      <Route path="/admin/:id/settings" element={<Settings />} />
+    </Route>
     <Route path="/leader" element={<Leader />} />
     <Route path="/user" element={<User />} />  
+    <Route path="/unauthorized" element={<Unauthorized />} />
   </>
 
 ))
@@ -25,7 +41,9 @@ const appRouter = createBrowserRouter(createRoutesFromElements(
 
 function App() {
   return (
-    <RouterProvider router={appRouter} />
+    <AuthProvider>
+      <RouterProvider router={appRouter} />
+    </AuthProvider>
   );
 }
 

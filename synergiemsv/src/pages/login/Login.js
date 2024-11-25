@@ -1,16 +1,19 @@
-import React, {useState, useEffect} from "react";
+import React, {useState, useEffect, useContext} from "react";
 import image from "../../Images/logo2 sans fond.png"
 import { LoginForm } from "./components/LoginForm";
 import { useNavigate } from "react-router";
 import { Link } from "react-router-dom";
+import { AuthContext } from "../AuthContext";
 
 export function Login() {
+    
     const [userData, setUserData] = useState({
         usernameOrEmail : "",
         password : ""
     })
     const [verified, setVerified] = useState(false);
 
+    const { login } = useContext(AuthContext);
     const navigate = useNavigate()
 
     useEffect(() => {
@@ -42,8 +45,17 @@ export function Login() {
                 ;
                 if(response.ok){
                     const data = await response.json();
-                    console.log(`User successfully logged in with role: ${data.role}`);
-                    navigate(`/${data.role}`);
+                    console.log(`User successfully logged in with role: ${data.rows[0].role}`);
+                    const user = {
+                        id : data.rows[0].id,
+                        role : data.rows[0].role,
+                        username : data.rows[0].username,
+                        email : data.rows[0].email
+                    }
+                    
+                    login(user)
+
+                    navigate(`/${data.rows[0].role}/${data.rows[0].id}`);
 
                 } else {
                     const errorData = await response.json()

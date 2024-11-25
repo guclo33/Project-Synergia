@@ -34,7 +34,7 @@ app.use(session({
 }));
 app.use(cors(corsOptions));
 
-app.use("/admin", adminRoute)
+app.use("/api/admin", adminRoute)
 app.use("/api/register", registerRoute)
 app.use("/api/login", loginRoute)
 

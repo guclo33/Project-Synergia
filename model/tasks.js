@@ -7,7 +7,7 @@ const createUserQuery = (userName, password, email) => {
 const loginQuery = (userNameOrEmail) =>  {
     
     
-    return pool.query("SELECT id, role, password FROM users WHERE (email = $1 OR username = $1)", [userNameOrEmail]);
+    return pool.query("SELECT id, role, password, username, email FROM users WHERE (email = $1 OR username = $1)", [userNameOrEmail]);
 
     
 }
