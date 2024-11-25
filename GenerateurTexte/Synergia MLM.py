@@ -15,6 +15,7 @@ from fonction_database import update_database
 # *****À FAIRE**** code pour automatisation, activation lors de réception d'un nouveau formulaire 
 
 #NOM format "Prénom, Nom"
+def python_script(data):
 
 nom = "Josianne, ares"
 
@@ -475,4 +476,3 @@ update_database(nom_profile, motivation_text, bref_text, forces_text, defis_text
 
 autofill_job(nom_profile, motivation_text, bref_text, forces_text, defis_text, changements_text, interpersonnelles_text, structure_text, problemes_text, arch1_nom, arch2_nom, desc_arch1_text, desc_arch2_text, travail_text, adapte_rouge_text, adapte_bleu_text, adapte_vert_text, adapte_jaune_text, bleu, rouge, jaune, vert)
 
-#subprocess.run(["node", "canvaAutofill.js"])

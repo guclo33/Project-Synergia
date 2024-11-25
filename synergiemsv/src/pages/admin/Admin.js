@@ -1,8 +1,9 @@
 import React, {useEffect, useContext} from "react";
-import { Link, useParams } from "react-router-dom";
+import { NavLink, useParams } from "react-router-dom";
 import { Outlet } from "react-router-dom";
 import { AuthContext } from "../AuthContext";
 import { Navigate } from "react-router-dom";
+import "../pages.css"
 
 
 
@@ -26,17 +27,17 @@ export function Admin() {
 
     return(
         <div className="admin">
-            <nav>
+            <nav className="navAdmin">
                 <ul>
                     <li><a href="https://www.synergiemsv.com">Synergie MSV</a></li>
-                    <li><Link to="/:id">Accueil</Link></li>
-                    <li><Link to="overview">Vue d'ensemble</Link></li>
-                    <li><Link to="roadmap">Feuille de route</Link></li>
-                    <li><Link to="details">Informations</Link></li>
-                    <li><Link to="settings">Paramètres</Link></li>
-                </ul>
-                <h1>Bienvenue {user.username}</h1>
+                    <li><NavLink to={`/admin/${id}`} className={({ isActive }) => (isActive ? 'isActive' : '')} exact>Accueil</NavLink></li>
+                    <li><NavLink to="overview" className={({ isActive }) => (isActive ? 'isActive' : '')} >Vue d'ensemble</NavLink></li>
+                    <li><NavLink to="roadmap" className={({ isActive }) => (isActive ? 'isActive' : '')} >Feuille de route</NavLink></li>
+                    <li><NavLink to="details" className={({ isActive }) => (isActive ? 'isActive' : '')} >Informations</NavLink></li>
+                    <li><NavLink to="settings" className={({ isActive }) => (isActive ? 'isActive' : '')} >Paramètres</NavLink></li>
+                </ul> 
             </nav>
+            <h1>Bienvenue {user.username}</h1>
             <Outlet />
         </div>
     )

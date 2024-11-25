@@ -14,7 +14,7 @@ const codeChallenge = crypto
 const clientId = process.env.CANVA_CLIENTID;
 const clientSecret = process.env.CANVA_SECRETID;
 const authURL = process.env.CANVA_AUTHURL + codeChallenge;
-const redirectURI = "http://127.0.0.1:3000/callback/";
+
 let accessToken = "";
 let refreshToken = "";
 
@@ -73,6 +73,9 @@ const template = async (accessToken, refreshToken) => {
 
 const connectCanva = async (req,res) => {
     const authCode = req.query.code;
+    const {id} = req.params;
+    const redirectURI = `http://127.0.0.1:3001/admin/${id}`;
+
     if(authCode) {
         try{
         const credentials = `${clientId}:${clientSecret}`;

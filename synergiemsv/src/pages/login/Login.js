@@ -35,7 +35,7 @@ export function Login() {
         if (verified){
             try {
                 console.log('Sending data to backend:', userData);
-                const response = await fetch("http://10.0.0.6:3000/api/login", {
+                const response = await fetch("http://localhost:3000/api/login", {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json"

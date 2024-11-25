@@ -10,7 +10,7 @@ const cors = require('cors');
 require("dotenv").config()
 
 
-const allowedOrigins = ['http://10.0.0.6:3001', 'http://localhost:3000']; // Ajouter ici toutes les origines autorisées
+const allowedOrigins = ['http://10.0.0.6:3001', 'http://localhost:3000', "http://localhost:3001", "https://app-aagr4xe5mic.canva-apps.com"]; // Ajouter ici toutes les origines autorisées
 
 const corsOptions = {
   origin: function (origin, callback) {
@@ -41,7 +41,7 @@ app.use("/api/login", loginRoute)
 
 
 
-app.get("/callback", connectCanva);
+app.get("/api/canva/:id", connectCanva);
 
 
 app.listen(PORT, "0.0.0.0", () =>{
