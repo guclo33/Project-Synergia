@@ -22,13 +22,13 @@ const appRouter = createBrowserRouter(createRoutesFromElements(
     <Route path="/register" element={<Register />}/>
     <Route path="/login" element={<Login />} />
     <Route path="/admin/:id" element={<Admin />}>
-      <Route path="/admin/:id" element={<AdminHome />} />
-      <Route path="/admin/:id/overview" element={<Overview />} />
-      <Route path="/admin/:id/roadmap" element={<Roadmap />} />
-      <Route path="/admin/:id/roadmap/:id" element={<Roadmap />} />
-      <Route path="/admin/:id/details" element={<Details />} />
-      <Route path="/admin/:id/details/:id" element={<Details />} />
-      <Route path="/admin/:id/settings" element={<Settings />} />
+      <Route index element={<AdminHome />} />
+      <Route path="overview" element={<Overview />} />
+      <Route path="roadmap" element={<Roadmap />} />
+      <Route path="roadmap/:id" element={<Roadmap />} />
+      <Route path="details" element={<Details />} />
+      <Route path="details/:id" element={<Details />} />
+      <Route path="settings" element={<Settings />} />
     </Route>
     <Route path="/leader" element={<Leader />} />
     <Route path="/user" element={<User />} />  

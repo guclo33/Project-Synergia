@@ -13,8 +13,10 @@ export function Admin() {
   
     const navigate = useNavigate()
 
-    if(user.role === "admin" && user.id === id) {
-
+    if(user.role !== "admin" && user.id !== id) {
+            navigate("/unauthorized");
+            return null;
+        }
 
     return(
         <div className="admin">
@@ -32,8 +34,4 @@ export function Admin() {
             <Outlet />
         </div>
     )
-    } else {
-        navigate("/unauthorized");
-        return null;
-    }
 }
