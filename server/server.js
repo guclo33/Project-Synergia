@@ -7,8 +7,18 @@ const adminRoute = require("../routes/admin");
 const registerRoute = require("../routes/register");
 const loginRoute = require("../routes/login")
 const cors = require('cors');
-require("dotenv").config()
+require("dotenv").config();
+const Redis = require('ioredis');
+const connectRedis = require('connect-redis');
+const { isAuthenticated } = require('../controller/loginAndRegister');
 
+const sessionSecret = process.env.COOKIE_SECRET_KEY
+
+const RedisStore = connectRedis(session);
+const redisClient = Redis.createClient({
+  host: 'localhost',  
+  port: 6379
+});
 
 const allowedOrigins = ['http://10.0.0.6:3001', 'http://localhost:3000', "http://localhost:3001", "https://app-aagr4xe5mic.canva-apps.com", "http://127.0.0.1:3001" ]; // Ajouter ici toutes les origines autorisées
 
@@ -27,24 +37,32 @@ const corsOptions = {
 
 app.use(express.json());
 app.use(session({
-    secret: process.env.COOKIE_SECRET_KEY,  
-    resave: false,
-    saveUninitialized: true,
-    cookie: { secure: false }  
+  store: new RedisStore({ client: redisClient }),
+  secret: sessionSecret,  
+  resave: false,
+  saveUninitialized: true,
+  cookie: { secure: false, httpOnly: true, maxAge: 1000 * 60 * 60 * 24, sameSite: 'None' }  
 }));
 app.use(cors(corsOptions));
 
-app.use("/api/admin", adminRoute)
+app.use("/api/admin",isAuthenticated, adminRoute)
 app.use("/api/register", registerRoute)
 app.use("/api/login", loginRoute)
 
-app.get("/api/canva/authurl/:id", (req,res) => {
+app.get("/api/canva/authurl/", (req,res) => {
   const authURL = getAuthUrl();
   res.json({authURL})
 })
 
 
-app.get("http://127.0.0.1:3000/api/canva/auth", connectCanva);
+app.get("/api/canva/auth",(req,res,next) => {
+  console.log(req.session.user);
+  next()
+},
+connectCanva, (req, res) => {
+  console.log(req.session.user);
+  
+});
 
 
 app.listen(PORT, "0.0.0.0", () =>{

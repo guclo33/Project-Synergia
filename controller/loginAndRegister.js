@@ -45,7 +45,7 @@ const login = async (req, res) => {
             role: user.rows[0].role,
             email: user.rows[0].email
         };
-        console.log(user)
+        console.log("user created!" , req.session.user)
 
         return res.status(200).send(user)
         
@@ -56,7 +56,9 @@ const login = async (req, res) => {
 }
 
 const isAuthenticated = (req, res, next) => {
-    if (req.session.user) {
+    console.log(req.session);
+    
+    if (req.session && req.session.user) {
         return next(); 
     } else {
         return res.status(401).send({ message: 'Unauthorized' });

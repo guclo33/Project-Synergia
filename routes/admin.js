@@ -21,5 +21,15 @@ router.get("/", isAuthenticated, (req, res) => {
     }
 });
 
+router.post("/", isAuthenticated, (req, res) => {
+    const { URL } = req.body; 
+    req.session.redirectURL = URL; 
+
+    
+    console.log('Redirect URL received:', req.session.redirectURL);
+    
+    res.status(200).send({ message: 'Redirect URL stored successfully', redirectURL: req.session.redirectURL });
+});
+
 
 module.exports = router

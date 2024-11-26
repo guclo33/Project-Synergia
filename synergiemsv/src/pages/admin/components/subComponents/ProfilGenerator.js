@@ -11,9 +11,16 @@ export function ProfilGenerator() {
     useEffect(() =>{
         const fetchAuthUrl= async () =>{
             try{
-                const response = await fetch(`http://localhost:3000/api/canva/authurl/${id}`);
+                const response = await fetch(`http://localhost:3000/api/canva/authurl/`, {
+                    methode : "GET",
+                    credentials: 'include',
+                });
                 const data = await response.json()
-                console.log(data.authURL)
+
+                //const currentLocation = window.location.pathname + window.location.search
+                
+                //const authUrlWithState = +`${data.authURL}&state=${encodeURIComponent(currentLocation)}`
+
                 setAuthURL(data.authURL)
             }catch(error){
                 console.error("error fetching authurl", error)
@@ -22,9 +29,37 @@ export function ProfilGenerator() {
         fetchAuthUrl();
     },[]);
 
-    const handleCanva = () =>{
+    useEffect(() => {
         
-        window.open("http://127.0.0.1:3000/api/canva/auth", '_blank');
+        const redirectURL = `http://localhost:3001/admin/${id}`
+        
+        const sendURL = async () => {
+            try{
+                const response = await fetch("http://localhost:3000/api/admin", {
+                    method : "POST",
+                    credentials: 'include',
+                    headers : {
+                        "Content-Type" : "application/json"
+                    },
+                    body : JSON.stringify({URL : redirectURL})
+                });
+                if (response.ok) {
+                    console.log("Successfully sent redirect URL");
+                } else {
+                    console.log("Error sending redirect URL", response.statusText);
+                };
+                
+            } catch (error) {
+                console.error("Could not send redirectURL" , error)
+            }
+        }
+
+        sendURL();
+    },[])
+
+    const handleCanva = (e) =>{
+        e.preventDefault();
+        window.location.href = authURL;
        
     }
     

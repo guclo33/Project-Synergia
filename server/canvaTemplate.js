@@ -15,6 +15,7 @@ const clientId = process.env.CANVA_CLIENTID;
 const clientSecret = process.env.CANVA_SECRETID;
 const authURL = process.env.CANVA_AUTHURL + codeChallenge;
 
+
 let accessToken = "";
 let refreshToken = "";
 
@@ -26,6 +27,7 @@ const getAuthUrl =() => {
 const templateDataset = async (templateId, accessToken, refreshToken) => {
     const templateInfos = await fetch(`https://api.canva.com/rest/v1/brand-templates/${templateId}/dataset`,   {
     method: "GET",
+    credentials: 'include',
     headers: {"Authorization" : `Bearer ${accessToken}`}
     });
         if (!templateInfos.ok) {
@@ -36,8 +38,10 @@ const templateDataset = async (templateId, accessToken, refreshToken) => {
 
         const info = await templateInfos.json();
         console.log (info)
-        fs.writeFileSync('accessToken.json', JSON.stringify({ accessToken: accessToken, refreshToken: refreshToken, templateId : templateId }));
+        
+        await fs.writeFileSync('accessToken.json', JSON.stringify({ accessToken: accessToken, refreshToken: refreshToken, templateId : templateId }));
         return info
+        
     }; 
 
 
@@ -54,14 +58,16 @@ const template = async (accessToken, refreshToken) => {
                 method: "GET",
                 headers : {
                     "Authorization" : `Bearer ${accessToken}`
-                }
+                },
+                credentials: 'include',
             }
         );
         const templateIdInfos = await getTemplateId.json()
         templateId = await templateIdInfos.items[0].id;
         console.log(templateIdInfos);
+        
         try {
-            templateDataset(templateId, accessToken, refreshToken);
+            await templateDataset(templateId, accessToken, refreshToken);
         } catch (err) {
             console.log("Could not get template dataset", err)
         }
@@ -73,10 +79,12 @@ const template = async (accessToken, refreshToken) => {
      
 }
 
-const connectCanva = async (req,res) => {
+const connectCanva = async (req,res, next) => {
     const authCode = req.query.code;
-    const {id} = req.params;
+    
+    const redirectURL = req.session.redirectURL;
     const redirectURI = "http://127.0.0.1:3000/api/canva/auth";
+     
 
     if(authCode) {
         try{
@@ -88,6 +96,7 @@ const connectCanva = async (req,res) => {
               "Authorization": `Basic ${base64Credentials}`,
               "Content-Type": "application/x-www-form-urlencoded",
             },
+            credentials: 'include',
             body: new URLSearchParams({
                 grant_type: "authorization_code",
                 code_verifier: codeVerifier,
@@ -98,9 +107,13 @@ const connectCanva = async (req,res) => {
         const data = await response.json();
         accessToken = await data.access_token;
         refreshToken = await data.refresh_token;
-           
-        res.status(200).json(data);
-        template(accessToken, refreshToken);
+        console.log(redirectURL) 
+
+        await template(accessToken, refreshToken);
+
+        res.send(data)
+        next()
+    
         
         
       } catch (err) {

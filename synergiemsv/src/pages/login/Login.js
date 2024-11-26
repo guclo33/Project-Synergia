@@ -37,6 +37,7 @@ export function Login() {
                 console.log('Sending data to backend:', userData);
                 const response = await fetch("http://localhost:3000/api/login", {
                     method: "POST",
+                    credentials: 'include',
                     headers: {
                         "Content-Type": "application/json"
                     },
