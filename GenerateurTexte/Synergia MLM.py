@@ -1,4 +1,5 @@
 import os
+import sys
 import pandas as pd
 import warnings
 warnings.filterwarnings("ignore", category=UserWarning, module="openpyxl")
@@ -17,7 +18,7 @@ from fonction_database import update_database
 #NOM format "Prénom, Nom"
 def python_script(data):
 
-nom = "Josianne, ares"
+nom = sys.argv[1]
 
 nom_profile = nom.replace(",", "")
 

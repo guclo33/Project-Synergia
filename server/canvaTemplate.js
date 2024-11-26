@@ -18,7 +18,9 @@ const authURL = process.env.CANVA_AUTHURL + codeChallenge;
 let accessToken = "";
 let refreshToken = "";
 
-
+const getAuthUrl =() => {
+    return authURL
+}
 
 
 const templateDataset = async (templateId, accessToken, refreshToken) => {
@@ -74,7 +76,7 @@ const template = async (accessToken, refreshToken) => {
 const connectCanva = async (req,res) => {
     const authCode = req.query.code;
     const {id} = req.params;
-    const redirectURI = `http://127.0.0.1:3001/admin/${id}`;
+    const redirectURI = "http://127.0.0.1:3000/api/canva/auth";
 
     if(authCode) {
         try{
@@ -117,5 +119,6 @@ const connectCanva = async (req,res) => {
 
 module.exports = {
     connectCanva,
+    getAuthUrl
 }
 
