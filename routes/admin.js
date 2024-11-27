@@ -29,7 +29,7 @@ router.post("/", isAuthenticated, (req, res) => {
     console.log('Redirect URL received:', req.session.redirectURL);
     
     res.status(200).send({ message: 'Redirect URL stored successfully', redirectURL: req.session.redirectURL });
-});
+})
 
 
 module.exports = router

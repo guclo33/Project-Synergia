@@ -23,6 +23,43 @@ const getAuthUrl =() => {
     return authURL
 }
 
+const getUser = (req, res) => {
+   
+    if(req.session.user.token) {
+        const user = {
+            id: req.session.user.id,
+            username : req.session.user.username,
+            role : req.session.user.role,
+            email : req.session.user.email,
+            accessToken : req.session.user.token.accessToken,
+            refreshToken : req.session.user.token.refreshToken
+        }
+        console.log(`here is the user :`, user)
+        return res.json(user)
+        
+    }
+
+    const user = {
+        id: req.session.user.id,
+        username : req.session.user.username,
+        role : req.session.user.role,
+        email : req.session.user.email,
+    
+}
+    
+    
+
+    console.log(`here is the user :`, user)
+    return res.json(user)
+}
+
+/*const setAuthStatus = (req,res) =>{
+    if(!req.session.user){
+        req.session.user = {}
+    }
+    req.session.user ={canva : true}
+    
+}*/
 
 const templateDataset = async (templateId, accessToken, refreshToken) => {
     const templateInfos = await fetch(`https://api.canva.com/rest/v1/brand-templates/${templateId}/dataset`,   {
@@ -84,6 +121,7 @@ const connectCanva = async (req,res, next) => {
     const state = req.query.state;
     const redirectURL = req.session.redirectURL;
     const redirectURI = "http://127.0.0.1:3000/api/canva/auth";
+    
      
 
     if(authCode) {
@@ -108,25 +146,36 @@ const connectCanva = async (req,res, next) => {
         
         accessToken = await data.access_token;
         refreshToken = await data.refresh_token;
-        console.log(redirectURL) 
+
+        req.session.user.token = {
+            accessToken: accessToken,
+            refreshToken: refreshToken
+        };
+
+        // Save the session after storing the token
+        req.session.save((err) => {
+            if (err) {
+                console.error("Session save error", err);
+            }
+        });
+
 
         await template(accessToken, refreshToken);
 
         
-        await res.send(data);
+
+        console.log(`accessToken = ${accessToken}. refreshToken = ${refreshToken}` )
+        //await res.send(data);
         
-        if (state) {
-            return res.redirect(state);  // Redirige l'utilisateur vers la page d'origine après authentification
-        } else {
-            return res.redirect('/admin'); // Rediriger vers /admin si aucun 'state' n'est fourni
-        }
+        res.redirect(state)
+        
         
     
         
         
       } catch (err) {
         console.error(err);
-        res.status(500).send("Error fetching token");
+        res.status(500).send("Error fetching token", err);
       }
     } else {
       res.status(404).send("Could not get code");
@@ -138,8 +187,11 @@ const connectCanva = async (req,res, next) => {
 
 
 
+
 module.exports = {
     connectCanva,
-    getAuthUrl
+    getAuthUrl,
+    getUser,
+    /*setAuthStatus*/
 }
 

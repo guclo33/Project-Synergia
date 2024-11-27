@@ -1,7 +1,8 @@
 const bcrypt = require('bcryptjs');
 const { createUserQuery, loginQuery} = require("../model/tasks");
-const jwt = require("jsonwebtoken")
-require("dotenv").config()
+
+
+
 
 const createUser = async (req, res) => {
     try {
@@ -41,20 +42,14 @@ const login = async (req, res) => {
             return res.status(400).send({ message: 'Invalid credentials' });
         }
         
-        const token = jwt.sign(
-            { id: user.rows[0].id, username: user.rows[0].username, role: user.rows[0].role },
-            process.env.JWT_SECRET_KEY,
-            { expiresIn: '1h' }  
-        );
-
-        res.cookie('auth_token', token, { httpOnly: true})
-
+       
         req.session.user = {
             id: user.rows[0].id,
             username: user.rows[0].username,
             role: user.rows[0].role,
             email: user.rows[0].email
         };
+        
         console.log("user created!" , req.session.user)
 
         return res.status(200).send(user)
@@ -66,47 +61,14 @@ const login = async (req, res) => {
 }
 
 const isAuthenticated = (req, res, next) => {
-    const token = req.cookies.auth_token || req.headers['authorization'];
-
-    if (!token) {
+    console.log(req.session);
+    
+    if (req.session && req.session.user) {
+        return next(); 
+    } else {
         return res.status(401).send({ message: 'Unauthorized' });
     }
-
-    jwt.verify(token, process.env.JWT_SECRET_KEY, (err, decoded) => {
-        if (err) {
-            return res.status(401).send({ message: 'Invalid token' });
-        }
-        req.user = decoded;  
-        return next();  
-    });
 };
 
-const getSession = (req, res, next) => {
-    const token = req.cookies.auth_token || req.headers['authorization']; 
-  
-    if (!token) {
-        console.log("Le token n'est pas trouvé")
-        return next(); 
-    }
-  
-    try {
-      
-      const decoded = jwt.verify(token, process.env.JWT_SECRET);
-  
-      
-      req.session.user = {
-        id: decoded.id,
-        username: decoded.username,
-        role: decoded.role
-      };
-  
-      console.log('Session réinitialisée avec les données du token');
-      return next(); 
-  
-    } catch (error) {
-      console.error('Erreur lors de la vérification du token:', error);
-      return res.status(401).send('Token invalide ou expiré');
-    }
-  };
 
-module.exports = { createUser, login, isAuthenticated, getSession }
+module.exports = { createUser, login, isAuthenticated};

@@ -1,5 +1,7 @@
-import React, {useEffect, useState} from "react";
+import React, {useEffect, useState, useContext} from "react";
 import { useParams, useLocation, useNavigate  } from "react-router";
+import { AuthContext } from "../../../AuthContext";
+import Cookies from 'js-cookie'
 
 export function ProfilGenerator() {
     const [canvaAuth, setCanvaAuth] = useState(false)
@@ -7,6 +9,8 @@ export function ProfilGenerator() {
     const navigate = useNavigate()
     const {id} = useParams()
     const location = useLocation()
+    const user = useContext(AuthContext)
+    const token = Cookies.get('auth_token');
 
     useEffect(() =>{
         const fetchAuthUrl= async () =>{
@@ -40,6 +44,7 @@ export function ProfilGenerator() {
                     credentials: 'include',
                     headers : {
                         "Content-Type" : "application/json"
+                        
                     },
                     body : JSON.stringify({URL : redirectURL})
                 });
@@ -57,19 +62,18 @@ export function ProfilGenerator() {
         sendURL();
     },[])
 
-    const handleCanva = (e) =>{
+    const handleCanva = async (e) =>{
         e.preventDefault();
         const currentURL = window.location.href;  // URL actuelle
         const authURLWithState = `${authURL}&state=${encodeURIComponent(currentURL)}`
         window.location.href = authURLWithState;
-       
     }
     
 
     return(
         <div className="profilGenerator">
             <h2>Générateur de texte</h2>
-            {canvaAuth ? 
+            {user.accessToken ? 
             <div>
                 <input type="text" value="" name="prénom" />
                 <input type="text" value="" name="nom" />
