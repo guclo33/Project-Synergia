@@ -59,7 +59,9 @@ export function ProfilGenerator() {
 
     const handleCanva = (e) =>{
         e.preventDefault();
-        window.location.href = authURL;
+        const currentURL = window.location.href;  // URL actuelle
+        const authURLWithState = `${authURL}&state=${encodeURIComponent(currentURL)}`
+        window.location.href = authURLWithState;
        
     }
     

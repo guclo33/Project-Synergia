@@ -10,7 +10,7 @@ const cors = require('cors');
 require("dotenv").config();
 const Redis = require('ioredis');
 const connectRedis = require('connect-redis');
-const { isAuthenticated } = require('../controller/loginAndRegister');
+const { isAuthenticated, getSession } = require('../controller/loginAndRegister');
 
 const sessionSecret = process.env.COOKIE_SECRET_KEY
 
@@ -55,14 +55,11 @@ app.get("/api/canva/authurl/", (req,res) => {
 })
 
 
-app.get("/api/canva/auth",(req,res,next) => {
+app.get("/api/canva/auth", getSession, isAuthenticated, (req,res,next) => {
   console.log(req.session.user);
   next()
 },
-connectCanva, (req, res) => {
-  console.log(req.session.user);
-  
-});
+connectCanva);
 
 
 app.listen(PORT, "0.0.0.0", () =>{

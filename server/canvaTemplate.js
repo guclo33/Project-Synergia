@@ -81,7 +81,7 @@ const template = async (accessToken, refreshToken) => {
 
 const connectCanva = async (req,res, next) => {
     const authCode = req.query.code;
-    
+    const state = req.query.state;
     const redirectURL = req.session.redirectURL;
     const redirectURI = "http://127.0.0.1:3000/api/canva/auth";
      
@@ -105,14 +105,22 @@ const connectCanva = async (req,res, next) => {
             })
         });
         const data = await response.json();
+        
         accessToken = await data.access_token;
         refreshToken = await data.refresh_token;
         console.log(redirectURL) 
 
         await template(accessToken, refreshToken);
 
-        res.send(data)
-        next()
+        
+        await res.send(data);
+        
+        if (state) {
+            return res.redirect(state);  // Redirige l'utilisateur vers la page d'origine après authentification
+        } else {
+            return res.redirect('/admin'); // Rediriger vers /admin si aucun 'state' n'est fourni
+        }
+        
     
         
         
