@@ -25,7 +25,7 @@ const getAuthUrl =() => {
 
 const getUser = (req, res) => {
    
-    if(req.session.user.token) {
+    /*if(req.session.user.token) {
         const user = {
             id: req.session.user.id,
             username : req.session.user.username,
@@ -37,7 +37,7 @@ const getUser = (req, res) => {
         console.log(`here is the user :`, user)
         return res.json(user)
         
-    }
+    }*/
 
     const user = {
         id: req.session.user.id,
@@ -167,7 +167,7 @@ const connectCanva = async (req,res, next) => {
         console.log(`accessToken = ${accessToken}. refreshToken = ${refreshToken}` )
         //await res.send(data);
         
-        res.redirect(state)
+        res.redirect(`${state}?auth=true`)
         
         
     

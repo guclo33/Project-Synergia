@@ -62,6 +62,15 @@ export function ProfilGenerator() {
         sendURL();
     },[])
 
+    useEffect(()=> {
+        const params = new URLSearchParams(window.location.search);
+        const auth = params.get("auth")
+
+        if(auth==="true"){
+            setCanvaAuth(true)
+        } 
+    },[])
+
     const handleCanva = async (e) =>{
         e.preventDefault();
         const currentURL = window.location.href;  // URL actuelle
@@ -69,20 +78,26 @@ export function ProfilGenerator() {
         window.location.href = authURLWithState;
     }
     
+    if(canvaAuth===false) {
+        return (
+            <div className="profilGenerator">
+                <h2>Générateur de texte</h2>
+                <button onClick={handleCanva}>Connect Canva</button>
+                
+             
+            </div>
+        )
+    }
 
     return(
         <div className="profilGenerator">
             <h2>Générateur de texte</h2>
-            {user.accessToken ? 
-            <div>
-                <input type="text" value="" name="prénom" />
-                <input type="text" value="" name="nom" />
-                <button>Générer le profil</button>
-            </div>
-             :
-             <button onClick={handleCanva}>Connect Canva</button>
-            
-            }
+                <div>
+                    <input type="text" value="" name="prénom" />
+                    <input type="text" value="" name="nom" />
+                    <button>Générer le profil</button>
+                </div>
+             
         </div>
     )
 }
