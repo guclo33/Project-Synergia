@@ -13,7 +13,7 @@ export function Admin() {
   
     const navigate = useNavigate()
 
-    useEffect(() => {
+    /*useEffect(() => {
         
         const getUser = async () => {
             try {
@@ -36,6 +36,30 @@ export function Admin() {
 
 
         getUser()
+    }, [])*/
+
+    useEffect(() => {
+        const setUser = async() => {
+            try {
+                const response = await fetch("http://localhost:3000/api/admin/setsession",{
+                    method: "POST",
+                    credentials: "includes",
+                    headers : {
+                        "Content-Type" : "application/json" 
+                    },
+                    body : JSON.stringify(user)                   
+                });
+                if(response.ok) {
+                    console.log(`Session on server successfully saved for ${user.username}`)
+                } else {
+                    console.log("problem saving user info")
+                }
+
+            } catch(error){
+                console.error("could not send user info to the server")
+            }
+        }
+        setUser()
     }, [])
 
     if (!user) {

@@ -17,8 +17,11 @@ from fonction_database import update_database
 
 #NOM format "Prénom, Nom"
 def python_script(data):
+arg = sys.argv[1]
+if arg == "error":
+    raise ValueError("Une erreur s'est produite")
 
-nom = sys.argv[1]
+nom = arg
 
 nom_profile = nom.replace(",", "")
 

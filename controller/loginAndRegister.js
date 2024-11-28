@@ -50,7 +50,13 @@ const login = async (req, res) => {
             email: user.rows[0].email
         };
         
-        console.log("user created!" , req.session.user)
+        console.log("user created!" , req.session.user);
+
+        req.session.save((err) => {
+            if (err) {
+                console.log('Error saving session', err);
+            }
+        })
 
         return res.status(200).send(user)
         

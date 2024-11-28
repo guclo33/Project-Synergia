@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
-const {isAuthenticated} = require("../controller/loginAndRegister")
+const {isAuthenticated} = require("../controller/loginAndRegister");
+const { spawn } = require('child_process');
 
 router.get("/", isAuthenticated, (req, res) => {
     const { id } = req.params;
@@ -29,6 +30,45 @@ router.post("/", isAuthenticated, (req, res) => {
     console.log('Redirect URL received:', req.session.redirectURL);
     
     res.status(200).send({ message: 'Redirect URL stored successfully', redirectURL: req.session.redirectURL });
+})
+
+router.post("/setsession", (req, res) => {
+    const {user} = req.body;
+    if(!user) {
+        return res.status(400).send("Error getting user info")
+    }
+    req.session.user = user
+    return res.status(200).send("User session data saved successfully");
+})
+
+
+router.post("/profilgenerator", isAuthenticated, (req,res) => {
+    const { firstName, lastName} = req.body.name;
+    if(!firstName || !lastName) {   
+        res.status(400).send("Did not receive profile name")
+    } 
+    const profilName = `${firstName}, ${lastName}`
+
+    const pythonProcess = spawn('python3', ['Synergia MLM.py', profilName]);
+    let results = ""
+    let error = ""
+
+    pythonProcess.stdout.on('data', (data) => {
+        results += data.toString()
+    })
+
+    pythonProcess.stderr.on('data', (data) => {
+        error += data.toString()
+    })
+
+    pythonProcess.on('close', (code) => {
+        if(code === 0) {
+            res.json({message: results.trim()})
+        } else {
+            res.status(500).json({error : error.trim})
+        }
+    })
+
 })
 
 

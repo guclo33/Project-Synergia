@@ -28,11 +28,11 @@ const corsOptions = {
     if (!origin || allowedOrigins.includes(origin)) {
       callback(null, true); // Autoriser les requêtes
     } else {
-      callback(new Error('Not allowed by CORS')); // Bloquer les autres origines
+      callback(new Error('Not allowed by CORS')); 
     }
   },
-  methods: ['GET', 'POST', 'PUT', 'DELETE'], // Spécifiez les méthodes autorisées
-  credentials: true // Si vous utilisez des cookies avec des sessions, autorisez les cookies
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  credentials: true 
 };
 
 
@@ -41,12 +41,12 @@ app.use(session({
   store: new RedisStore({ client: redisClient }),
   secret: sessionSecret,  
   resave: false,
-  saveUninitialized: true,
+  saveUninitialized: false,
   cookie: { secure: false, httpOnly: true, maxAge: 1000 * 60 * 60 * 24, sameSite: 'None' }  
 }));
 app.use(cors(corsOptions));
 
-app.use("/api/admin",isAuthenticated, adminRoute)
+app.use("/api/admin", adminRoute)
 app.use("/api/register", registerRoute)
 app.use("/api/login", loginRoute)
 

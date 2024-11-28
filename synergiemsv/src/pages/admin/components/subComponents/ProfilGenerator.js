@@ -1,16 +1,19 @@
 import React, {useEffect, useState, useContext} from "react";
-import { useParams, useLocation, useNavigate  } from "react-router";
+import { useParams } from "react-router";
 import { AuthContext } from "../../../AuthContext";
-import Cookies from 'js-cookie'
+
 
 export function ProfilGenerator() {
     const [canvaAuth, setCanvaAuth] = useState(false)
     const [authURL, setAuthURL] = useState("")
-    const navigate = useNavigate()
-    const {id} = useParams()
-    const location = useLocation()
-    const user = useContext(AuthContext)
-    const token = Cookies.get('auth_token');
+    const [profilName, setProfilName] = useState({
+        firstName : "",
+        lastName : ""
+    });
+    const [message, setMessage] = useState("")
+    const {id} = useParams();
+    const {user} =useContext(AuthContext);
+    
 
     useEffect(() =>{
         const fetchAuthUrl= async () =>{
@@ -77,6 +80,40 @@ export function ProfilGenerator() {
         const authURLWithState = `${authURL}&state=${encodeURIComponent(currentURL)}`
         window.location.href = authURLWithState;
     }
+
+    const handleChange = (e) => {
+        const {name, value} = e.target;
+        setProfilName((prev)=> ({
+            ...prev,
+            [name] : value
+        }))
+
+    };
+
+    const handleSubmit = async (e)=> {
+        e.preventDefault();
+        try {
+            const response = await fetch("http://localhost:3000/api/admin/profilgenerator", {
+                method: "POST",
+                credentials: 'include',
+                headers : {
+                    "Content-Type" : "application/json"
+                },
+                body : JSON.stringify( profilName )
+
+            });
+            if(response.ok){
+                const message = await response.json()
+                setMessage(message.message)
+            } else {
+                const error = await response.json()
+                setMessage(error.error)
+            }
+        } catch(error) {
+            
+            console.error("error submiting profile name", error)
+        }
+    }
     
     if(canvaAuth===false) {
         return (
@@ -89,14 +126,20 @@ export function ProfilGenerator() {
         )
     }
 
+    
+
+
     return(
         <div className="profilGenerator">
             <h2>Générateur de texte</h2>
-                <div>
-                    <input type="text" value="" name="prénom" />
-                    <input type="text" value="" name="nom" />
+                <form onSubmit={handleSubmit}>
+                    <label htmlFor="prénom">Prénom</label>
+                    <input type="text" value={profilName.firstName} name="firstName" onChange={handleChange}/>
+                    <label htmlFor="Nom">Nom</label>
+                    <input type="text" value={profilName.lastName} name="lastName" onChange={handleChange} />
                     <button>Générer le profil</button>
-                </div>
+                </form>
+                {message && <p className="messageProfil">{message}</p>}
              
         </div>
     )

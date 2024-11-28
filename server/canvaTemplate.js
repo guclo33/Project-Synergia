@@ -147,10 +147,10 @@ const connectCanva = async (req,res, next) => {
         accessToken = await data.access_token;
         refreshToken = await data.refresh_token;
 
-        req.session.user.token = {
+        /*req.session.user.token = {
             accessToken: accessToken,
             refreshToken: refreshToken
-        };
+        };*/
 
         // Save the session after storing the token
         req.session.save((err) => {
