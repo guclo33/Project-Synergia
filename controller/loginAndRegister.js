@@ -67,9 +67,11 @@ const login = async (req, res) => {
 }
 
 const isAuthenticated = (req, res, next) => {
-    console.log(req.session);
+    
     
     if (req.session && req.session.user) {
+        console.log(req.session.user);
+        
         return next(); 
     } else {
         return res.status(401).send({ message: 'Unauthorized' });

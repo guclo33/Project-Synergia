@@ -12,7 +12,7 @@ export function ProfilGenerator() {
     });
     const [message, setMessage] = useState("")
     const {id} = useParams();
-    const {user} =useContext(AuthContext);
+    const {user} = useContext(AuthContext);
     
 
     useEffect(() =>{
@@ -36,7 +36,7 @@ export function ProfilGenerator() {
         fetchAuthUrl();
     },[]);
 
-    useEffect(() => {
+    /*useEffect(() => {
         
         const redirectURL = `http://localhost:3001/admin/${id}`
         
@@ -63,7 +63,7 @@ export function ProfilGenerator() {
         }
 
         sendURL();
-    },[])
+    },[])*/
 
     useEffect(()=> {
         const params = new URLSearchParams(window.location.search);
@@ -92,6 +92,11 @@ export function ProfilGenerator() {
 
     const handleSubmit = async (e)=> {
         e.preventDefault();
+        const dataToSend = {
+            firstName :profilName.firstName,
+            lastName: profilName.lastName
+        }
+        console.log(dataToSend)
         try {
             const response = await fetch("http://localhost:3000/api/admin/profilgenerator", {
                 method: "POST",
@@ -99,13 +104,17 @@ export function ProfilGenerator() {
                 headers : {
                     "Content-Type" : "application/json"
                 },
-                body : JSON.stringify( profilName )
+                body : JSON.stringify( {
+                    firstName :profilName.firstName,
+                    lastName: profilName.lastName
+                })
 
             });
             if(response.ok){
-                const message = await response.json()
-                setMessage(message.message)
+                const data = await response.json()
+                setMessage(data.message)
             } else {
+                console.log(`problem sending ${dataToSend}`)
                 const error = await response.json()
                 setMessage(error.error)
             }

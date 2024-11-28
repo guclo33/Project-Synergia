@@ -16,8 +16,9 @@ from fonction_database import update_database
 # *****À FAIRE**** code pour automatisation, activation lors de réception d'un nouveau formulaire 
 
 #NOM format "Prénom, Nom"
-def python_script(data):
+
 arg = sys.argv[1]
+
 if arg == "error":
     raise ValueError("Une erreur s'est produite")
 

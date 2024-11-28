@@ -39,28 +39,33 @@ export function Admin() {
     }, [])*/
 
     useEffect(() => {
-        const setUser = async() => {
-            try {
-                const response = await fetch("http://localhost:3000/api/admin/setsession",{
-                    method: "POST",
-                    credentials: "includes",
-                    headers : {
-                        "Content-Type" : "application/json" 
-                    },
-                    body : JSON.stringify(user)                   
-                });
-                if(response.ok) {
-                    console.log(`Session on server successfully saved for ${user.username}`)
-                } else {
-                    console.log("problem saving user info")
-                }
+        if(user) {
+            console.log(`Voici les infos envoyer au server : ${user.id}`)
+            const data = {user}
+            const setUser = async() => {
+                try {
+                    const response = await fetch("http://localhost:3000/api/admin/setsession",{
+                        method: "POST",
+                        credentials: "include",
+                        headers : {
+                            "Content-Type" : "application/json" 
+                        },
+                        body : JSON.stringify(data)                   
+                    });
+                    if(response.ok) {
+                        console.log(`Session on server successfully saved for ${user.username}`)
+                    } else {
+                        console.log("problem saving user info")
+                    }
 
-            } catch(error){
-                console.error("could not send user info to the server")
+                } catch(error){
+                    console.error("could not send user info to the server")
+                }
             }
+        
+            setUser()
         }
-        setUser()
-    }, [])
+    }, [user])
 
     if (!user) {
         // Si les données de l'utilisateur ne sont pas encore chargées, ne pas rediriger
