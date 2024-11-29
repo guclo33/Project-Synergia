@@ -12,4 +12,13 @@ const loginQuery = (userNameOrEmail) =>  {
     
 }
 
-module.exports = {createUserQuery, loginQuery}
+const getAdminData = (userId) => {
+    return pool.query("")
+}
+
+const findUserById = async (id) => {
+    // Remplacez par une requête SQL ou une autre méthode pour récupérer l'utilisateur par ID
+    return await database.query('SELECT * FROM users WHERE id = $1', [id]);
+};
+
+module.exports = {createUserQuery, loginQuery, findUserById}

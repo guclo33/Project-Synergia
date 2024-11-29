@@ -10,7 +10,9 @@ const cors = require('cors');
 require("dotenv").config();
 const Redis = require('ioredis');
 const connectRedis = require('connect-redis');
-const { isAuthenticated } = require('../controller/loginAndRegister');
+const { isAuthenticated, isAuthorized } = require('../controller/loginAndRegister');
+const passport = require('./config/passport');
+
 
 
 const sessionSecret = process.env.COOKIE_SECRET_KEY
@@ -21,12 +23,12 @@ const redisClient = Redis.createClient({
   port: 6379
 });
 
-const allowedOrigins = ['http://10.0.0.6:3001', 'http://localhost:3000', "http://localhost:3001", "https://app-aagr4xe5mic.canva-apps.com", "http://127.0.0.1:3001", "http://localhost:3001/admin" ]; // Ajouter ici toutes les origines autorisées
+const allowedOrigins = ['http://10.0.0.6:3001', 'http://localhost:3000', "http://localhost:3001", "https://app-aagr4xe5mic.canva-apps.com", "http://127.0.0.1:3001", "http://localhost:3001/admin" ]; // 
 
 const corsOptions = {
   origin: function (origin, callback) {
     if (!origin || allowedOrigins.includes(origin)) {
-      callback(null, true); // Autoriser les requêtes
+      callback(null, true); 
     } else {
       callback(new Error('Not allowed by CORS')); 
     }
@@ -45,8 +47,12 @@ app.use(session({
   cookie: { secure: false, httpOnly: true, maxAge: 1000 * 60 * 60 * 24, sameSite: 'None' }  
 }));
 app.use(cors(corsOptions));
+app.use(passport.initialize());
+app.use(passport.session());
 
-app.use("/api/admin", adminRoute)
+
+
+app.use("/api/admin/:id",isAuthorized, adminRoute)
 app.use("/api/register", registerRoute)
 app.use("/api/login", loginRoute)
 
@@ -55,13 +61,13 @@ app.get("/api/canva/authurl/", (req,res) => {
   res.json({authURL})
 })
 
-app.get("/api/user", getUser)
+app.get("/api/user/:id", getUser)
 
 app.get("/api/canva/auth", (req,res,next) => {
   console.log(req.session.user)
   next()
 },
-connectCanva, /*setAuthStatus*/);
+connectCanva);
 
 
 app.listen(PORT, "0.0.0.0", () =>{

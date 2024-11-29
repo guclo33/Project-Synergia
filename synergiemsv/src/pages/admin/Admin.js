@@ -13,30 +13,7 @@ export function Admin() {
   
     const navigate = useNavigate()
 
-    /*useEffect(() => {
-        
-        const getUser = async () => {
-            try {
-                const response = await fetch("http://localhost:3000/api/user", {
-                    method: "GET",
-                    credentials: 'include'
-
-                })
-                if(response.ok){
-                    const data = await response.json()
-                    login(data)
-                    console.log(`récupération des datas : infos de user : ${user}`, data)
-                } else {
-                    console.error("Failed to fetch user data:", response.statusText);
-                }
-            } catch(error) {
-                console.error("Didn't fetch the user data", error)
-            }
-        }
-
-
-        getUser()
-    }, [])*/
+    
 
     useEffect(() => {
         if(user) {

@@ -46,17 +46,17 @@ export function Login() {
                 ;
                 if(response.ok){
                     const data = await response.json();
-                    console.log(`User successfully logged in with role: ${data.rows[0].role}`);
+                    console.log(`User successfully logged in with role: ${data.user.role}`);
                     const user = {
-                        id : data.rows[0].id,
-                        role : data.rows[0].role,
-                        username : data.rows[0].username,
-                        email : data.rows[0].email
+                        id : data.user.id,
+                        role : data.user.role,
+                        username : data.user.username,
+                        email : data.user.email
                     }
                     
                     login(user)
 
-                    navigate(`/${data.rows[0].role}/${data.rows[0].id}`);
+                    navigate(`/${data.user.role}/${data.user.id}`);
 
                 } else {
                     const errorData = await response.json()

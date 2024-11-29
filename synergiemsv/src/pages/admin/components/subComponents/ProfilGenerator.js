@@ -1,6 +1,7 @@
 import React, {useEffect, useState, useContext} from "react";
 import { useParams } from "react-router";
 import { AuthContext } from "../../../AuthContext";
+import "../../../pages.css"
 
 
 export function ProfilGenerator() {
@@ -24,9 +25,7 @@ export function ProfilGenerator() {
                 });
                 const data = await response.json()
 
-                //const currentLocation = window.location.pathname + window.location.search
                 
-                //const authUrlWithState = +`${data.authURL}&state=${encodeURIComponent(currentLocation)}`
 
                 setAuthURL(data.authURL)
             }catch(error){
@@ -36,34 +35,7 @@ export function ProfilGenerator() {
         fetchAuthUrl();
     },[]);
 
-    /*useEffect(() => {
-        
-        const redirectURL = `http://localhost:3001/admin/${id}`
-        
-        const sendURL = async () => {
-            try{
-                const response = await fetch("http://localhost:3000/api/admin", {
-                    method : "POST",
-                    credentials: 'include',
-                    headers : {
-                        "Content-Type" : "application/json"
-                        
-                    },
-                    body : JSON.stringify({URL : redirectURL})
-                });
-                if (response.ok) {
-                    console.log("Successfully sent redirect URL");
-                } else {
-                    console.log("Error sending redirect URL", response.statusText);
-                };
-                
-            } catch (error) {
-                console.error("Could not send redirectURL" , error)
-            }
-        }
-
-        sendURL();
-    },[])*/
+    
 
     useEffect(()=> {
         const params = new URLSearchParams(window.location.search);
@@ -96,6 +68,7 @@ export function ProfilGenerator() {
             firstName :profilName.firstName,
             lastName: profilName.lastName
         }
+        document.getElementById('loading').style.display = 'block';
         console.log(dataToSend)
         try {
             const response = await fetch("http://localhost:3000/api/admin/profilgenerator", {
@@ -121,6 +94,8 @@ export function ProfilGenerator() {
         } catch(error) {
             
             console.error("error submiting profile name", error)
+        } finally{
+            document.getElementById('loading').style.display = 'none';
         }
     }
     
@@ -148,26 +123,10 @@ export function ProfilGenerator() {
                     <input type="text" value={profilName.lastName} name="lastName" onChange={handleChange} />
                     <button>Générer le profil</button>
                 </form>
-                {message && <p className="messageProfil">{message}</p>}
+                <div id="loading" style={{display: "none"}}>Loading...</div>
              
         </div>
     )
 }
 
- /*
-        try{
-            const response = await fetch(`http://localhost:3000/api/canva/${id}`, {
-                method: "GET"
-            })
-            if(response.ok){
-                console.log("successfully authorized with Canva")
-
-            } else {
-                const error = await response.json();
-                console.log(`Error connecting to api : ${error}`)
-            }
-
-
-        } catch(error){
-            console.log("Couldn't connect to Canva")
-        }*/
+ 

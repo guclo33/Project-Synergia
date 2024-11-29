@@ -6,6 +6,8 @@ const path = require('path');
 
 
 router.get("/", isAuthenticated, (req, res) => {
+    
+    
     const { id } = req.params;
 
     console.log("ID from URL:", id);
@@ -24,15 +26,7 @@ router.get("/", isAuthenticated, (req, res) => {
     }
 });
 
-/*router.post("/", isAuthenticated, (req, res) => {
-    const { URL } = req.body; 
-    req.session.redirectURL = URL; 
 
-    
-    console.log('Redirect URL received:', req.session.redirectURL);
-    
-    res.status(200).send({ message: 'Redirect URL stored successfully', redirectURL: req.session.redirectURL });
-})*/
 
 router.post("/setsession", (req, res) => {
     const {user} = req.body;
@@ -42,7 +36,7 @@ router.post("/setsession", (req, res) => {
     if(!user) {
         return res.status(400).send("Error getting user info")
     }
-    req.session.user = user;  // mettez à jour la session avec le user
+    req.session.user = user;  
     req.session.save((err) => {
         if (err) {
             console.error("Error saving session:", err);
