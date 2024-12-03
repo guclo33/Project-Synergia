@@ -21,7 +21,7 @@ passport.use(
                     return done(null, false, { message: 'Invalid credentials' });
                 }
 
-                
+                console.log(`passport user created wih : ${user.rows[0]}`)
                 return done(null, user.rows[0]);
             } catch (err) {
                 return done(err);
@@ -31,12 +31,18 @@ passport.use(
 );
 
 
-passport.serializeUser((user, done) => done(null, user.id));
+passport.serializeUser((user, done) => {
+    console.log('Serializing user:', user)
+    done(null, user.id)
+});
+
 passport.deserializeUser(async (id, done) => {
     try {
-        const user = await findUserById(id);
+        const userRows = await findUserById(id);
+        const user = userRows.rows[0]
         done(null, user);
     } catch (err) {
+        
         done(err);
     }
 });

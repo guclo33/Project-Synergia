@@ -68,16 +68,21 @@ const isAuthenticated = (req, res, next) => {
 };
 
 
-const isAuthorized = (req, res, next) => {
-    if(!req.isAuthenticated()){
-        return res.status(401).send({message: "Unauthorized"})
+const isAuthorizedAdmin = (req, res, next) => {
+    const {id} = req.params;
+    
+    if (!req.isAuthenticated()) {
+        console.log("User not authenticated");
+        return res.status(401).send({ message: "Unauthorized" });
     }
+      
 
-    const {api, role, id} = req.params;
-
-    if(req.user.role !== role || req.user.id.toString() !== id) {
+    if(req.user.role !== "admin" || req.user.id.toString() !== id) {
+        console.log("c'est la que ca casse")
         return res.status(403).send({message: "Forbidden: Role or ID does not match"});
     }
+
+    
     return next();
 }
 
@@ -86,4 +91,4 @@ const isAuthorized = (req, res, next) => {
 
 
 
-module.exports = { createUser, login, isAuthenticated, isAuthorized};
+module.exports = { createUser, login, isAuthenticated, isAuthorizedAdmin};

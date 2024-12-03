@@ -3,32 +3,27 @@ const router = express.Router();
 const {isAuthenticated} = require("../controller/loginAndRegister");
 const { exec } = require('child_process');
 const path = require('path');
+const {getAdminHomeData} = require("../model/tasks")
+const { getAdminHomeDataController, getOverviewDataController, getRoadmapDataController, updateRoadmapTodosController } = require ("../controller/adminController")
 
 
-router.get("/", isAuthenticated, (req, res) => {
-    
-    
-    const { id } = req.params;
+router.get("/", getAdminHomeDataController)
 
-    console.log("ID from URL:", id);
-    console.log("ID from session:", req.session.user.id);
-    if (req.session.user.role === "admin") {
-        
-        if (req.session.user.id === id) {
-            res.status(200).send("Bienvenue à ton tableau de bord !");
-        } else {
-            
-            res.status(403).send({ message: "Vous n'êtes pas autorisé à accéder à ce tableau de bord." });
-        }
-    } else {
-        
-        res.status(403).send({ message: "Accès refusé. Vous devez être un admin pour accéder à cette page." });
-    }
-});
+router.get("/overview",getOverviewDataController)
+
+router.put("/overview")
+
+router.get("/roadmap", getRoadmapDataController)
+
+router.put("/roadmap", updateRoadmapTodosController )
+
+router.get("/details")
+
+router.put("/details")
 
 
 
-router.post("/setsession", (req, res) => {
+/*router.post("/setsession", (req, res) => {
     const {user} = req.body;
     res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3001');
     res.setHeader('Access-Control-Allow-Credentials', 'true');
@@ -46,7 +41,7 @@ router.post("/setsession", (req, res) => {
     });
     console.log(req.session.user)
     return res.status(200).send("User session data saved successfully");
-})
+})*/
 
 
 router.post("/profilgenerator", (req,res) => {

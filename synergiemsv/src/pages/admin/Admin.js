@@ -8,14 +8,14 @@ import "../pages.css"
 
 
 export function Admin() {
-    const { user, login} = useContext(AuthContext);
+    const { user} = useContext(AuthContext);
     const { id } = useParams()
   
     const navigate = useNavigate()
 
     
 
-    useEffect(() => {
+    /*useEffect(() => {
         if(user) {
             console.log(`Voici les infos envoyer au server : ${user.id}`)
             const data = {user}
@@ -42,7 +42,7 @@ export function Admin() {
         
             setUser()
         }
-    }, [user])
+    }, [user])*/
 
     if (!user) {
         // Si les données de l'utilisateur ne sont pas encore chargées, ne pas rediriger

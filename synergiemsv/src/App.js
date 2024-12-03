@@ -25,9 +25,9 @@ const appRouter = createBrowserRouter(createRoutesFromElements(
       <Route index element={<AdminHome />} />
       <Route path="overview" element={<Overview />} />
       <Route path="roadmap" element={<Roadmap />} />
-      <Route path="roadmap/:id" element={<Roadmap />} />
+      <Route path="roadmap/:leaderid" element={<Roadmap />} />
       <Route path="details" element={<Details />} />
-      <Route path="details/:id" element={<Details />} />
+      <Route path="details/:clientid" element={<Details />} />
       <Route path="settings" element={<Settings />} />
     </Route>
     <Route path="/leader" element={<Leader />} />
