@@ -1,4 +1,5 @@
 import React, {useState} from "react";
+import { Link } from "react-router-dom";
 import "../../../pages.css"
 
 export function LeadersHome ({ adminHomeData})  {
@@ -22,7 +23,7 @@ export function LeadersHome ({ adminHomeData})  {
             {leadersActif.map((leader) => (
                 <div className="leaderHome" key={leader.id}>   
                     <h4>Leader</h4>
-                    <p>{leader.nom}</p>
+                    <p><Link to={`roadmap/${leader.id}`}>{leader.nom}</Link></p>
                     <h4>Courriel</h4>
                     <p>{leader.email}</p>
                     <h4>Téléphone</h4>

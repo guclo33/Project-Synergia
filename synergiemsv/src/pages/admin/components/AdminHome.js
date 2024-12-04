@@ -44,7 +44,7 @@ export function AdminHome() {
         console.log("getAdmin called")
         getAdminHomeData();
 
-    },[adminHomeData, user])
+    },[user])
     
     
     return(

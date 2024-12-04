@@ -81,6 +81,10 @@ export function Roadmap() {
         getRoadmapData()
     }, [user, roadmapExecData, roadmapPrepData])
     
+    if (!leaderid || !roadmapPrepData || !roadmapExecData) {
+        return <p>Loading...</p>;
+    }
+
     let filteredObjectPrep = {};
     
     let filteredObjectExec = {};
@@ -155,6 +159,9 @@ export function Roadmap() {
     }
     
     
+    if (!filteredObjectPrep || !roadmapPrepData || !roadmapExecData) {
+        return <p>Loading...</p>;
+    }
 
     return(
         <div className="roadmap">
@@ -162,9 +169,9 @@ export function Roadmap() {
            
                 {leaderid ? (
                     <div className="todoList">
+                            <h2>{filteredObjectPrep.nom}</h2>
                             <h3>Préparation</h3>
                             <div key={filteredObjectPrep.leader_id} className="preparation">
-                                <h2>{filteredObjectPrep.nom}</h2>
                                 <button name="showDone" onClick={handleButton}>Voir complétés</button>
                                 {prepFalseArray.map(([key, value]) => (
                                     <div key={key} className="todo">

@@ -3,21 +3,21 @@ const router = express.Router();
 const {isAuthenticated} = require("../controller/loginAndRegister");
 const { exec } = require('child_process');
 const path = require('path');
-const {getAdminHomeData} = require("../model/tasks")
-const { getAdminHomeDataController, getOverviewDataController, getRoadmapDataController, updateRoadmapTodosController } = require ("../controller/adminController")
+
+const { getAdminHomeDataController, getOverviewDataController, getRoadmapDataController, updateRoadmapTodosController, updateOverviewController, getDetailsById} = require ("../controller/adminController")
 
 
 router.get("/", getAdminHomeDataController)
 
 router.get("/overview",getOverviewDataController)
 
-router.put("/overview")
+router.put("/overview", updateOverviewController)
 
 router.get("/roadmap", getRoadmapDataController)
 
 router.put("/roadmap", updateRoadmapTodosController )
 
-router.get("/details")
+router.get("/details/:id", getDetailsById )
 
 router.put("/details")
 

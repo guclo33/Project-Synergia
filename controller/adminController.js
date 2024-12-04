@@ -1,4 +1,4 @@
-const {getAdminHomeData, getOverviewData, getRoadmapData, updateRoadmapTodos} = require("../model/tasks")
+const {getAdminHomeData, getOverviewData, getRoadmapData, updateRoadmapTodos, updateOverview} = require("../model/tasks")
 
 const getAdminHomeDataController = async (req,res) => {
     try {
@@ -18,9 +18,9 @@ const getAdminHomeDataController = async (req,res) => {
 const getOverviewDataController = async (req, res) =>{
     try {
         const data = await getOverviewData()
-        console.log(`data de la query: ${data}`)
+        
         if(data){
-            console.log(`voici le data Overview: ${data}`)
+            
             return  res.status(200).send(data)
         }
         res.send(404).send("no data found")
@@ -89,8 +89,30 @@ const updateRoadmapTodosController = async (req, res) => {
     }
 }
 
+const updateOverviewController = async (req, res) => {
+    const { leader_id, date_presentation, echeance, statut, priorite} = req.body;
+    console.log("req.body=", req.body)
+    console.log("leader id", leader_id,"date pres:", date_presentation,"echeance", echeance,'statut', statut,"priorite", priorite)
+    try {
+        await updateOverview(date_presentation, echeance, statut, priorite, leader_id)
+        res.status(200).send("completed update overview")
+    } catch(error) {
+        res.status(400).send(error)
+    }
+
+}
+
+const getDetailsById = async (req,res) => {
+    const {id} = req.body;
+    try{
+        const data = await getDetailsById(id)
+        console.log(data)
+        res.status(200).json(data)
+    } catch(error) {
+        res.status(400).send(error)
+    }
+}
 
 
 
-
-module.exports = { getAdminHomeDataController, getOverviewDataController, getRoadmapDataController, updateRoadmapTodosController };
+module.exports = { getAdminHomeDataController, getOverviewDataController, getRoadmapDataController, updateRoadmapTodosController, updateOverviewController, getDetailsById };

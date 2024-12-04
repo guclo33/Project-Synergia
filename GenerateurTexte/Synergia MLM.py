@@ -465,13 +465,13 @@ def generate_simple_word(file_path, text_content):
 
 nom_organisateur = synergia_nom.iloc[0, 4]
 
-nouveau_dossier = f"C:/Users/Guillaume Cloutier/OneDrive/Synergia/{nom_organisateur}"
+nouveau_dossier = f"C:/Users/Guillaume Cloutier/OneDrive/Synergia/{nom_organisateur}/Profiles"
 
 if not os.path.exists(nouveau_dossier):
     os.makedirs(nouveau_dossier)
 
 # Générer le fichier Word
-generate_simple_word(f"{nouveau_dossier}/{nom}", full_text)
+generate_simple_word(f"{nouveau_dossier}/{nom_profile}", full_text)
     
 # Pour updater la database
 

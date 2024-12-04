@@ -12,12 +12,10 @@ const getAdminHomeData = async () => {
     return await pool.query("SELECT l.id as leaderid, l.client_id as clientid, l.active as active, c.nom_client as nom, c.email as email, c.phone as phone FROM leader l JOIN client c ON l.client_id = c.id" )
 }
 
-const updateInfo = async (table, column, value) => {
-    return await pool.query("ALTER TABLE $1 SET $2 = $3", [table, column, value]) // À TRAVAILLER!! NE PEUT PAS METTRE $1 POUR TABLE ET COLUMN
-}
+
 
 const findUserById = async (id) => {
-    // Remplacez par une requête SQL ou une autre méthode pour récupérer l'utilisateur par ID
+    
     return await pool.query('SELECT * FROM users WHERE id = $1', [id]);
 };
 
@@ -33,5 +31,24 @@ const updateRoadmapTodos = async(query, value, leaderid)=> {
     return await pool.query(query, [value, leaderid])
 }
 
+const updateOverview = async (date_presentation, echeance, statut, priorite, leader_id) => {
+    return await pool.query("UPDATE leader_todo SET date_presentation = $1, echeance = $2, statut = $3, priorite = $4 WHERE leader_id = $5", [date_presentation, echeance, statut, priorite, leader_id ])
+}
 
-module.exports = {createUserQuery, loginQuery, findUserById, getAdminHomeData, getOverviewData, getRoadmapData, updateRoadmapTodos}
+const getDetailsData = async (id) => {
+    const info = await pool.query("SELECT * FROM leader JOIN client ON leader.client_id = client.id JOIN profile ON client.profile_id = profile.id where leader.id = $1", [id])
+
+    const equipe = await pool.query(" SELECT nom_client as nom, email, phone FROM client WHERE leader_id = 7;")
+
+    const data = {
+        info: info.rows[0],
+        equipe : equipe.rows
+    }
+
+    return data
+}
+
+
+
+
+module.exports = {createUserQuery, loginQuery, findUserById, getAdminHomeData, getOverviewData, getRoadmapData, updateRoadmapTodos, updateOverview}
