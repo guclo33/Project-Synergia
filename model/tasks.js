@@ -36,19 +36,20 @@ const updateOverview = async (date_presentation, echeance, statut, priorite, lea
 }
 
 const getDetailsData = async (id) => {
+    
     const info = await pool.query("SELECT * FROM leader JOIN client ON leader.client_id = client.id JOIN profile ON client.profile_id = profile.id where leader.id = $1", [id])
-
-    const equipe = await pool.query(" SELECT nom_client as nom, email, phone FROM client WHERE leader_id = 7;")
+    
+    const equipe = await pool.query(" SELECT id, nom_client as nom, email, phone FROM client WHERE leader_id = 7;")
 
     const data = {
         info: info.rows[0],
         equipe : equipe.rows
     }
-
+    console.log("voici le detailsData:", data)
     return data
 }
 
 
 
 
-module.exports = {createUserQuery, loginQuery, findUserById, getAdminHomeData, getOverviewData, getRoadmapData, updateRoadmapTodos, updateOverview}
+module.exports = {createUserQuery, loginQuery, findUserById, getAdminHomeData, getOverviewData, getRoadmapData, updateRoadmapTodos, updateOverview, getDetailsData}

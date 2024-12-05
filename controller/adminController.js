@@ -1,11 +1,11 @@
-const {getAdminHomeData, getOverviewData, getRoadmapData, updateRoadmapTodos, updateOverview} = require("../model/tasks")
+const {getAdminHomeData, getOverviewData, getRoadmapData, updateRoadmapTodos, updateOverview, getDetailsData} = require("../model/tasks")
 
 const getAdminHomeDataController = async (req,res) => {
     try {
         const data = await getAdminHomeData()
-        console.log(`data de la query: ${data}`)
+        
         if(data){
-            console.log(`voici le data: ${data}`)
+            
             return  res.status(200).send(data)
         }
         res.send(404).send("no data found")
@@ -103,10 +103,12 @@ const updateOverviewController = async (req, res) => {
 }
 
 const getDetailsById = async (req,res) => {
-    const {id} = req.body;
+    const {clientid} = req.params;
+    console.log("clientID:" , clientid)
     try{
-        const data = await getDetailsById(id)
+        const data = await getDetailsData(clientid)
         console.log(data)
+        
         res.status(200).json(data)
     } catch(error) {
         res.status(400).send(error)

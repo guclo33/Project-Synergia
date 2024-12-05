@@ -81,7 +81,7 @@ export function Roadmap() {
         getRoadmapData()
     }, [user, roadmapExecData, roadmapPrepData])
     
-    if (!leaderid || !roadmapPrepData || !roadmapExecData) {
+    if (!roadmapPrepData || !roadmapExecData) {
         return <p>Loading...</p>;
     }
 

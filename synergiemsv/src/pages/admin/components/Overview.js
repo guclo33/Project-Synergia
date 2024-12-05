@@ -111,7 +111,7 @@ export function Overview() {
                         <input type="datetime-local" name="date_presentation" value={newInfos.date_presentation || leader.date_presentation || ""} onChange={handleChange} />
 
                         <h5>Date d'échéance :</h5>
-                        <input type="datetime-local" name="echeance" value={newInfos.echeance || leader.echeance || ""}  onChange={handleChange} />
+                        <input type="date" name="echeance" value={newInfos.echeance || leader.echeance || ""}  onChange={handleChange} />
 
                         <h5>Statut :</h5>
                         <select name="statut" value={newInfos.statut || leader.statut || ""} onChange={handleChange}> 

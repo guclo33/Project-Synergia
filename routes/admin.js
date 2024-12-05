@@ -17,7 +17,9 @@ router.get("/roadmap", getRoadmapDataController)
 
 router.put("/roadmap", updateRoadmapTodosController )
 
-router.get("/details/:id", getDetailsById )
+router.get("/details", getAdminHomeDataController)
+
+router.get("/details/:clientid", getDetailsById )
 
 router.put("/details")
 
