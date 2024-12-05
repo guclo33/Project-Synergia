@@ -23,6 +23,7 @@ export function Details() {
                         
                         const dataArray = data.rows.map((row) => ( {
                             leader_id: row.leaderid,
+                            client_id: row.clientid,
                             nom: row.nom,
                             email: row.email,
                             phone: row.phone,

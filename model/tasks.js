@@ -35,11 +35,11 @@ const updateOverview = async (date_presentation, echeance, statut, priorite, lea
     return await pool.query("UPDATE leader_todo SET date_presentation = $1, echeance = $2, statut = $3, priorite = $4 WHERE leader_id = $5", [date_presentation, echeance, statut, priorite, leader_id ])
 }
 
-const getDetailsData = async (id) => {
+const getDetailsData = async (clientid) => {
     
-    const info = await pool.query("SELECT * FROM leader JOIN client ON leader.client_id = client.id JOIN profile ON client.profile_id = profile.id where leader.id = $1", [id])
+    const info = await pool.query("SELECT * FROM leader JOIN client ON leader.client_id = client.id JOIN profile ON client.profile_id = profile.id where client.id = $1", [clientid])
     
-    const equipe = await pool.query(" SELECT id, nom_client as nom, email, phone FROM client WHERE leader_id = 7;")
+    const equipe = await pool.query(" SELECT id, nom_client as nom, email, phone FROM client WHERE leader_id = (SELECT leader_id FROM client WHERE id = $1);", [clientid])
 
     const data = {
         info: info.rows[0],
@@ -49,7 +49,21 @@ const getDetailsData = async (id) => {
     return data
 }
 
+const updateDetailsGeneralInfosQuery = async (email, phone, price_sold, active, additional_infos, clientid) =>{
+    await pool.query("UPDATE client SET email = $1, phone = $2 WHERE id = $3; ", [email, phone, clientid]);
+    await pool.query("UPDATE leader SET price_sold = $1, active = $2, additional_infos = $3 WHERE client_id = $4",[price_sold,active, additional_infos, clientid])
+    return {success:true}
+    
+}
+
+const updateUserInfosQuery =  async (username, email, id) => {
+    return await pool.query("UPDATE users SET username = $1, email = $2 WHERE id = $3", [username, email, id])
+}
+
+const updateUserPasswordQuery = async (password, id) => {
+    return await pool.query("UPDATE users SET password = $1 WHERE id = $2", [password, id])
+}
 
 
 
-module.exports = {createUserQuery, loginQuery, findUserById, getAdminHomeData, getOverviewData, getRoadmapData, updateRoadmapTodos, updateOverview, getDetailsData}
+module.exports = {createUserQuery, loginQuery, findUserById, getAdminHomeData, getOverviewData, getRoadmapData, updateRoadmapTodos, updateOverview, getDetailsData, updateDetailsGeneralInfosQuery, updateUserInfosQuery, updateUserPasswordQuery}

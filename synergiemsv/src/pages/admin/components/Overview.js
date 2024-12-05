@@ -71,7 +71,7 @@ export function Overview() {
 
     const handleSubmit = async (e) =>  {
         e.preventDefault()
-        console.log(`leaderid: ${modifyId}, date presentation: ${newInfos.date_presentation}, echeance: ${newInfos.echeance}, statut: ${newInfos.statut}, priorite: ${newInfos.priorite}`)
+        
         try{
             const response = await fetch(`http://localhost:3000/api/admin/${user.id}/overview`, {
                 method : "PUT",

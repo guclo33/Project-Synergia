@@ -1,10 +1,10 @@
 const express = require("express");
-const router = express.Router();
+const router = express.Router({ mergeParams: true });
 const {isAuthenticated} = require("../controller/loginAndRegister");
 const { exec } = require('child_process');
 const path = require('path');
 
-const { getAdminHomeDataController, getOverviewDataController, getRoadmapDataController, updateRoadmapTodosController, updateOverviewController, getDetailsById} = require ("../controller/adminController")
+const { getAdminHomeDataController, getOverviewDataController, getRoadmapDataController, updateRoadmapTodosController, updateOverviewController, getDetailsById, updateDetailsGeneralInfos, updateUserInfos, updateUserPassword} = require ("../controller/adminController")
 
 
 router.get("/", getAdminHomeDataController)
@@ -21,7 +21,11 @@ router.get("/details", getAdminHomeDataController)
 
 router.get("/details/:clientid", getDetailsById )
 
-router.put("/details")
+router.put("/details/:clientid", updateDetailsGeneralInfos)
+
+router.put("/settings", updateUserInfos),
+
+router.put("/settings/password", updateUserPassword)
 
 
 

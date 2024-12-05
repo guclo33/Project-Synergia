@@ -1,4 +1,5 @@
-const {getAdminHomeData, getOverviewData, getRoadmapData, updateRoadmapTodos, updateOverview, getDetailsData} = require("../model/tasks")
+const {getAdminHomeData, getOverviewData, getRoadmapData, updateRoadmapTodos, updateOverview, getDetailsData, updateDetailsGeneralInfosQuery, updateUserInfosQuery, updateUserPasswordQuery} = require("../model/tasks")
+const bcrypt = require("bcryptjs")
 
 const getAdminHomeDataController = async (req,res) => {
     try {
@@ -115,6 +116,46 @@ const getDetailsById = async (req,res) => {
     }
 }
 
+const updateDetailsGeneralInfos = async (req, res) => {
+    const {clientid} = req.params;
+    const {email, phone, price_sold, active, additional_infos} = req.body;
+    console.log("clientid", clientid, "req.body", req.body)
+    try {
+        await updateDetailsGeneralInfosQuery(email, phone, price_sold, active, additional_infos, clientid);
+        res.status(200).send("Succesfully updated details general infos")
+    } catch(error) {
+        res.status(400).send(error)
+    }
+}
+
+const updateUserInfos = async (req, res) => {
+    const {username, email} = req.body;
+    const {id} = req.params
+    console.log("req.body", req.body, "id", id);
+    try {
+        await updateUserInfosQuery(username, email, id)
+        res.status(200).send("succesfully updated user infos")
+    }catch(error) {
+        res.status(400).send(error)
+    }
+}
+
+const updateUserPassword = async (req, res) => {
+    const {newPassword} = req.body;
+    const {id} = req.params
+    console.log("req.body", req.body, "id", id);
+
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+
+    try{
+        await updateUserPasswordQuery(hashedPassword, id);
+        res.status(200).send("sucessfully updated the password")
+
+    } catch(error) {
+        res.status(400).send(error)
+    }
+}
 
 
-module.exports = { getAdminHomeDataController, getOverviewDataController, getRoadmapDataController, updateRoadmapTodosController, updateOverviewController, getDetailsById };
+
+module.exports = { getAdminHomeDataController, getOverviewDataController, getRoadmapDataController, updateRoadmapTodosController, updateOverviewController, getDetailsById, updateDetailsGeneralInfos, updateUserInfos, updateUserPassword };
