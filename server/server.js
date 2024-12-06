@@ -54,6 +54,7 @@ app.use(passport.session());
 
 app.use("/api/admin/:id", isAuthorizedAdmin, adminRoute)
 
+
 app.use("/api/register", registerRoute)
 app.use("/api/login", loginRoute)
 

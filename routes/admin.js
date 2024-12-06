@@ -3,8 +3,12 @@ const router = express.Router({ mergeParams: true });
 const {isAuthenticated} = require("../controller/loginAndRegister");
 const { exec } = require('child_process');
 const path = require('path');
+const multer = require('multer');
+const fs = require('fs');
+const upload = multer({ dest: 'uploads/' });
 
-const { getAdminHomeDataController, getOverviewDataController, getRoadmapDataController, updateRoadmapTodosController, updateOverviewController, getDetailsById, updateDetailsGeneralInfos, updateUserInfos, updateUserPassword} = require ("../controller/adminController")
+
+const { getAdminHomeDataController, getOverviewDataController, getRoadmapDataController, updateRoadmapTodosController, updateOverviewController, getDetailsById, updateDetailsGeneralInfos, updateUserInfos, updateUserPassword, uploadFile, listFile, downloadFile} = require ("../controller/adminController")
 
 
 router.get("/", getAdminHomeDataController)
@@ -26,6 +30,12 @@ router.put("/details/:clientid", updateDetailsGeneralInfos)
 router.put("/settings", updateUserInfos),
 
 router.put("/settings/password", updateUserPassword)
+
+router.post("/details/profile/upload/:leaderName", upload.single("file"), uploadFile);
+
+router.get("/details/profile/list/:leaderName",  listFile)
+
+router.get("/details/profile/download/:leaderName/:filename",  downloadFile)
 
 
 

@@ -1,5 +1,9 @@
 const {getAdminHomeData, getOverviewData, getRoadmapData, updateRoadmapTodos, updateOverview, getDetailsData, updateDetailsGeneralInfosQuery, updateUserInfosQuery, updateUserPasswordQuery} = require("../model/tasks")
-const bcrypt = require("bcryptjs")
+const bcrypt = require("bcryptjs");
+const multer = require('multer');
+const path = require('path');
+const fs = require('fs');
+
 
 const getAdminHomeDataController = async (req,res) => {
     try {
@@ -156,6 +160,68 @@ const updateUserPassword = async (req, res) => {
     }
 }
 
+const uploadFile = async (req, res) => {
+    const {leaderName} = req.params;
+    const uploadPath = path.join(`C:/Users/Guillaume Cloutier/OneDrive/Synergia/${leaderName}/Profiles`);
+    try {
+        
+        if (!req.file) {
+            return res.status(400).send({ message: 'No file uploaded.' });
+        }
+        try {
+            await fs.mkdir(uploadPath, { recursive: true });
+        } catch (err) {
+            console.error('Error creating directory:', err);
+            return res.status(500).send({ message: 'Error creating upload directory.' });
+        }
+
+        
+        const targetPath = path.join(uploadPath, req.file.originalname);
+        try {
+            await fs.rename(req.file.path, targetPath);
+        } catch (err) {
+            console.error('Error moving file:', err);
+            return res.status(500).send({ message: 'Error moving uploaded file.' });
+        }
+
+            res.status(200).send({ 
+                message: 'File uploaded successfully.', 
+                filePath: targetPath 
+            });
+    } catch(error) {
+        console.error('Error during file upload:', error);
+        res.status(500).send({ message: 'Error uploading file.' });
+    }
+}
+
+const listFile = async (req, res) => {
+    const { leaderName } = req.params;
+
+    if (!leaderName) {
+        return res.status(400).send({ message: 'Leader name is required.' });
+    }
+
+    const uploadPath = path.join(`C:/Users/Guillaume Cloutier/OneDrive/Synergia/${leaderName}/Profiles`);
+
+    // Check if the directory exists
+    if (!fs.existsSync(uploadPath)) {
+        return res.status(404).send({ message: 'Directory not found.' });
+    }
+
+    fs.readdir(uploadPath, (err, files) => {
+        if (err) {
+            console.error('Error reading files:', err);
+            return res.status(500).send({ message: 'Error reading files.' });
+        }
+
+        res.status(200).send({ files });
+    });
+};
+
+const downloadFile = async (req, res) => {
+    
+}
 
 
-module.exports = { getAdminHomeDataController, getOverviewDataController, getRoadmapDataController, updateRoadmapTodosController, updateOverviewController, getDetailsById, updateDetailsGeneralInfos, updateUserInfos, updateUserPassword };
+
+module.exports = { getAdminHomeDataController, getOverviewDataController, getRoadmapDataController, updateRoadmapTodosController, updateOverviewController, getDetailsById, updateDetailsGeneralInfos, updateUserInfos, updateUserPassword, uploadFile, listFile };
