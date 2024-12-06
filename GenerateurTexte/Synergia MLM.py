@@ -465,10 +465,18 @@ def generate_simple_word(file_path, text_content):
 
 nom_organisateur = synergia_nom.iloc[0, 4]
 
-nouveau_dossier = f"C:/Users/Guillaume Cloutier/OneDrive/Synergia/{nom_organisateur}/Profiles"
+nouveau_dossier = f"C:/Users/Guillaume Cloutier/OneDrive/Synergia/{nom_organisateur}/profiles"
+dossier_facture = f"C:/Users/Guillaume Cloutier/OneDrive/Synergia/{nom_organisateur}/factures"
+dossier_questionnaires = f"C:/Users/Guillaume Cloutier/OneDrive/Synergia/{nom_organisateur}/questionnaires"
 
 if not os.path.exists(nouveau_dossier):
     os.makedirs(nouveau_dossier)
+    
+if not os.path.exists(dossier_facture):
+    os.makedirs(dossier_facture)
+
+if not os.path.exists(dossier_questionnaires):
+    os.makedirs(dossier_questionnaires)
 
 # Générer le fichier Word
 generate_simple_word(f"{nouveau_dossier}/{nom_profile}", full_text)

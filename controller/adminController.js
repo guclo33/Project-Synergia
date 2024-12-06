@@ -2,7 +2,7 @@ const {getAdminHomeData, getOverviewData, getRoadmapData, updateRoadmapTodos, up
 const bcrypt = require("bcryptjs");
 const multer = require('multer');
 const path = require('path');
-const fs = require('fs');
+const fs = require('fs')
 
 
 const getAdminHomeDataController = async (req,res) => {
@@ -161,47 +161,46 @@ const updateUserPassword = async (req, res) => {
 }
 
 const uploadFile = async (req, res) => {
-    const {leaderName} = req.params;
-    const uploadPath = path.join(`C:/Users/Guillaume Cloutier/OneDrive/Synergia/${leaderName}/Profiles`);
-    try {
-        
-        if (!req.file) {
-            return res.status(400).send({ message: 'No file uploaded.' });
-        }
-        try {
-            await fs.mkdir(uploadPath, { recursive: true });
-        } catch (err) {
+    console.log("req.file :", req.file)
+    
+    const {leaderName, category} = req.params;
+    
+    const uploadPath = path.join(`C:/Users/Guillaume Cloutier/OneDrive/Synergia/${leaderName}/${category}`);
+    if (!req.file) {
+        return res.status(400).send({ message: 'No file uploaded.' });
+    }
+
+    fs.mkdir(uploadPath, { recursive: true }, (err) => {
+        if (err) {
             console.error('Error creating directory:', err);
             return res.status(500).send({ message: 'Error creating upload directory.' });
         }
 
-        
         const targetPath = path.join(uploadPath, req.file.originalname);
-        try {
-            await fs.rename(req.file.path, targetPath);
-        } catch (err) {
-            console.error('Error moving file:', err);
-            return res.status(500).send({ message: 'Error moving uploaded file.' });
-        }
+        fs.rename(req.file.path, targetPath, (err) => {
+            if (err) {
+                console.error('Error moving file:', err);
+                return res.status(500).send({ message: 'Error moving uploaded file.' });
+            }
 
-            res.status(200).send({ 
-                message: 'File uploaded successfully.', 
-                filePath: targetPath 
+            res.status(200).send({
+                message: 'File uploaded successfully.',
+                filePath: targetPath,
             });
-    } catch(error) {
-        console.error('Error during file upload:', error);
-        res.status(500).send({ message: 'Error uploading file.' });
-    }
+        });
+    });
 }
 
+
 const listFile = async (req, res) => {
-    const { leaderName } = req.params;
+    const { category, leaderName } = req.params;
+    
 
     if (!leaderName) {
         return res.status(400).send({ message: 'Leader name is required.' });
     }
 
-    const uploadPath = path.join(`C:/Users/Guillaume Cloutier/OneDrive/Synergia/${leaderName}/Profiles`);
+    const uploadPath = path.join(`C:/Users/Guillaume Cloutier/OneDrive/Synergia/${leaderName}/${category}`);
 
     // Check if the directory exists
     if (!fs.existsSync(uploadPath)) {
@@ -219,9 +218,35 @@ const listFile = async (req, res) => {
 };
 
 const downloadFile = async (req, res) => {
+    const { leaderName, category, fileName } = req.params; 
+    console.log(`Téléchargement du fichier: ${fileName}, catégorie: ${category}, leader: ${leaderName}`);
     
-}
+    
+    const filePath = path.join(
+        `C:/Users/Guillaume Cloutier/OneDrive/Synergia/${leaderName}/${category}`,
+        fileName
+    );
+
+    
+    if (!fs.existsSync(filePath)) {
+        return res.status(404).send({ message: 'Fichier non trouvé.' });
+    }
+
+    try {
+        
+        res.download(filePath, fileName, (err) => {
+            if (err) {
+                console.error('Erreur lors du téléchargement:', err);
+                res.status(500).send({ message: 'Erreur lors du téléchargement.' });
+            }
+        });
+    } catch (error) {
+        console.error('Erreur inattendue:', error);
+        res.status(500).send({ message: 'Erreur interne du serveur.' });
+    }
+};
 
 
 
-module.exports = { getAdminHomeDataController, getOverviewDataController, getRoadmapDataController, updateRoadmapTodosController, updateOverviewController, getDetailsById, updateDetailsGeneralInfos, updateUserInfos, updateUserPassword, uploadFile, listFile };
+
+module.exports = { getAdminHomeDataController, getOverviewDataController, getRoadmapDataController, updateRoadmapTodosController, updateOverviewController, getDetailsById, updateDetailsGeneralInfos, updateUserInfos, updateUserPassword, uploadFile, listFile, downloadFile };

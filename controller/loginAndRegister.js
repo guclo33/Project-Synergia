@@ -81,7 +81,7 @@ const isAuthorizedAdmin = (req, res, next) => {
         console.log("c'est la que ca casse")
         return res.status(403).send({message: "Forbidden: Role or ID does not match"});
     }
-
+    console.log("user authenticated")
     
     return next();
 }

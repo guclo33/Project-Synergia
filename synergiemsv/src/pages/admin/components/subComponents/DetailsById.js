@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from "react";
 import { useParams } from "react-router";
 import { GeneralInfos } from "./GeneralInfos";
-import {Documents} from "./Document";
+import {Documents} from "./Documents";
 import { Profile } from "./Profile";
 
 export function DetailsById({detailsData}) {

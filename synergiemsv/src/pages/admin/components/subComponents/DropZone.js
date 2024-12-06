@@ -8,9 +8,12 @@ export function DropZone({detailsData, category, apiUrl}) {
     const {user} = useContext(AuthContext)
     const {info} = detailsData
     
+
     const fetchFiles = useCallback(async () => {
+        const encodedLeaderName = encodeURIComponent(info.nom_leader)
+        console.log("calling fetchfiles with apiurl:", apiUrl, "category:", category, "nom leader", info.nom_leader)
         try {
-            const response = await fetch(`${apiUrl}/${category}/list/${info.nom_client}`, {
+            const response = await fetch(`${apiUrl}/${category}/list/${encodedLeaderName}`, {
                 method: "GET",
                 credentials: "include",
             });
@@ -34,13 +37,13 @@ export function DropZone({detailsData, category, apiUrl}) {
         formData.append('file', acceptedFiles[0]);
 
         try {
-            const response = await fetch(`${apiUrl}/${category}/upload/${info.nom_client}`, {
+            const response = await fetch(`${apiUrl}/${category}/upload/${info.nom_leader}`, {
                 method: "POST",
                 credentials : "include",
                 body : formData
             });
             if (response.ok) {
-                const data = response.json()
+                const data = await response.json()
                 console.log('Uploaded file:', data);
                 fetchFiles();
             }
@@ -48,11 +51,11 @@ export function DropZone({detailsData, category, apiUrl}) {
             console.log("couldn't upload file")
         }
 
-    },[user, detailsData]);
+    },[apiUrl, category, detailsData]);
 
     const downloadFile = async (fileName) => {
         try {
-            const response = await fetch(`${apiUrl}/${category}/download/${info.nom_client}/${fileName}`, {
+            const response = await fetch(`${apiUrl}/${category}/download/${info.nom_leader}/${fileName}`, {
                 method: "GET",
                 credentials: "include",
             });
@@ -75,23 +78,71 @@ export function DropZone({detailsData, category, apiUrl}) {
         fetchFiles();
     }, [fetchFiles]);
 
-    
-    const { getRootProps, getInputProps } = useDropzone({ onDrop });
+
+    const handleClick = (e) => {
+        
+        const fileName = e.target.getAttribute('data-name')
+        downloadFile(fileName)
+    }
+
+    const { getRootProps, getInputProps, isDragActive, isDragAccept, isDragReject } = useDropzone({
+        onDrop, })
+
+    const baseStyle = {
+        border: "2px dashed #cccccc",
+        borderRadius: "4px",
+        padding: "20px",
+        textAlign: "center",
+        transition: "border-color 0.3s, background-color 0.3s",
+        };
+        
+        const activeStyle = {
+        borderColor: "#2196f3",
+        backgroundColor: "#e3f2fd",
+        };
+        
+        const acceptStyle = {
+        borderColor: "#4caf50",
+        backgroundColor: "#e8f5e9",
+        };
+        
+        const rejectStyle = {
+        borderColor: "#f44336",
+        backgroundColor: "#ffebee",
+        };
+        
+          // Fusionner les styles en fonction de l'état
+        const currentStyle = {
+            ...baseStyle,
+            ...(isDragActive ? activeStyle : {}),
+            ...(isDragAccept ? acceptStyle : {}),
+            ...(isDragReject ? rejectStyle : {}),
+        };
 
     return (
-        <div>
+        <div
+            {...getRootProps({ className: "dropzone" })}
+            style={currentStyle}
+            >
+            <input {...getInputProps()} />
+            {isDragReject && <p style={{ color: "#f44336" }}>Fichiers non valides.</p>}
+            {isDragAccept && <p style={{ color: "#4caf50" }}>Relâchez pour déposer.</p>}
             <h3>{category}</h3>
-            <div {...getRootProps({ className: "dropzone" })} style={{ border: "2px dashed #cccccc", padding: "20px", textAlign: "center" }}>
-                <input {...getInputProps()} />
-                <p>Drag and drop files here, or click to select files.</p>
-            </div>
             <ul>
                 {files.map((file, index) => (
-                    <li key={index}>
-                        {file} <button onClick={() => downloadFile(file)}>Download</button>
-                    </li>
+                <li key={index}>
+                    <p
+                    style={{ cursor: 'pointer', color: 'blue', textDecoration: 'underline' }}
+                    data-name={file}
+                    rel="noopener noreferrer"
+                    onClick={handleClick}
+                    >
+                    {file}
+                    </p>
+                </li>
                 ))}
             </ul>
-        </div>
+    </div>
     );
 }
+

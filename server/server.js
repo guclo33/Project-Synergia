@@ -52,7 +52,12 @@ app.use(passport.session());
 
 
 
-app.use("/api/admin/:id", isAuthorizedAdmin, adminRoute)
+app.use("/api/admin/:id", isAuthorizedAdmin,(req, res, next) => {
+  console.log("Params:", req.params);
+  console.log("Path:", req.path);
+  console.log("Middleware executed");
+  next();
+}, adminRoute)
 
 
 app.use("/api/register", registerRoute)

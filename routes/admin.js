@@ -5,7 +5,7 @@ const { exec } = require('child_process');
 const path = require('path');
 const multer = require('multer');
 const fs = require('fs');
-const upload = multer({ dest: 'uploads/' });
+const upload = multer({ dest: 'C:/Users/Guillaume Cloutier/Downloads' });
 
 
 const { getAdminHomeDataController, getOverviewDataController, getRoadmapDataController, updateRoadmapTodosController, updateOverviewController, getDetailsById, updateDetailsGeneralInfos, updateUserInfos, updateUserPassword, uploadFile, listFile, downloadFile} = require ("../controller/adminController")
@@ -31,33 +31,12 @@ router.put("/settings", updateUserInfos),
 
 router.put("/settings/password", updateUserPassword)
 
-router.post("/details/profile/upload/:leaderName", upload.single("file"), uploadFile);
+router.post("/details/:category/upload/:leaderName", upload.single("file"), uploadFile);
 
-router.get("/details/profile/list/:leaderName",  listFile)
+router.get("/details/:category/list/:leaderName", listFile)
 
-router.get("/details/profile/download/:leaderName/:filename",  downloadFile)
+router.get("/details/:category/download/:leaderName/:fileName",  downloadFile)
 
-
-
-/*router.post("/setsession", (req, res) => {
-    const {user} = req.body;
-    res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3001');
-    res.setHeader('Access-Control-Allow-Credentials', 'true');
-    console.log(user)
-    if(!user) {
-        return res.status(400).send("Error getting user info")
-    }
-    req.session.user = user;  
-    req.session.save((err) => {
-        if (err) {
-            console.error("Error saving session:", err);
-        } else {
-            console.log("Session saved successfully!");
-        }
-    });
-    console.log(req.session.user)
-    return res.status(200).send("User session data saved successfully");
-})*/
 
 
 router.post("/profilgenerator", (req,res) => {
