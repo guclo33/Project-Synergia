@@ -1,5 +1,6 @@
 import React from 'react';
 import './App.css';
+import "./variables.css";
 import { RouterProvider, createBrowserRouter, createRoutesFromElements, Route } from 'react-router-dom';
 import {Home} from "./pages/home/Home"
 import {Register} from "./pages/register/Register"

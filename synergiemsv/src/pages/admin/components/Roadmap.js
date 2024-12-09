@@ -79,7 +79,7 @@ export function Roadmap() {
         
 
         getRoadmapData()
-    }, [user, roadmapExecData, roadmapPrepData])
+    }, [roadmapExecData, roadmapPrepData])
     
     if (!roadmapPrepData || !roadmapExecData) {
         return <p>Loading...</p>;
@@ -224,11 +224,13 @@ export function Roadmap() {
                     </div> ): 
                         (
                             
-                                roadmapPrepData.map(leader => (
-                                <div key={leader.leader_id}>
-                                    <h4><Link to={`${leader.leader_id}`}>Nom: {leader.nom}</Link></h4>
-                                </div> 
-                                ))
+                            <div className="leadersMap">    
+                                {roadmapPrepData.map(leader => (
+                                <div className="leader" key={leader.leader_id}>
+                                    <h4><Link to={`${leader.leader_id}`}>{leader.nom}</Link></h4>
+                                </div> ))}
+                            </div>    
+                                
                         )}
 
                             

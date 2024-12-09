@@ -16,20 +16,29 @@ export function LeadersHome ({ adminHomeData})  {
 
     return (
         <div className="leadersHome">
-            <h3>Vos leaders!</h3>
-            <input id = "active" type="checkbox" checked={!active} onChange={handleCheck} />
-            <label htmlFor="active">Voir les leaders inactifs</label>
-
+            <h2>Vos leaders!</h2>
+             <div className="input">  
+                <input id = "active" type="checkbox" checked={!active} onChange={handleCheck} />
+                <label htmlFor="active">Voir les leaders inactifs</label>
+            </div> 
             {leadersActif.map((leader) => (
                 <div className="leaderHome" key={leader.id}>   
-                    <h4>Leader</h4>
-                    <p><Link to={`roadmap/${leader.id}`}>{leader.nom}</Link></p>
-                    <h4>Courriel</h4>
-                    <p>{leader.email}</p>
-                    <h4>Téléphone</h4>
-                    <p>{leader.phone}</p>
-                    <h4>Status</h4>
-                    {leader.active ? <p>Actif</p> : <p>Inactif</p>}
+                    <div className="info">
+                        <h4>Leader</h4>
+                        <p><Link to={`roadmap/${leader.id}`}>{leader.nom}</Link></p>
+                    </div>
+                    <div className="info">
+                        <h4>Courriel</h4>
+                        <p>{leader.email}</p>
+                    </div>
+                    <div className="info">
+                        <h4>Téléphone</h4>
+                        <p>{leader.phone || "non enregistré"} </p>
+                    </div>
+                    <div className="info">
+                        <h4>Status</h4>
+                        {leader.active ? <p>Actif</p> : <p>Inactif</p>}
+                    </div>
                 </div>   
             ))}
         </div>

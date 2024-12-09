@@ -69,9 +69,9 @@ export function ProfilGenerator() {
             lastName: profilName.lastName
         }
         document.getElementById('loading').style.display = 'block';
-        console.log(dataToSend)
+        console.log(dataToSend, "params id =", id)
         try {
-            const response = await fetch("http://localhost:3000/api/admin/profilgenerator", {
+            const response = await fetch(`http://localhost:3000/api/admin/${id}/profilgenerator`, {
                 method: "POST",
                 credentials: 'include',
                 headers : {
@@ -115,7 +115,7 @@ export function ProfilGenerator() {
 
     return(
         <div className="profilGenerator">
-            <h2>Générateur de texte</h2>
+            <h2>Générateur de profils</h2>
                 <form onSubmit={handleSubmit}>
                     <label htmlFor="prénom">Prénom</label>
                     <input type="text" value={profilName.firstName} name="firstName" onChange={handleChange}/>

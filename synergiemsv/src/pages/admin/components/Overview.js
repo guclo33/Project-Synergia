@@ -49,7 +49,7 @@ export function Overview() {
 
         getOverviewData();
         
-    }, [user, overviewData])
+    }, [])
     
     const handleClick = (e) =>{
         const leaderID = e.target.getAttribute("data-id")
@@ -101,48 +101,51 @@ export function Overview() {
     return(
         <div className="Overview">
             <h2>Tableau de bord: vue d'ensemble</h2>
+            <div className="label">
+                <h5 className="a">Date de présentation :</h5>
+                <h5 className="b">Date d'échéance :</h5>
+                <h5 className="c">Statut :</h5>
+                <h5 className="d">Priorité :</h5>
+            </div>
             
             {overviewData.map(leader => (
                 modifyId == leader.leader_id ? (
                     <form onSubmit={handleSubmit} className="modifyForm">
                         <h4>{leader.nom}</h4>     
+                        <input className="a" type="datetime-local" name="date_presentation" value={newInfos.date_presentation || leader.date_presentation || ""} onChange={handleChange} />
 
-                        <h5>Date de présentation :</h5>
-                        <input type="datetime-local" name="date_presentation" value={newInfos.date_presentation || leader.date_presentation || ""} onChange={handleChange} />
+                        <input className="b" type="date" name="echeance" value={newInfos.echeance || leader.echeance || ""}  onChange={handleChange} />
 
-                        <h5>Date d'échéance :</h5>
-                        <input type="date" name="echeance" value={newInfos.echeance || leader.echeance || ""}  onChange={handleChange} />
-
-                        <h5>Statut :</h5>
-                        <select name="statut" value={newInfos.statut || leader.statut || ""} onChange={handleChange}> 
+                        <select className="c" name="statut" value={newInfos.statut || leader.statut || ""} onChange={handleChange}> 
                             <option value="À faire">À faire</option>
                             <option value="En cours">En cours</option>
                             <option value="Terminé">Terminé</option>
                         </select>
 
-                        <h5>Priorité :</h5>
-                        <select name="priorite" value={newInfos.priorite || leader.priorite || ""} onChange={handleChange}>
+                        <select className="d" name="priorite" value={newInfos.priorite || leader.priorite || ""} onChange={handleChange}>
                             <option value="Faible">Faible</option>
                             <option value="Moyenne">Moyenne</option>
                             <option value="Élevé">Élevé</option>
                         </select>
-                        <button onClick={handleCancelButton}>Annuler</button>
-                        <button type="submit" name="modify">Confirmé</button>
+                        <div className="e">
+                            <button onClick={handleCancelButton}>Annuler</button>
+                            <button type="submit" name="modify">Confirmé</button>
+                        </div>        
                     </form>
                 ) : (
                 <div className="overviewLeader" key={leader.leader_id}>
                     
                     <h4>{leader.nom}</h4>
-                    <h5>Date de présentation :</h5>
-                    <p>{leader.date_presentation}</p>
-                    <h5>Date d'échéance :</h5>
-                    <p>{leader.echeance}</p>
-                    <h5>Statut :</h5>
-                    <p>{leader.statut}</p>
-                    <h5>Priorité :</h5>
-                    <p>{leader.priorite}</p>
+                    
+                    <p className="a">{new Date(leader.date_presentation).toLocaleDateString('en-CA')}</p>
+                    
+                    <p className="b">{new Date(leader.echeance).toLocaleDateString('en-CA')}</p>
+                    
+                    <p className="c">{leader.statut}</p>
+                    
+                    <p className="d">{leader.priorite}</p>
 
-                    <button data-id={leader.leader_id} name="modify" onClick={handleClick}>Modifier</button>
+                    <button className="e" data-id={leader.leader_id} name="modify" onClick={handleClick}>Modifier</button>
                 </div>)
             ))}
         </div>

@@ -2,6 +2,7 @@ import React, {useContext, useEffect, useState} from "react";
 import { AuthContext } from "../../AuthContext";
 import { ProfilGenerator } from "./subComponents/ProfilGenerator";
 import { LeadersHome } from "./subComponents/LeadersHome";
+import "../admin.css"
 
 
 
@@ -44,11 +45,12 @@ export function AdminHome() {
         console.log("getAdmin called")
         getAdminHomeData();
 
-    },[user])
+    },[])
     
     
     return(
         <div className="AdminHome">
+            <h1>Bienvenue {user.username}</h1>
             <ProfilGenerator />
             <LeadersHome adminHomeData={adminHomeData}/>
             <h3>Informations diverses:</h3>
