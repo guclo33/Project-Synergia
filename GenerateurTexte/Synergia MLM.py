@@ -465,7 +465,7 @@ def generate_simple_word(file_path, text_content):
 
 nom_organisateur = synergia_nom.iloc[0, 4]
 
-nouveau_dossier = f"C:/Users/Guillaume Cloutier/OneDrive/Synergia/{nom_organisateur}/profiles"
+nouveau_dossier = f"C:/Users/Guillaume Cloutier/OneDrive/Synergia/{nom_organisateur}/profils"
 dossier_facture = f"C:/Users/Guillaume Cloutier/OneDrive/Synergia/{nom_organisateur}/factures"
 dossier_questionnaires = f"C:/Users/Guillaume Cloutier/OneDrive/Synergia/{nom_organisateur}/questionnaires"
 

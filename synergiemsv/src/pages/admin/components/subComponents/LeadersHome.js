@@ -16,7 +16,7 @@ export function LeadersHome ({ adminHomeData})  {
 
     return (
         <div className="leadersHome">
-            <h2>Vos leaders!</h2>
+            <h2>Mes leaders!</h2>
              <div className="input">  
                 <input id = "active" type="checkbox" checked={!active} onChange={handleCheck} />
                 <label htmlFor="active">Voir les leaders inactifs</label>

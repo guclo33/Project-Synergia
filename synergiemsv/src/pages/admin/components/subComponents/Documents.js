@@ -9,8 +9,8 @@ export function Documents({detailsData}) {
         const apiUrl = `http://localhost:3000/api/admin/${user.id}/details`;
         
         return (
-            <div>
-                <DropZone detailsData={detailsData} apiUrl={apiUrl} category="profiles" />
+            <div className="documents">
+                <DropZone detailsData={detailsData} apiUrl={apiUrl} category="profils" />
                 <DropZone detailsData={detailsData} apiUrl={apiUrl} category="factures" />
                 <DropZone detailsData={detailsData} apiUrl={apiUrl} category="questionnaires" />
             </div>

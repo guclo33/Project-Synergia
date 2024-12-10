@@ -10,16 +10,18 @@ export function DetailsLeaders({leadersData}) {
     }
     
     return(
-        <div className="detailsLeader">
+        <div className="detail">
             <h3>Liste des leaders:</h3> 
-            {leadersData.map(leader => (
-                <Link to={`${leader.client_id}`}><div className="detailsLeaders" key={leader.leader_id}>
-                    <h4>{leader.nom}</h4>
-                    <p>{leader.email}</p>
-                    <p>{leader.phone}</p>
+                <div className="detailsLeader">
+                    
+                    {leadersData.map(leader => (
+                        <Link to={`${leader.client_id}`}><div className="detailsLeaders" key={leader.leader_id}>
+                            <h4>{leader.nom}</h4>
+                            
 
-                </div></Link>
-            ))}
+                        </div></Link>
+                    ))}
+                </div>
         </div>
     )
 }

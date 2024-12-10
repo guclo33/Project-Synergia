@@ -3,6 +3,11 @@ import { useParams } from "react-router";
 import { useDropzone } from 'react-dropzone';
 import { AuthContext } from "../../../AuthContext";
 
+function capitalizeFirstLetter(string) {
+    if (!string) return ""; 
+    return string.charAt(0).toUpperCase() + string.slice(1).toLowerCase();
+}
+
 export function DropZone({detailsData, category, apiUrl}) {
     const [files, setFiles] = useState([]);
     const {user} = useContext(AuthContext)
@@ -85,15 +90,20 @@ export function DropZone({detailsData, category, apiUrl}) {
         downloadFile(fileName)
     }
 
+    
+
     const { getRootProps, getInputProps, isDragActive, isDragAccept, isDragReject } = useDropzone({
         onDrop, })
 
     const baseStyle = {
-        border: "2px dashed #cccccc",
-        borderRadius: "4px",
-        padding: "20px",
+        border: "1px solid var(--secondary-color)",
+        boxShadow: "0 4px 8px var(--primary-color)",
+        borderRadius: "20px",
+        padding: "1rem",
+
         textAlign: "center",
         transition: "border-color 0.3s, background-color 0.3s",
+        
         };
         
         const activeStyle = {
@@ -120,14 +130,17 @@ export function DropZone({detailsData, category, apiUrl}) {
         };
 
     return (
-        <div
+        <div className="dropSection">
+            <h3>{capitalizeFirstLetter(category)}</h3>
+            <div   
             {...getRootProps({ className: "dropzone" })}
             style={currentStyle}
             >
+            
             <input {...getInputProps()} />
             {isDragReject && <p style={{ color: "#f44336" }}>Fichiers non valides.</p>}
             {isDragAccept && <p style={{ color: "#4caf50" }}>Relâchez pour déposer.</p>}
-            <h3>{category}</h3>
+            
             <ul>
                 {files.map((file, index) => (
                 <li key={index}>
@@ -142,6 +155,7 @@ export function DropZone({detailsData, category, apiUrl}) {
                 </li>
                 ))}
             </ul>
+    </div>
     </div>
     );
 }

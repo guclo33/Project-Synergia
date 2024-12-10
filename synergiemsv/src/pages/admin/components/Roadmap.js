@@ -171,8 +171,8 @@ export function Roadmap() {
                     <div className="todoList">
                             <h2>{filteredObjectPrep.nom}</h2>
                             <h3>Préparation</h3>
-                            <div key={filteredObjectPrep.leader_id} className="preparation">
-                                <button name="showDone" onClick={handleButton}>Voir complétés</button>
+                            <div key={filteredObjectPrep.leader_id} >
+                                <div className="preparation">
                                 {prepFalseArray.map(([key, value]) => (
                                     <div key={key} className="todo">
                                         <label htmlFor={key}>{key}</label>
@@ -180,12 +180,13 @@ export function Roadmap() {
                                         
                                     </div>
                             ))}
+                            </div>
                             {showDone && (
                             <div className="done">
-                                <h3>Tâches complétées</h3>
-
+                                <h3 className="tacheComplete">Tâches complétées</h3>
+                                <div className="doneChecklist">
                                 {prepTrueArray.map(([key, value]) => (
-                                    <div key={key} className="doneChecklist">
+                                    <div key={key} className="todo">
                                         <label htmlFor={key}>{key}</label>
                                         <input 
                                             name={key} 
@@ -196,31 +197,36 @@ export function Roadmap() {
                                         />
                                     </div>
                                 ))}
+                                </div>
                             </div>
                         )}
                         </div>
                         <div className="execution">
                             <h3>Exécution</h3>
-                            {execFalseArray.map(([key, value]) => (
-                                <div key={key} className="executionTodo">
-                                    <label htmlFor={key}>{key}</label>
-                                    <input name={key} value={value} type="checkbox" checked={value} onChange={handleClick} />
-                                </div>
-                            ))}
+                            <div className="execContainer">
+                                {execFalseArray.map(([key, value]) => (
+                                    <div key={key} className="todo">
+                                        <label htmlFor={key}>{key}</label>
+                                        <input name={key} value={value} type="checkbox" checked={value} onChange={handleClick} />
+                                    </div>
+                                ))}
+                            </div>
                             {showDone && (
                                 <div className="executionDone">
-                                    <h3>Tâches complétées</h3>
-                            
+                                    <h3 className="tacheComplete">Tâches complétées</h3>
+                                    <div className="execDoneChecklist">
                                     {execTrueArray.map(([key, value]) => (
                                 
-                                        <div key={key} className="execDoneChecklist">
+                                        <div key={key} className="todo">
                                             <label htmlFor={key}>{key}</label>
                                             <input name={key} value={value} type="checkbox" checked={value} onChange={handleClick} />
                                         </div>
                                 ))}
                                 </div>
+                                </div>
                             )}
                         </div>
+                        <button className="showDone" name="showDone" onClick={handleButton}>Voir tâches complétées</button>
                     </div> ): 
                         (
                             

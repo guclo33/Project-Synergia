@@ -13,6 +13,7 @@ export function Profile({detailsData}) {
         <div className="profile">
             <button onClick={handleClick}>Voir profile</button>
             {view ? (
+                
             <>
             <h2>Profile Synergia :</h2>
             <div className="couleur">
