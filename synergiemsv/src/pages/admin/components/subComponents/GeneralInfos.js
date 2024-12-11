@@ -61,6 +61,56 @@ export function GeneralInfos({detailsData}) {
     
     if(!detailsData.equipe) {
         
+        return (
+        <div className="generalInfos">
+           
+        {modify ? (<>
+             <form onSubmit={handleSubmit} className="modify">
+                 <div className="info">
+                     <h5>Courriel :</h5>
+                     <input type="email" name="email" value={newInfos.email || ""} onChange={handleChange} />
+                 </div>
+                 <div className="info">
+                     <h5>Téléphone :</h5>
+                     <input type="phone" name="phone" value={newInfos.phone || ""} onChange={handleChange} />
+                 </div>    
+                 
+                 <div className="infoSup">
+                     <h5>Informations supplémentaires :</h5>
+                     <textarea type="textarea" name="additional_infos" rows="5" value={newInfos.additional_infos || ""} onChange={handleChange} />
+                 </div>
+                 
+             </form>
+             <div className="buttonDetails">
+                 <button onClick={handleCancel}>Annuler</button>
+                 <button type="submit">Confirmer</button>
+             </div>
+             </>
+        ): (<>
+         <div className="infos">
+             <div className="info">
+                 <h5>Courriel :</h5>
+                 <p>{info.email}</p>
+             </div>
+             <div className="info">
+                 <h5>Téléphone :</h5>
+                 <p>{info.phone}</p>
+             </div>
+             
+             <div className="infoSup">
+                 <h5>Informations supplémentaires :</h5>
+                 <p>{info.additional_infos}</p>
+             </div>
+             
+         </div>
+         <div className="buttonDetails">
+             <button onClick={handleModify}>Modifier</button>
+         </div>
+         </>)}   
+          
+     </div>
+
+ )
     }
 
 

@@ -8,6 +8,10 @@ export function Documents({detailsData}) {
         const {user} = useContext(AuthContext)
         const apiUrl = `http://localhost:3000/api/admin/${user.id}/details`;
         
+        if(!detailsData.equipe){
+            return
+        }
+        
         return (
             <div className="documents">
                 <DropZone detailsData={detailsData} apiUrl={apiUrl} category="profils" />
