@@ -62,14 +62,14 @@ const updateRoadmapTodosController = async (req, res) => {
     
     switch (name) {
         case "Création du groupe messenger": column = "creation_messenger"; break;
-        case "Date confirmé": column = "date_confirme"; break;
+        case "Date confirmée": column = "date_confirme"; break;
         case "Questionnaires et Consignes envoyés": column = "questionnaire_envoye"; break;
         case "Création Zoom": column = "creation_zoom"; break;
         case "Envoie des factures": column = "envoie_factures"; break;
         case "Comptabilité à jour": column = "comptabilite"; break;
-        case "Rédaction profiles": column = "redaction_profil"; break;
-        case "Profile Leader": column = "profil_leader"; break;
-        case "Tout importer, prêt à partagé": column = "pret_partage"; break;
+        case "Rédaction profils": column = "redaction_profil"; break;
+        case "Profil Leader": column = "profil_leader"; break;
+        case "Tout importer, prêt à partager": column = "pret_partage"; break;
         case "Présentation powerpoint": column = "powerpoint"; break;
         case "Mentimeter": column = "mentimeter"; break;
         case "Planification des rencontres 1": column = "planif_rencontres1"; break;
@@ -93,6 +93,10 @@ const updateRoadmapTodosController = async (req, res) => {
         res.status(400).send(error)
     }
 }
+
+/*const createOverviewTask = async (req, res) =>{
+
+}*/
 
 const updateOverviewController = async (req, res) => {
     const { leader_id, date_presentation, echeance, statut, priorite} = req.body;

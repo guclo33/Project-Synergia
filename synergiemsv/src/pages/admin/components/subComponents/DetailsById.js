@@ -13,9 +13,12 @@ export function DetailsById({detailsData}) {
     return(
         <div className="detailsById">
             <h3>{detailsData.info.nom_client}</h3>
-            <GeneralInfos detailsData={detailsData} />
-            <Documents detailsData={detailsData}/>
-            <Profile detailsData={detailsData}/>
+            
+                <GeneralInfos detailsData={detailsData} />
+                <Documents detailsData={detailsData}/>
+                <Profile detailsData={detailsData}/>
+             
+            
         </div>
     )
 }

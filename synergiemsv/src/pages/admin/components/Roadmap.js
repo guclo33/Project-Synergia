@@ -28,15 +28,15 @@ export function Roadmap() {
                             nom: row.nom,
                             leader_id : row.leader_id,
                             "Création du groupe messenger" : row.creation_messenger,
-                            "Date confirmé": row.date_confirme,
+                            "Date confirmée": row.date_confirme,
                             "Questionnaires et Consignes envoyés": row.questionnaire_envoye,
                             "Création Zoom": row.creation_zoom,
                             "Envoie des factures": row.envoie_factures,
                             "Réception du paiement": row.recept_paiement,
                             "Comptabilité à jour": row.comptabilite,
-                            "Rédaction profiles": row.redaction_profil,
-                            "Profile Leader": row.profil_leader,
-                            "Tout importer, prêt à partagé": row.pret_partage,
+                            "Rédaction profils": row.redaction_profil,
+                            "Profil Leader": row.profil_leader,
+                            "Tout importer, prêt à partager": row.pret_partage,
                             "Présentation powerpoint": row.powerpoint,
                             "Mentimeter": row.mentimeter,
                             
@@ -158,6 +158,10 @@ export function Roadmap() {
         }
     }
     
+
+   /* const handleNewTask = async() => {
+
+    }*/
     
     if (!filteredObjectPrep || !roadmapPrepData || !roadmapExecData) {
         return <p>Loading...</p>;
@@ -226,7 +230,10 @@ export function Roadmap() {
                                 </div>
                             )}
                         </div>
-                        <button className="showDone" name="showDone" onClick={handleButton}>Voir tâches complétées</button>
+                        <div className="overviewButton">
+                            <button className="showDone" name="showDone" onClick={handleButton}>Voir tâches complétées</button>
+                            
+                        </div>
                     </div> ): 
                         (
                             
@@ -247,3 +254,5 @@ export function Roadmap() {
     </div>
     )
 }
+
+/*<button className="newTask" name="newTask" onClick={handleNewTask}>Créer une nouvelle tâche</button>*/

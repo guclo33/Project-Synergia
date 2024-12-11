@@ -64,9 +64,9 @@ export function Details() {
                     if(response.ok){
                         const data = await response.json();
                         console.log("here's Details", data)
-                            
+                        
                         setDetailsData(data)
-                            
+   
                         console.log("detailsData:", detailsData)
                             
                     } else {

@@ -11,18 +11,31 @@ export function Profile({detailsData}) {
 
     return(
         <div className="profile">
-            <button onClick={handleClick}>Voir profile</button>
+            <button onClick={handleClick}>Voir profil</button>
             {view ? (
                 
             <>
-            <h2>Profile Synergia :</h2>
+            <h2>Profil Synergia :</h2>
+            <h4>Couleurs:</h4>
             <div className="couleur">
-                <h4>Couleur:</h4>
-                <p>bleu : {info.bleu}</p><p>vert : {info.vert}</p><p>jaune : {info.jaune}</p><p>rouge : {info.rouge}</p>
+                <h6 className="bleu">Bleu</h6> 
+                <h6 className="vert">Vert</h6> 
+                <h6 className="jaune">Jaune</h6> 
+                <h6 className="rouge">Rouge</h6> 
+                <p>{info.bleu}</p>
+                <p>{info.vert}</p>
+                <p>{info.jaune}</p>
+                <p>{info.rouge}</p>
+
             </div>
-            <div className="archétype">
-                <h4>Vos deux pricipaux archétypes:</h4>
-                <p>{info.archnum1}</p><p>{info.archnum2}</p>
+            <h4>Vos deux pricipaux archétypes:</h4>
+            <div className="archetype">
+                
+                <p>{info.archnum1}</p>
+                <p>{info.archnum2}</p>
+                <img href={`C:/Users/Guillaume Cloutier/Projets/Projet Synergia/synergiemsv/src/Images/archetypes/${info.archnum1}`} alt="archétype#1"/>
+                <img href={`C:/Users/Guillaume Cloutier/Projets/Projet Synergia/synergiemsv/src/Images/archetypes/${info.archnum2}`} alt="archétype#1"/>
+
             </div>
             <div className="texteProfile">
                 <h5>En bref :</h5>
@@ -39,7 +52,7 @@ export function Profile({detailsData}) {
                 <p>{info.perceptionstructure}</p>
                 <h5>Perceptions des défis, problèmes et difficultés :</h5>
                 <p>{info.perceptionproblemes}</p>
-                <h4>Tes archétype</h4>
+                <h4>Tes archétypes</h4>
                 <h5>Tes motivations naturelle :</h5>
                 <p>{info.motivationsnaturelles}</p>
                 <h5>{info.archnum1}</h5>

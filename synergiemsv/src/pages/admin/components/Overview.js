@@ -1,14 +1,16 @@
 import React, {useEffect, useState, useContext} from "react";
 import { AuthContext } from "../../AuthContext";
+import { Link } from "react-router-dom";
 
 export function Overview() {
     const [overviewData, setOverviewData] = useState([])
-    const [modifyId, setModifyId] = useState(null);
+    const [modifyId, setModifyId] = useState(null);
     const [newInfos, setNewInfos] = useState({
         date_presentation : overviewData.date_presentation,
         echeance : overviewData.echeance,
         statut: overviewData.statut,
-        priorite : overviewData.priorite
+        priorite : overviewData.priorite,
+        client_id: overviewData.client_id
     })
 
     const {user} = useContext(AuthContext)
@@ -29,7 +31,8 @@ export function Overview() {
                             date_presentation: row.date_presentation,
                             echeance: row.echeance,
                             statut: row.statut,
-                            priorite: row.priorite
+                            priorite: row.priorite,
+                            client_id: row.client_id
                         }));
                         console.log("dataArray:", dataArray)
                         setOverviewData(dataArray)
@@ -135,7 +138,7 @@ export function Overview() {
                 ) : (
                 <div className="overviewLeader" key={leader.leader_id}>
                     
-                    <h4>{leader.nom}</h4>
+                    <Link to={`/admin/${user.id}/details/${leader.client_id}`}><h4>{leader.nom}</h4></Link>
                     
                     <p className="a">{new Date(leader.date_presentation).toLocaleDateString('en-CA')}</p>
                     

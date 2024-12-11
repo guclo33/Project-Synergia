@@ -20,7 +20,7 @@ const findUserById = async (id) => {
 };
 
 const getOverviewData = async () => {
-    return await pool.query("SELECT c.nom_client as nom, l.leader_id, l.date_presentation, l.echeance, l.statut, l.priorite FROM client c JOIN leader ON c.id = leader.client_id JOIN leader_todo l ON leader.id = l.leader_id")
+    return await pool.query("SELECT c.nom_client as nom, c.id as client_id, l.leader_id, l.date_presentation, l.echeance, l.statut, l.priorite FROM client c JOIN leader ON c.id = leader.client_id JOIN leader_todo l ON leader.id = l.leader_id ORDER BY statut")
 }
 
 const getRoadmapData = async () => {
@@ -38,6 +38,14 @@ const updateOverview = async (date_presentation, echeance, statut, priorite, lea
 const getDetailsData = async (clientid) => {
     
     const info = await pool.query("SELECT * FROM leader JOIN client ON leader.client_id = client.id JOIN profile ON client.profile_id = profile.id where client.id = $1", [clientid])
+
+    if(info.rows.length === 0) {
+        const info = await pool.query("SELECT * FROM client JOIN profile ON client.id = profile.client_id where client.id = $1", [clientid])
+        const data = {
+            info: info.rows[info.rows.length -1]
+        }
+        return data
+    }
     
     const equipe = await pool.query(" SELECT id, nom_client as nom, email, phone FROM client WHERE leader_id = (SELECT leader_id FROM client WHERE id = $1);", [clientid])
 

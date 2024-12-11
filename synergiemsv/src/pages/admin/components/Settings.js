@@ -102,30 +102,30 @@ export function Settings() {
         <div className="settings">
             { modify ? (
                 <>
-                    <form onSubmit={handleSubmit}>
+                    <form className="settingsContainer" onSubmit={handleSubmit}>
                         <h5>Username :</h5>
-                        <input type="text" name="username" value={newInfos.username ||  ""} onChange={handleChange} />
+                        <input className="z" type="text" name="username" value={newInfos.username ||  ""} onChange={handleChange} />
                         <h5>Courriel :</h5>
-                        <input type="email" name="email" value={newInfos.email ||  ""} onChange={handleChange} />
+                        <input className="z" type="email" name="email" value={newInfos.email ||  ""} onChange={handleChange} />
                         
                         <button onClick={handleCancel}>Annuler</button>
                         <button type="submit">Confirmer</button>
                     </form>
                     <div className="modifyPassword">
                         <h5>Modifier le mot de passe :</h5>
-                        <input type="password" name="password" value={newPassword ||  ""} onChange={handlePassword} />
+                        <input  type="password" name="password" value={newPassword ||  ""} onChange={handlePassword} />
                         <button onClick={handleCancel}>Annuler</button>
                         <button onClick={submitPassword}>Confirmer le nouveau mot de passe</button>
                     </div>
                 </>
             ): (
-                <div className="settingInfos">
+                <div className="settingsContainer" >
                     <h5>Username :</h5>
-                    <p>{user.username}</p>
+                    <p className="z">{user.username}</p>
                     <h5>Courriel :</h5>
-                    <p>{user.email}</p>
+                    <p className="z">{user.email}</p>
                     <h5>Rôle :</h5>
-                    <p>{user.role}</p>                 
+                    <p className="z">{user.role}</p>                 
                     <button onClick={handleClick}>Modifier</button>
                 </div>
             )}
