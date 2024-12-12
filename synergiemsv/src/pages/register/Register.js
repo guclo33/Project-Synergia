@@ -2,8 +2,9 @@ import React from "react";
 import image from "../../Images/logo2 sans fond.png"
 import {RegisterForm} from "./components/RegisterForm"
 import { useNavigate } from "react-router";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
+import "../pages.css"
 
 export function Register() {
     const [passCapsVerified, setPassCapsVerified] = useState(false);
@@ -16,7 +17,7 @@ export function Register() {
         password: "",
         verifyPassword: ""
     })
-
+    const location = useLocation();
     const navigate = useNavigate()
 
     const isPassCapsVerified = (password) => {
@@ -106,15 +107,24 @@ export function Register() {
         <>
             <nav>
                 <ul>
-                    <li><a href="https://www.synergiemsv.com">Synergie MSV</a></li>
-                    <li><Link to="/">Accueil</Link></li>
-                    <li><Link to="/login">Se connecter</Link></li>
-                    <li><Link to="/register">Créer un compte</Link></li>
+                    
+                    <li style={{
+                        fontWeight: location.pathname === '/' ? 'bold' : 'normal',
+                        }}><Link to="/">Accueil</Link></li>
+                    <li style={{
+                        fontWeight: location.pathname === '/login' ? 'bold' : 'normal',
+                        }}><Link to="/login">Se connecter</Link></li>
+                    <li style={{
+                        fontWeight: location.pathname === '/register' ? 'bold' : 'normal',
+                        }}><Link to="/register">Créer un compte</Link></li>
+                    <a href="https://www.synergiemsv.com"><img src={image} alt="logo SynergieMSV" /></a>
                 </ul>
             </nav>
-            <div className="register">
-                <img src={image} alt="logo SynergieMSV" />
-                <RegisterForm handleSubmit={handleSubmit} handleChange={handleChange} registerData={registerData} passCapsVerified={passCapsVerified} samePassword={samePassword} passLength={passLength}/>
+            <div className="registerContainer">
+                <div className="register">
+                    
+                    <RegisterForm handleSubmit={handleSubmit} handleChange={handleChange} registerData={registerData} passCapsVerified={passCapsVerified} samePassword={samePassword} passLength={passLength}/>
+                </div>
             </div>
         </>
     )

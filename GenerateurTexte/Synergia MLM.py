@@ -1,4 +1,5 @@
 import os
+import sys
 import pandas as pd
 import warnings
 warnings.filterwarnings("ignore", category=UserWarning, module="openpyxl")
@@ -15,9 +16,13 @@ from fonction_database import update_database
 # *****À FAIRE**** code pour automatisation, activation lors de réception d'un nouveau formulaire 
 
 #NOM format "Prénom, Nom"
-def python_script(data):
 
-nom = "Josianne, ares"
+arg = sys.argv[1]
+
+if arg == "error":
+    raise ValueError("Une erreur s'est produite")
+
+nom = arg
 
 nom_profile = nom.replace(",", "")
 
@@ -460,13 +465,21 @@ def generate_simple_word(file_path, text_content):
 
 nom_organisateur = synergia_nom.iloc[0, 4]
 
-nouveau_dossier = f"C:/Users/Guillaume Cloutier/OneDrive/Synergia/{nom_organisateur}"
+nouveau_dossier = f"C:/Users/Guillaume Cloutier/OneDrive/Synergia/{nom_organisateur}/profils"
+dossier_facture = f"C:/Users/Guillaume Cloutier/OneDrive/Synergia/{nom_organisateur}/factures"
+dossier_questionnaires = f"C:/Users/Guillaume Cloutier/OneDrive/Synergia/{nom_organisateur}/questionnaires"
 
 if not os.path.exists(nouveau_dossier):
     os.makedirs(nouveau_dossier)
+    
+if not os.path.exists(dossier_facture):
+    os.makedirs(dossier_facture)
+
+if not os.path.exists(dossier_questionnaires):
+    os.makedirs(dossier_questionnaires)
 
 # Générer le fichier Word
-generate_simple_word(f"{nouveau_dossier}/{nom}", full_text)
+generate_simple_word(f"{nouveau_dossier}/{nom_profile}", full_text)
     
 # Pour updater la database
 
