@@ -4,6 +4,7 @@ import { LoginForm } from "./components/LoginForm";
 import { useNavigate } from "react-router";
 import { Link } from "react-router-dom";
 import { AuthContext } from "../AuthContext";
+import { useLocation } from 'react-router-dom';
 
 export function Login() {
     
@@ -12,6 +13,7 @@ export function Login() {
         password : ""
     })
     const [verified, setVerified] = useState(false);
+    const location = useLocation();
 
     const { login } = useContext(AuthContext);
     const navigate = useNavigate()
@@ -37,6 +39,7 @@ export function Login() {
                 console.log('Sending data to backend:', userData);
                 const response = await fetch("http://localhost:3000/api/login", {
                     method: "POST",
+                    credentials: 'include',
                     headers: {
                         "Content-Type": "application/json"
                     },
@@ -45,17 +48,17 @@ export function Login() {
                 ;
                 if(response.ok){
                     const data = await response.json();
-                    console.log(`User successfully logged in with role: ${data.rows[0].role}`);
+                    console.log(`User successfully logged in with role: ${data.user.role}`);
                     const user = {
-                        id : data.rows[0].id,
-                        role : data.rows[0].role,
-                        username : data.rows[0].username,
-                        email : data.rows[0].email
+                        id : data.user.id,
+                        role : data.user.role,
+                        username : data.user.username,
+                        email : data.user.email
                     }
                     
                     login(user)
 
-                    navigate(`/${data.rows[0].role}/${data.rows[0].id}`);
+                    navigate(`/${data.user.role}/${data.user.id}`);
 
                 } else {
                     const errorData = await response.json()
@@ -77,16 +80,25 @@ export function Login() {
         <>
             <nav>
                 <ul>
-                    <li><a href="https://www.synergiemsv.com">Synergie MSV</a></li>
-                    <li><Link to="/">Accueil</Link></li>
-                    <li><Link to="/login">Se connecter</Link></li>
-                    <li><Link to="/register">Créer un compte</Link></li>
+                    
+                    <li style={{
+          fontWeight: location.pathname === '/' ? 'bold' : 'normal',
+        }}><Link to="/">Accueil</Link></li>
+                    <li style={{
+          fontWeight: location.pathname === '/login' ? 'bold' : 'normal',
+        }}><Link to="/login">Se connecter</Link></li>
+                    <li style={{
+          fontWeight: location.pathname === '/register' ? 'bold' : 'normal',
+        }}><Link to="/register">Créer un compte</Link></li>
+                    <a href="https://www.synergiemsv.com"><img src={image} alt="logo SynergieMSV" /></a>
                 </ul>
             </nav>
-            <div className="login">
-                <img src={image} alt="logo SynergieMSV" />
-                <LoginForm handleSubmit={handleSubmit} handleChange={handleChange} userData={userData}/>
-                
+            <div className="loginContainer">
+                <div className="login">
+                    
+                    <LoginForm handleSubmit={handleSubmit} handleChange={handleChange} userData={userData}/>
+                    
+                </div>
             </div>
         </>
     )

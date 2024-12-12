@@ -1,5 +1,9 @@
 const bcrypt = require('bcryptjs');
 const { createUserQuery, loginQuery} = require("../model/tasks");
+const passport = require ("../server/config/passport")
+
+
+
 
 const createUser = async (req, res) => {
     try {
@@ -22,45 +26,69 @@ const createUser = async (req, res) => {
     }
 };
 
-const login = async (req, res) => {
-    const { usernameOrEmail, password} = req.body ;
+const login = (req, res, next) => {
+        passport.authenticate('local', (err, user, info) => {
+            if (err) return res.status(500).send({ message: `Error: ${err.message}` });
+            if (!user) return res.status(400).send({ message: info.message });
     
-    try {
-        const user = await loginQuery(usernameOrEmail);
-        
-        
-        if(user.rows.length <= 0){
-            return res.status(400).send({message:"Could not find any matching username or email"})
-            
-        };
+            req.logIn(user, (err) => {
+                if (err) {
+                    console.error('Error during login:', err);
+                    return res.status(500).send({ message: 'Login failed' });
+                }
+    
+                
+                const userResponse = {
+                    id: user.id,
+                    role: user.role,
+                    username: user.username,
+                    email: user.email,
+                };
+    
+                console.log('User logged in successfully:', userResponse);
+                return res.status(200).send({
+                    message: 'Login successful',
+                    user: userResponse,
+                });
+            });
+        })(req, res, next);
+    };
+    
+    
+    
+    
+    
 
-        const isMatch = await bcrypt.compare(password, user.rows[0].password)
-        if (!isMatch) {
-            return res.status(400).send({ message: 'Invalid credentials' });
-        }
-        
-        req.session.user = {
-            id: user.rows[0].id,
-            username: user.rows[0].username,
-            role: user.rows[0].role,
-            email: user.rows[0].email
-        };
-        console.log(user)
-
-        return res.status(200).send(user)
-        
-
-    } catch(error) {
-        res.status(500).send({message:`Could not login : ${error.message}`})
-    }
-}
 
 const isAuthenticated = (req, res, next) => {
-    if (req.session.user) {
-        return next(); 
-    } else {
-        return res.status(401).send({ message: 'Unauthorized' });
+    if (req.isAuthenticated()) {
+        return next();
     }
+    res.status(401).send({ message: 'Unauthorized' });
 };
 
-module.exports = { createUser, login, isAuthenticated }
+
+const isAuthorizedAdmin = (req, res, next) => {
+    const {id} = req.params;
+    
+    if (!req.isAuthenticated()) {
+        console.log("User not authenticated");
+        return res.status(401).send({ message: "Unauthorized" });
+    }
+      
+
+    if(req.user.role !== "admin" || req.user.id.toString() !== id) {
+        console.log("c'est la que ca casse")
+        return res.status(403).send({message: "Forbidden: Role or ID does not match"});
+    }
+    console.log("user authenticated")
+    
+    return next();
+}
+
+    
+    
+
+
+
+module.exports = { createUser, login, isAuthenticated, isAuthorizedAdmin};

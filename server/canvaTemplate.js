@@ -15,15 +15,56 @@ const clientId = process.env.CANVA_CLIENTID;
 const clientSecret = process.env.CANVA_SECRETID;
 const authURL = process.env.CANVA_AUTHURL + codeChallenge;
 
+
 let accessToken = "";
 let refreshToken = "";
 
+const getAuthUrl =() => {
+    return authURL
+}
 
+const getUser = (req, res) => {
+   
+    /*if(req.session.user.token) {
+        const user = {
+            id: req.session.user.id,
+            username : req.session.user.username,
+            role : req.session.user.role,
+            email : req.session.user.email,
+            accessToken : req.session.user.token.accessToken,
+            refreshToken : req.session.user.token.refreshToken
+        }
+        console.log(`here is the user :`, user)
+        return res.json(user)
+        
+    }*/
 
+    const user = {
+        id: req.session.user.id,
+        username : req.session.user.username,
+        role : req.session.user.role,
+        email : req.session.user.email,
+    
+}
+    
+    
+
+    console.log(`here is the user :`, user)
+    return res.json(user)
+}
+
+/*const setAuthStatus = (req,res) =>{
+    if(!req.session.user){
+        req.session.user = {}
+    }
+    req.session.user ={canva : true}
+    
+}*/
 
 const templateDataset = async (templateId, accessToken, refreshToken) => {
     const templateInfos = await fetch(`https://api.canva.com/rest/v1/brand-templates/${templateId}/dataset`,   {
     method: "GET",
+    credentials: 'include',
     headers: {"Authorization" : `Bearer ${accessToken}`}
     });
         if (!templateInfos.ok) {
@@ -34,8 +75,10 @@ const templateDataset = async (templateId, accessToken, refreshToken) => {
 
         const info = await templateInfos.json();
         console.log (info)
-        fs.writeFileSync('accessToken.json', JSON.stringify({ accessToken: accessToken, refreshToken: refreshToken, templateId : templateId }));
+        
+        await fs.writeFileSync('accessToken.json', JSON.stringify({ accessToken: accessToken, refreshToken: refreshToken, templateId : templateId }));
         return info
+        
     }; 
 
 
@@ -52,14 +95,16 @@ const template = async (accessToken, refreshToken) => {
                 method: "GET",
                 headers : {
                     "Authorization" : `Bearer ${accessToken}`
-                }
+                },
+                credentials: 'include',
             }
         );
         const templateIdInfos = await getTemplateId.json()
         templateId = await templateIdInfos.items[0].id;
         console.log(templateIdInfos);
+        
         try {
-            templateDataset(templateId, accessToken, refreshToken);
+            await templateDataset(templateId, accessToken, refreshToken);
         } catch (err) {
             console.log("Could not get template dataset", err)
         }
@@ -71,10 +116,13 @@ const template = async (accessToken, refreshToken) => {
      
 }
 
-const connectCanva = async (req,res) => {
+const connectCanva = async (req,res, next) => {
     const authCode = req.query.code;
-    const {id} = req.params;
-    const redirectURI = `http://127.0.0.1:3001/admin/${id}`;
+    const state = req.query.state;
+    const redirectURL = req.session.redirectURL;
+    const redirectURI = "http://127.0.0.1:3000/api/canva/auth";
+    
+     
 
     if(authCode) {
         try{
@@ -86,6 +134,7 @@ const connectCanva = async (req,res) => {
               "Authorization": `Basic ${base64Credentials}`,
               "Content-Type": "application/x-www-form-urlencoded",
             },
+            credentials: 'include',
             body: new URLSearchParams({
                 grant_type: "authorization_code",
                 code_verifier: codeVerifier,
@@ -94,16 +143,39 @@ const connectCanva = async (req,res) => {
             })
         });
         const data = await response.json();
+        
         accessToken = await data.access_token;
         refreshToken = await data.refresh_token;
-           
-        res.status(200).json(data);
-        template(accessToken, refreshToken);
+
+        /*req.session.user.token = {
+            accessToken: accessToken,
+            refreshToken: refreshToken
+        };*/
+
+        // Save the session after storing the token
+        req.session.save((err) => {
+            if (err) {
+                console.error("Session save error", err);
+            }
+        });
+
+
+        await template(accessToken, refreshToken);
+
+        
+
+        console.log(`accessToken = ${accessToken}. refreshToken = ${refreshToken}` )
+        //await res.send(data);
+        
+        res.redirect(`${state}?auth=true`)
+        
+        
+    
         
         
       } catch (err) {
         console.error(err);
-        res.status(500).send("Error fetching token");
+        res.status(500).send("Error fetching token", err);
       }
     } else {
       res.status(404).send("Could not get code");
@@ -115,7 +187,11 @@ const connectCanva = async (req,res) => {
 
 
 
+
 module.exports = {
     connectCanva,
+    getAuthUrl,
+    getUser,
+    /*setAuthStatus*/
 }
 
