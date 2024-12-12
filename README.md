@@ -1,4 +1,5 @@
 # Plateforme SynergieMSV
+![Logo SynergieMSV](synergiemsv/src/images/logo2 sans fond.png)
 
 
 Une plateforme web conçue pour gérer efficacement les clients et les équipes des clients de Synergia. Personnalisé selon les demandes de la propriétaire. La plateforme permet la création de "profils" de personnalité grâce à l'intelligence artificiel pour ceux ayant rempli un questionnaires au préalable. 
@@ -14,6 +15,8 @@ Une plateforme web conçue pour gérer efficacement les clients et les équipes 
 - [Licence](#licence)
 
 ---
+![exemple accueil](synergiemsv/src/images/exemple_accueil.png)
+
 
 ## Aperçu
 
