@@ -50,9 +50,9 @@ Cette plateforme a été développée pour centraliser la gestion des clients, g
 
 ## Deploiement
 
-Pour l'instant, le site n'est pas encore déployer et est en environement local seulement
+Pour l'instant, le site n'est pas encore déployé et est en environement local seulement
 
-## amélioration à venir
+## Amélioration à venir
 
 - **Ajout des pages et fonctionnalités pour les rôles "leader" et "user"**
 - **Ajout de fonction de recherche**
