@@ -1,21 +1,27 @@
-import React, {useState} from "react";
+import React, {useState, useRef} from "react";
 
 
 export function Profile({detailsData}) {
     const [view, setView] = useState(false)
     const {info} = detailsData
+    const sectionRef = useRef(null)
     
     const handleClick = () => {
         setView(!view)
+        setTimeout(() => {
+           
+        if (sectionRef.current) {
+        sectionRef.current.scrollIntoView({ behavior: "smooth" })
+        }},100)
     }
 
     return(
         <div className="profile">
-            <button onClick={handleClick}>Voir profil</button>
+            <button ref={sectionRef} onClick={handleClick}>Voir profil</button>
             {view ? (
                 
             <>
-            <h2>Profil Synergia :</h2>
+            <h2 >Profil Synergia :</h2>
             <h4>Couleurs:</h4>
             <div className="couleur">
                 <h6 className="bleu">Bleu</h6> 

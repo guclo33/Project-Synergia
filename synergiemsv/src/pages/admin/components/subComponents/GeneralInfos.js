@@ -58,6 +58,8 @@ export function GeneralInfos({detailsData}) {
             console.log("couldn't update client details data" , error)
         }
     }
+
+    const teamWithoutLeader = detailsData.equipe.filter(client => client.nom !== detailsData.info.nom_client)
     
     if(!detailsData.equipe) {
         
@@ -189,7 +191,7 @@ export function GeneralInfos({detailsData}) {
             <h2>Équipe:</h2>
             <div className="team">
                 
-                {detailsData.equipe.length >0? (equipe.map(teamMate => (
+                {detailsData.equipe.length >0? (teamWithoutLeader.map(teamMate => (
                     <Link to={`/admin/${user.id}/details/${teamMate.id}`} key={teamMate.id} >
                         <h4>{teamMate.nom}</h4>
                         <div className="userInfo">
