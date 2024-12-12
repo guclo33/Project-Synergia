@@ -1,5 +1,5 @@
 # Plateforme SynergieMSV
-![Logo Synergia](synergiemsv/src/images/logo2 sans fond.png)
+![Logo Synergia](https://github.com/guclo33/Project-Synergia/blob/main/synergiemsv/src/Images/logo2%20sans%20fond.png)
 
 
 Une plateforme web conçue pour gérer efficacement les clients et les équipes des clients de Synergia. Personnalisé selon les demandes de la propriétaire. La plateforme permet la création de "profils" de personnalité grâce à l'intelligence artificiel pour ceux ayant rempli un questionnaires au préalable. 
@@ -15,7 +15,7 @@ Une plateforme web conçue pour gérer efficacement les clients et les équipes 
 - [Licence](#licence)
 
 ---
-![exemple accueil](synergiemsv/src/images/exemple_accueil.png)
+![exemple accueil](https://github.com/guclo33/Project-Synergia/blob/main/synergiemsv/src/Images/exemple_accueil.png)
 
 
 ## Aperçu
