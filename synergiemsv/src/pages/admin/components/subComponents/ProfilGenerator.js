@@ -23,15 +23,20 @@ export function ProfilGenerator() {
 
     return(
         <div className="profilGenerator">
-            <h2>Générateur de texte</h2>
-            {canvaAuth ?
-            <button onClick={handleCanva}>Connect Canva</button> :
-            <div>
-                <input type="text" value="" name="prénom" />
-                <input type="text" value="" name="nom" />
-                <button>Générer le profil</button>
-            </div>
-            }
+            <h2>Générateur de profils</h2>
+                <form onSubmit={handleSubmit}>
+                    <div className="pGInput">
+                        <label htmlFor="prénom">Prénom</label>
+                        <input type="text" value={profilName.firstName} name="firstName" onChange={handleChange}/>
+                    </div>
+                    <div className="pGInput">
+                    <label htmlFor="Nom">Nom</label>
+                    <input type="text" value={profilName.lastName} name="lastName" onChange={handleChange} />
+                    </div>
+                    <button>Générer le profil</button>
+                </form>
+                <div id="loading" style={{display: "none"}}>Loading...</div>
+             
         </div>
     )
 }
