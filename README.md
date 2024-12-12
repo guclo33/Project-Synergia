@@ -17,7 +17,7 @@ Une plateforme web conçue pour gérer efficacement les clients et les équipes 
 
 ## Aperçu
 
-Cette plateforme a été développée pour centraliser la gestion des clients, générer des rapports, et optimiser les interactions entre les équipes. Elle inclut une interface conviviale permettant d'ajouter, de modifier, de visualiser les informations des clients et de générer des documents personnalisés à l'aide d'OpenAI. Ce texte sera également transposé dans un modèle Canva pour faciliter la finition. Pour l'instant seul la portion pour le rôle "admin" est disponible.
+Cette plateforme a été développée pour centraliser la gestion des clients, générer des rapports, et optimiser les interactions entre les équipes. Elle inclut une interface conviviale permettant d'ajouter, de modifier, de visualiser les informations des clients et de générer des documents personnalisés à l'aide d'OpenAI. Ce texte sera également transposé dans un modèle Canva pour faciliter la finition. Pour l'instant seul la portion pour le rôle "admin" est disponible. 
 
 ## Fonctionnalités
 
